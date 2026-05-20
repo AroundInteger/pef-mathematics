@@ -1,0 +1,66 @@
+\section{Numerical Validation}
+\label{sec:numerical}
+
+% Intended content (~3 pages --- the empirical engine of the paper).
+%
+%  7.1 Datasets.
+%      The six datasets of the empirical companion paper:
+%        - URC rugby union (n = 240 games);
+%        - English Championship football (n = 552 games);
+%        - NHANES 2017 oscillometric blood pressure (N = 10,352);
+%        - GSE47462 paired transcriptomics (genes in ranked subset);
+%        - S&P 100 / S&P 500 finance (2020--2023);
+%        - Bosch OpenML 752 CNC manufacturing telemetry.
+%      Cite empirical companion paper for full data provenance.
+%
+%  7.2 Symmetry tests (three levels).
+%      (1) Algebraic verification on a (kappa, rho) grid; expect residual at
+%          machine precision (~1e-14).
+%      (2) Estimator-level: for each KPI, swap (X, Y) -> (Y, X), recompute
+%          eta-hat, verify exact agreement at machine precision.
+%      (2.5) Bootstrap joint-distribution test: for each KPI, bootstrap
+%          (|tau-hat|, rho-hat) under both label orderings; energy-distance
+%          or 2D KS test for equality.  Catches pipeline asymmetries that the
+%          point estimate does not.
+%      (3) Pipeline-level (deferred from companion paper to here): rerun the
+%          entire ML pipeline with (X, Y) swapped on each dataset; verify
+%          ML improvement, AUC, KDE-derived statistics are all invariant.
+%          Any non-invariance is reported and attributed to a specific
+%          implementation choice (KDE bandwidth, standardisation, ddof, etc.).
+%
+%  7.3 Cumulant identity check.
+%      For each KPI, bootstrap eta-hat and the implied theta-hat; finite-
+%      difference the derivatives d_theta log eta and d_theta^2 log eta and
+%      compare to eta - 1 and eta(eta - 1) respectively.  Localised failures
+%      identify regions of (tau, rho) where the latent geometric model fits
+%      poorly; this is the *map* of model fit across the empirical landscape.
+%
+%  7.4 Sphere-distance equivalence.
+%      Compute sigma-hat = arccos(2 sqrt(kappa-hat) rho-hat / (1 + kappa-hat))
+%      for each KPI and verify eta-hat = 1 / (1 - cos sigma-hat) numerically.
+%      Bootstrap confidence bands.  This is the cleanest empirical witness
+%      to the projective interpretation and produces the sphere figure
+%      (Figure 4 of this paper).
+%
+%  7.5 psi-stabilisation.
+%      For each domain, bootstrap eta-hat and psi-hat at varying sub-sample
+%      sizes n.  Verify Var(psi-hat) is approximately constant across
+%      (tau, rho) while Var(eta-hat) scales with eta^2 (eta - 1) / n.  This
+%      empirically validates psi as the meta-analytic scale.
+%
+%  7.6 Regime-change LRT at rho = 0.
+%      Fit a continuous model and a model with a slope discontinuity at
+%      rho = 0 to (ML gain) on (rho, |tau|) across pooled domains; perform
+%      a likelihood-ratio test.  The mathematical regime change of
+%      Section 5.3 predicts the discontinuous model wins.  Report p-values,
+%      effect sizes, and quadrant-level breakdown.
+%
+%  7.7 Falsifiability summary.
+%      Tabulate what each test would falsify if it failed, and what (if
+%      anything) failed in the actual run.  This is the section that gives
+%      the paper its empirical bite.
+
+% TODO: drafting.  All computations to be run by the corresponding scripts
+% in ../overleaf_pef_article/scripts/paper_pipeline/ once those scripts have
+% been added (see the empirical paper's plan file).  The companion paper
+% imports the resulting CSVs and reports the numbers.

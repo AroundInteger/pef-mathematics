@@ -1,0 +1,35 @@
+---
+description: Empirical PEF paper — path, research questions, and scope boundaries
+alwaysApply: true
+---
+
+# Empirical paper (`pef-empirical`)
+
+**Sibling repo (local):** `/Users/rowanbrown/Documents/GitHub/pef-empirical`  
+**Role:** Cross-domain validation, KPI ML, quadrant taxonomy, Gaussian information-content link (group authorship).
+
+## This repo (`pef-mathematics`) owns
+
+- Mathematical structure of \(\eta\): canonical form, symmetries, sphere, partition function, Fisher–Rao \(\psi\)
+- Proofs and series expansions (§§2–6 scaffold)
+- §7 **numerical validation** of geometry claims using CSVs in `validation_inputs/`
+- Regime-change and \(\psi\)-scale narrative tied to ML residuals
+
+## Empirical repo owns (cite, do not duplicate)
+
+- Sports and supporting-domain **data** and PEF estimation per KPI
+- `run_paper_pipeline.m`, `numbers.tex`, main figures 1–3
+- Four-quadrant **practical guidance** table and application domains
+- Primary \(\eta \leftrightarrow I(X;Y)\) **empirical** correlation on KPI studies
+
+## Data rule
+
+- **Do not** copy sports raw CSVs or re-implement the full pipeline here
+- Refresh `validation_inputs/` from `pef-empirical/scripts/paper_pipeline/outputs/` after empirical pipeline runs
+- Draft §7 from those CSVs; do not invent numbers not in the inputs
+
+## Writing guardrails
+
+- Do not claim six-domain KPI ML results as new theorems
+- Empirical paper is submitted **first**; avoid blocking companion on unfinished empirical reproducibility
+- Cross-cite empirical for data provenance; cross-cite this paper for \(\psi\) and geometric identities

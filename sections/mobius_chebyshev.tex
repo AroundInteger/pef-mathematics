@@ -1,0 +1,45 @@
+\section{M\"obius Linearisation and the Chebyshev/Poisson Expansion}
+\label{sec:mobius}
+
+% Intended content (~2 pages):
+%
+%  3.1 Moebius linearisation.
+%      From the canonical form,
+%        1/eta = 1 - rho sech tau.
+%      Define tilde-rho = rho / cosh tau and tilde-eta = 1 - 1/eta; the
+%      surface becomes the flat plane tilde-eta = tilde-rho.  Interpretation:
+%      eta is curved only because we view a flat object through nonlinear
+%      coordinates.
+%
+%  3.2 Iso-eta contours.
+%      In (tau, rho), contours of constant eta are the curves
+%        rho = c cosh tau,  c in (-1, 1).
+%
+%  3.3 Chebyshev generating function.
+%      The denominator 1 - 2 sqrt(kappa) rho + kappa is the classical
+%      generating-function denominator for the Chebyshev polynomials U_n of
+%      the second kind.  Expansion
+%        eta = U_0(rho) + U_1(rho) sqrt(kappa) + sum_{n >= 2} (U_n + U_{n-2}) kappa^{n/2}
+%      and the recurrence U_n + U_{n-2} = 2 rho U_{n-1} collapse the
+%      expansion to
+%        eta = 1 + 2 rho sqrt(kappa) + 2 rho sum_{n >= 1} U_n(rho) kappa^{(n+1)/2}.
+%
+%  3.4 Poisson-kernel form.
+%      With rho = cos theta and r = sqrt(kappa) = e^tau,
+%        eta = (1 + r^2) / |1 - r e^{i theta}|^2.
+%      Compare with the Poisson kernel
+%        P_r(theta) = (1 - r^2) / |1 - r e^{i theta}|^2.
+%      Decomposition
+%        eta = P_r(theta) + 2 r^2 / |1 - r e^{i theta}|^2.
+%      Consequence: eta is a sum of two non-negative kernels on S^1;
+%      eta >= P_r pointwise.
+%
+%  3.5 Discussion: connection to harmonic analysis on the disc.
+%      Optional remark on Bergman/Szego flavour --- short, signposted rather
+%      than developed in full.  This is where future work on a fully
+%      operator-theoretic treatment would attach.
+
+% TODO: drafting.  Literature scan required: check whether the Chebyshev
+% expansion of (1 + kappa) / (1 + kappa - 2 sqrt(kappa) rho) has appeared
+% under a different name in the design-of-experiments or generalised
+% least-squares literature.

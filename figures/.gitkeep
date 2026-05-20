@@ -1,0 +1,21 @@
+% Companion-paper figures live here.
+%
+% Planned figures (one per major section):
+%   figure_1_canonical_form.{png,eps}     --- the cosh-tau canonical form,
+%                                              iso-eta contours rho = c cosh tau.
+%   figure_2_mobius_linearisation.{png,eps} --- the (tilde-rho, tilde-eta) flat plane.
+%   figure_3_poisson_decomposition.{png,eps} --- eta = P_r + 2r^2 / |1 - r e^{i theta}|^2.
+%   figure_4_sphere_lift.{png,eps}        --- six-domain KPIs on S^2, coloured
+%                                              by observed ML improvement, with
+%                                              equator (kappa = 1) and marked
+%                                              pole P(1) highlighted.
+%   figure_5_psi_stabilisation.{png,eps}  --- Var(eta-hat) vs Var(psi-hat)
+%                                              across (tau, rho) at fixed n.
+%   figure_6_cumulant_identity.{png,eps}  --- residuals of the cumulant identity
+%                                              check across (tau, rho).
+%   figure_7_regime_change.{png,eps}      --- ML residuals vs rho with the
+%                                              discontinuous fit overlaid.
+%
+% Figures will be generated from the same MATLAB pipeline that the empirical
+% companion paper uses, so this folder receives copies (or symlinks) rather
+% than independent generation scripts.

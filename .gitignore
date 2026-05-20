@@ -1,0 +1,19 @@
+# LaTeX aux
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.bcf
+*.run.xml
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
+
+# Regenerated from sibling repo when refreshing §7 inputs
+# validation_inputs/*.csv

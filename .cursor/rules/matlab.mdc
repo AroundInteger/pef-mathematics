@@ -1,0 +1,39 @@
+---
+description: MATLAB R2025b install path; pipeline lives in sibling empirical repo
+globs: "**/*.{m,mlx}"
+alwaysApply: true
+---
+
+# MATLAB (this machine)
+
+MATLAB is installed but **not** on the default shell `PATH`. Use the full path below.
+
+| Item | Path |
+|------|------|
+| Install root | `/Applications/MATLAB_R2025b.app` |
+| Executable | `/Applications/MATLAB_R2025b.app/bin/matlab` |
+| Version | R2025b (25.2) |
+
+## Running scripts
+
+Prefer **batch** mode (non-interactive, exits when done):
+
+```bash
+/Applications/MATLAB_R2025b.app/bin/matlab -batch "cd('path/to/script/dir'); run('script_name.m')"
+```
+
+## Pipeline location
+
+**Do not** expect a full paper pipeline in this repo. Run validation and figures in the empirical sibling:
+
+| Purpose | Path (sibling) |
+|---------|----------------|
+| Canonical pipeline | `/Users/rowanbrown/Documents/GitHub/pef-empirical/scripts/paper_pipeline/run_paper_pipeline.m` |
+| §7 CSV outputs | `pef-empirical/scripts/paper_pipeline/outputs/` → copy to `validation_inputs/` here |
+
+If you add local `.m` scripts for companion-only plots, keep paths repo-relative.
+
+## Agent notes
+
+- Use the full MATLAB executable path above.
+- Avoid hard-coded paths from other machines (e.g. `/Users/iMacPro/...`).

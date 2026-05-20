@@ -1,0 +1,49 @@
+\section{Fisher--Rao Geometry and the $\psi$ Coordinate}
+\label{sec:fisher_rao}
+
+% Intended content (~2 pages).
+%
+%  6.1 The variance-stabilising coordinate.
+%      Definition: for rho > 0,
+%        psi := 2 arctanh sqrt(rho sech tau)
+%             = 2 arctanh sqrt( 2 sqrt(kappa) rho / (1 + kappa) ).
+%      For rho < 0, define |psi| analogously with sign(psi) = sign(rho) and
+%      treat the regime change of Section 5.3 explicitly.
+%
+%  6.2 The variance-stabilising property.
+%      Theorem: under sampling, psi has approximately constant asymptotic
+%      variance across the (tau, rho) half-strip.  Proof via the delta
+%      method applied to the cumulant identity.
+%
+%  6.3 Fisher--Rao interpretation.
+%      Identify psi as the Fisher--Rao geodesic distance from independence
+%      (i.e. from the point (kappa = 1, rho = 0) in the natural parameter
+%      manifold of the latent geometric family).  This is the PEF analogue
+%      of Fisher's classical z = arctanh rho for the bivariate Gaussian
+%      correlation.
+%
+%  6.4 Implication for cross-domain meta-analysis.
+%      For meta-analysis across rugby, football, NHANES, GSE47462, finance,
+%      and the Bosch CNC dataset (see empirical companion paper for sources),
+%      psi-scale confidence intervals will be approximately comparable in
+%      width across domains in a way that eta-scale or rho-scale intervals
+%      are not.  Practical consequence: cross-domain pooling on the psi scale
+%      removes a coordinate artefact from the apparent heterogeneity.
+%
+%  6.5 Comparison with related coordinates.
+%      Brief comparison with:
+%        - Fisher's z = arctanh(rho) for bivariate Gaussian correlation;
+%        - the logit / log-odds transformation in binary classification;
+%        - the angle-based parameterisation cos sigma of Section 4.
+%      psi is the natural one *for this family*, but is one member of a
+%      broader class of variance-stabilising transforms.
+%
+%  6.6 Practical recipe for cross-domain pooling.
+%      Step-by-step: estimate (kappa, rho), compute tau and psi, bootstrap
+%      psi-scale confidence intervals, pool across domains on the psi scale,
+%      back-transform to the eta scale only for reporting.  This is the
+%      recipe the empirical companion paper adopts in its cross-domain table.
+
+% TODO: drafting.  Important: a non-parametric / rank-based version of psi
+% (substituting Spearman or Kendall correlation for Pearson rho) is worth
+% at least a remark, possibly an exercise / open problem.

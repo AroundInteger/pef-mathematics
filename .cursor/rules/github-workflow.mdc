@@ -1,0 +1,45 @@
+---
+description: Git and GitHub habits for this paper repo (learning-friendly prompts)
+alwaysApply: true
+---
+
+# Git workflow — `pef-mathematics`
+
+Use this repo as the **maintained** source for the companion mathematics paper. Pair with `pef-empirical` (separate remote).
+
+## After an agreed edit — agent checklist
+
+When the user and agent have **agreed** a change is complete, before finishing:
+
+1. **Summarise** what changed (files + why in one sentence).
+2. **Validation inputs:** If §7 numbers depend on empirical pipeline outputs, confirm `validation_inputs/*.csv` match the latest run in `pef-empirical` (or note that refresh is still needed).
+3. **Compile:** If LaTeX structure changed, note whether `latexmk` on `main.tex` was run (optional for agent; user may compile in Overleaf).
+4. **Commit:** Only if the user asked to commit. Suggest a message focused on **why**.
+5. **Push:** Only if the user asked. First push: `git push -u origin main`.
+6. **Do not** commit large generated artefacts unrelated to the manuscript.
+
+## Branching (simple default)
+
+| Work | Branch |
+|------|--------|
+| Theory / § drafts | `draft/…` or direct on `main` if solo |
+| Refreshing validation CSVs | Single commit: `sync validation_inputs from empirical pipeline` |
+| Do not | Force-push `main`, duplicate empirical data files |
+
+## Good commit message shape
+
+```
+Short imperative summary (≤72 chars).
+
+Why this change matters for the companion argument or §7 alignment.
+```
+
+## Cross-repo discipline
+
+- **Two remotes, two histories** — empirical commits stay in `pef-empirical`; geometry/theory commits stay here
+- When empirical pipeline changes symmetry or \(\psi\) outputs, refresh inputs **before** claiming §7 is up to date in this repo
+
+## Remotes
+
+- Intended GitHub name: **`pef-mathematics`**
+- Pipeline runs live only in `pef-empirical`

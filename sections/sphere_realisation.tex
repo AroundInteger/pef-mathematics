@@ -1,0 +1,51 @@
+\section{$\eta$ as Inverse Spherical Chord}
+\label{sec:sphere}
+
+% Intended content (~3 pages --- this is one of the two genuinely novel sections).
+%
+%  4.1 The lift.
+%      Definition: for (kappa, rho) in (0, infinity) x (-1, 1), set
+%        z = sqrt(kappa) * exp(i arccos rho)
+%      and let pi^{-1}: C -> S^2 be the inverse stereographic projection from
+%      the south pole.  This realises every (kappa, rho) as a point on the
+%      Riemann sphere.
+%
+%  4.2 The pole at independence.
+%      The point P(1) = (1, 0, 0) on S^2 corresponds to (kappa, rho) = (1, 1):
+%      Fisher's perfectly-paired, equal-variance limit, where eta -> infinity.
+%      Call P(1) the marked pole.
+%
+%  4.3 The angular distance identity.
+%      Theorem (sphere realisation):
+%        eta(kappa, rho) = 1 / (1 - cos sigma) = (1/2) csc^2(sigma/2),
+%      where sigma is the angular (spherical) distance from pi^{-1}(z) to
+%      the marked pole P(1).  Proof: direct computation, using
+%      cos sigma = 2 sqrt(kappa) rho / (1 + kappa).
+%
+%  4.4 Geometric translations of the empirical taxonomy.
+%      - Fisher's classical line kappa = 1 is the equator.
+%      - The involution kappa <-> 1/kappa is reflection across the equator.
+%      - Iso-eta contours are spherical caps centred on P(1).
+%      - The empirical "competitive, negative-rho, high-asymmetry" Q4 regime
+%        is literally the antipodal hemisphere to the marked pole.
+%
+%  4.5 Why this matters for the empirical paper.
+%      The four-quadrant taxonomy of the empirical companion is a *coordinate
+%      artefact* of viewing a spherical object through a planar (kappa, rho)
+%      chart.  The substantive structure is the angular distance sigma to
+%      independence; the four quadrants are just the four sign-patterns of
+%      (kappa - 1, rho), which on the sphere collapse to a single
+%      latitude/longitude coordinate up to the kappa <-> 1/kappa reflection.
+%
+%  4.6 Caveats.
+%      The stereographic lift is not unique (a different choice of base
+%      point gives a different chart); we choose the one that makes P(1)
+%      the marked pole because it is the only point in the closure of the
+%      physical domain where eta diverges.
+
+% TODO: drafting.  Literature scan required: check whether this projective
+% realisation of the variance-ratio / correlation pair has appeared in
+% statistical-shape-analysis or random-matrix-eigenvalue work.  My current
+% belief is that the *specific* realisation with marked pole at (1, 1) is
+% novel for this family, but the more general fact that 2x2 correlation
+% matrices lift to the sphere is well-known and must be cited.

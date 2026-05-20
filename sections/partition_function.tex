@@ -1,0 +1,56 @@
+\section{Partition-Function Structure}
+\label{sec:partition}
+
+% Intended content (~3 pages --- the second of the two genuinely novel sections).
+%
+%  5.1 The identity.
+%      Theorem (cumulant generating function):
+%        log eta(tau, rho) = -log(1 - rho sech tau).
+%      Setting theta = log(rho sech tau) when rho sech tau in (0, 1), this is
+%      the cumulant generating function of a one-parameter geometric
+%      exponential family with natural parameter theta and sufficient
+%      statistic the latent count n in {0, 1, 2, ...}.
+%
+%  5.2 First and second cumulants.
+%      Proposition: at the natural parameter theta,
+%        d_theta log eta = <n> = eta - 1     (mean / signal),
+%        d_theta^2 log eta = Var(n) = eta (eta - 1)  (Fisher information).
+%      Interpretation: eta - 1 is the *signal* quantity and eta(eta - 1) is
+%      the *information* quantity, both properties of eta itself, distribution
+%      free, with no extra modelling assumptions beyond the PEF definition.
+%
+%  5.3 Regime change at rho = 0.
+%      For rho > 0, the series sum_{n >= 0} (rho sech tau)^n converges and the
+%      partition-function reading is well-defined.  For rho < 0, the series
+%      becomes sign-alternating: information content is read off |rho| sech tau
+%      with sign carried separately.
+%
+%      Phenomenology: the empirical "efficiency--power tension" of the
+%      companion paper is exactly the rho < 0 regime, where the latent
+%      geometric interpretation breaks.  This is a *prediction* the empirical
+%      paper's framing now supports rather than merely describes: the
+%      regime change at rho = 0 is mathematical, not phenomenological, and
+%      the empirical divergence-is-largest-in-competitive-settings finding
+%      is its signature.
+%
+%  5.4 Distribution-free scope.
+%      The mutual-information derivation in the empirical companion's
+%      Section 2.2 requires bivariate normality.  The cumulant identity in
+%      5.1--5.2 does not: it is a purely algebraic consequence of the PEF
+%      formula, valid for any (kappa, rho) such that rho sech tau in (0, 1).
+%      In this sense the partition-function reading is the natural
+%      distribution-free signal/information bridge for paired efficiency.
+%
+%  5.5 What the latent count means.
+%      Discussion: the latent geometric variable n has no direct physical
+%      interpretation as a counting variable in the original (X_A, X_B)
+%      problem; it is a *latent* statistic in the sense of the exponential
+%      family.  This is consistent with sufficient-statistic constructions
+%      elsewhere in statistics.  Worth flagging that this does not imply a
+%      generative model for the data --- only for the efficiency-information
+%      pair.
+
+% TODO: drafting.  Literature scan required: the geometric exponential family
+% on (0, 1) with natural parameter log(p) and sufficient statistic n is
+% standard; the *novelty* here is identifying log eta as its CGF for the
+% paired-efficiency family.  Confirm this identification is new.
