@@ -1,0 +1,29 @@
+---
+description: LaTeX and British English conventions for PEF manuscripts
+globs: "**/*.tex"
+alwaysApply: false
+---
+
+# LaTeX — PEF papers
+
+## Language
+
+British English: recognised, behaviour, rigour, optimisation, generalised.
+
+## Maths
+
+- Greek in math mode: `$\eta$`, `$\kappa$`, `$\rho$`, `$\psi$`, `$\tau$` — not Unicode
+- Canonical form: `\eta = \cosh\tau/(\cosh\tau - \rho)` with `\tau=\tfrac{1}{2}\log\kappa`
+- Numbered equations with labels; cross-ref empirical paper for data, not re-derive KPI tables here
+
+## Structure
+
+- `sections/numerical_validation.tex` ↔ files in `validation_inputs/` — cite pipeline CSV columns, do not invent values
+
+## Tone
+
+Theory-first; empirical validation is imported numerics, not new six-domain ML claims.
+
+## Reference
+
+`UP1_PEF/paper/draft_v13_comprehensive_theoretical/documentation/OVERLEAF_BEST_PRACTICES.md` (archive).

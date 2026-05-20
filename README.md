@@ -2,6 +2,8 @@
 
 Solo-authored mathematical companion to the empirical PEF paper in [`pef-empirical`](../pef-empirical).
 
+**Project memory (both repos, workspace, archive):** [PEF_PROJECT_MEMORY.md](PEF_PROJECT_MEMORY.md)
+
 ## Scope
 
 Distribution-free geometry of \(\eta = (1+\kappa)/(1+\kappa-2\sqrt{\kappa}\,\rho)\): canonical form, \(\kappa \leftrightarrow 1/\kappa\) symmetry, sphere and partition-function readings, Fisher–Rao coordinate \(\psi\). The bivariate-normal mutual-information link in the empirical paper is the Gaussian specialisation.
@@ -13,7 +15,7 @@ pef-mathematics/
 ├── main.tex, sections/, references.bib
 ├── figures/                 % companion-specific figures (when drafted)
 ├── validation_inputs/       % CSVs imported from pef-empirical pipeline (§7)
-└── .cursor/rules/           % empirical-paper + git workflow
+└── .cursor/rules/           % empirical-paper, git workflow, project context
 ```
 
 ## Numerical validation (§7)

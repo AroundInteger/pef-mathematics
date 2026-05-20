@@ -1,0 +1,37 @@
+---
+description: PEF two-repo project map, workspace, archive, and agent defaults
+alwaysApply: true
+---
+
+# PEF project context (mathematics repo)
+
+## Repos and workspace
+
+| Repo | Local path | GitHub (AroundInteger) |
+|------|------------|------------------------|
+| Empirical (data + pipeline) | `/Users/rowanbrown/Documents/GitHub/pef-empirical` | `pef-empirical` |
+| **This repo** | `pef-mathematics` | `pef-mathematics` |
+| Archive only | `/Users/rowanbrown/Documents/GitHub/UP1_PEF` | legacy monorepo |
+
+**Day-to-day workspace:** `/Users/rowanbrown/Documents/GitHub/pef-papers.code-workspace`.
+
+**User:** Rowan Brown (`AroundInteger`). Commit/push **only when explicitly asked**.
+
+## Layout
+
+`main.tex`, `sections/`, `validation_inputs/` (CSVs from empirical pipeline), `figures/`.
+
+## No local full pipeline
+
+Regenerate numbers in `pef-empirical`, then refresh `validation_inputs/`. §7 drafts must match those CSVs.
+
+## Scope (see also `empirical-paper.mdc`)
+
+- This repo owns geometry, ψ, partition function, symmetry/cumulant tests
+- Empirical owns KPI data, `numbers.tex`, main figures, quadrant guidance
+- Companion follows empirical submission; do not block empirical reproducibility
+
+## Writing defaults
+
+- British English; LaTeX maths per `latex-paper.mdc`
+- Do not duplicate sports data or full `run_paper_pipeline.m` here
