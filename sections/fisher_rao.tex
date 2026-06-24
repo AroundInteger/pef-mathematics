@@ -1,49 +1,87 @@
-\section{Fisher--Rao Geometry and the $\psi$ Coordinate}
+\section{Fisher--Rao Geometry and the \texorpdfstring{$\psi$}{psi} Coordinate}
 \label{sec:fisher_rao}
 
-% Intended content (~2 pages).
-%
-%  6.1 The variance-stabilising coordinate.
-%      Definition: for rho > 0,
-%        psi := 2 arctanh sqrt(rho sech tau)
-%             = 2 arctanh sqrt( 2 sqrt(kappa) rho / (1 + kappa) ).
-%      For rho < 0, define |psi| analogously with sign(psi) = sign(rho) and
-%      treat the regime change of Section 5.3 explicitly.
-%
-%  6.2 The variance-stabilising property.
-%      Theorem: under sampling, psi has approximately constant asymptotic
-%      variance across the (tau, rho) half-strip.  Proof via the delta
-%      method applied to the cumulant identity.
-%
-%  6.3 Fisher--Rao interpretation.
-%      Identify psi as the Fisher--Rao geodesic distance from independence
-%      (i.e. from the point (kappa = 1, rho = 0) in the natural parameter
-%      manifold of the latent geometric family).  This is the PEF analogue
-%      of Fisher's classical z = arctanh rho for the bivariate Gaussian
-%      correlation.
-%
-%  6.4 Implication for cross-domain meta-analysis.
-%      For meta-analysis across rugby, football, NHANES, GSE47462, finance,
-%      and the Bosch CNC dataset (see empirical companion paper for sources),
-%      psi-scale confidence intervals will be approximately comparable in
-%      width across domains in a way that eta-scale or rho-scale intervals
-%      are not.  Practical consequence: cross-domain pooling on the psi scale
-%      removes a coordinate artefact from the apparent heterogeneity.
-%
-%  6.5 Comparison with related coordinates.
-%      Brief comparison with:
-%        - Fisher's z = arctanh(rho) for bivariate Gaussian correlation;
-%        - the logit / log-odds transformation in binary classification;
-%        - the angle-based parameterisation cos sigma of Section 4.
-%      psi is the natural one *for this family*, but is one member of a
-%      broader class of variance-stabilising transforms.
-%
-%  6.6 Practical recipe for cross-domain pooling.
-%      Step-by-step: estimate (kappa, rho), compute tau and psi, bootstrap
-%      psi-scale confidence intervals, pool across domains on the psi scale,
-%      back-transform to the eta scale only for reporting.  This is the
-%      recipe the empirical companion paper adopts in its cross-domain table.
+\subsection{The Variance-Stabilising Coordinate}
+\label{sec:psi_def}
 
-% TODO: drafting.  Important: a non-parametric / rank-based version of psi
-% (substituting Spearman or Kendall correlation for Pearson rho) is worth
-% at least a remark, possibly an exercise / open problem.
+The Fisher information of the geometric exponential family (\cref{thm:exp_family}) at natural parameter $\theta = \log(\rho\,\sech\tau)$ is
+\begin{equation}
+  \mathcal{I}(\theta) = A''(\theta) = \eta(\eta-1),
+  \label{eq:fisher_info}
+\end{equation}
+from \cref{prop:cumulants}.  The Fisher--Rao arc-length element on the half-strip is $\mathrm{d}s^{2} = \mathcal{I}(\theta)\,\mathrm{d}\theta^{2}$.  A coordinate $\psi$ is \emph{variance-stabilising} if $\mathrm{d}\psi/\mathrm{d}\theta = \sqrt{\mathcal{I}(\theta)}$, i.e.\ if $\psi$ measures arc length along the Fisher--Rao geodesic from independence.
+
+\begin{proposition}[Variance-Stabilising Coordinate]
+\label{prop:psi}
+For $\rho\,\sech\tau \in (0,1)$, the coordinate
+\begin{equation}
+  \psi = 2\,\arctanh\!\sqrt{\rho\,\sech\tau}
+       = 2\,\arctanh\!\sqrt{\frac{2\sqrt{\kappa}\,\rho}{1+\kappa}}
+  \label{eq:psi_def}
+\end{equation}
+satisfies $\mathrm{d}\psi = \sqrt{\mathcal{I}(\theta)}\,\mathrm{d}\theta$ and hence gives the Fisher--Rao geodesic distance from the independence point $(\tau,\rho) \in \{\rho = 0\}$.
+\end{proposition}
+
+\begin{proof}
+Let $u = \rho\,\sech\tau = e^{\theta}$.  Then $\theta = \log u$ and $\mathrm{d}\theta = \mathrm{d}u/u$.  The arc-length integrand is
+\[
+  \sqrt{\mathcal{I}(\theta)}\,\mathrm{d}\theta
+  = \sqrt{\eta(\eta-1)}\cdot\frac{\mathrm{d}u}{u}
+  = \frac{\sqrt{u/(1-u)^{2}}}{u}\,\mathrm{d}u
+  = \frac{\mathrm{d}u}{\sqrt{u}\,(1-u)}.
+\]
+Substituting $u = v^{2}$ gives $\mathrm{d}u = 2v\,\mathrm{d}v$ and $\sqrt{u} = v$, so the integrand becomes $2\,\mathrm{d}v/(1-v^{2}) = 2\,\mathrm{d}\!\arctanh(v)$.  Integrating from $u=0$ (independence) gives $\psi = 2\,\arctanh(\sqrt{u}) = 2\,\arctanh\!\sqrt{\rho\,\sech\tau}$.
+\end{proof}
+
+\subsection{The Variance-Stabilising Property}
+\label{sec:psi_var}
+
+Let $\hat\theta$ be the maximum-likelihood estimator of $\theta$ based on $n$ matched observations.  By standard exponential-family theory, $\sqrt{n}(\hat\theta - \theta)\xrightarrow{d}\mathcal{N}(0,1/\mathcal{I}(\theta))$.  Applying the delta method to $\psi = \psi(\theta)$:
+\begin{equation}
+  \sqrt{n}(\hat\psi - \psi)
+  \xrightarrow{d}
+  \mathcal{N}\!\Bigl(0,\Bigl(\tfrac{\mathrm{d}\psi}{\mathrm{d}\theta}\Bigr)^{2}/\mathcal{I}(\theta)\Bigr)
+  = \mathcal{N}(0,1),
+  \label{eq:psi_clt}
+\end{equation}
+since $(\mathrm{d}\psi/\mathrm{d}\theta)^{2} = \mathcal{I}(\theta)$ by construction.  Therefore $\Var(\hat\psi) \approx 1/n$ \emph{uniformly} across the half-strip $(\tau,\rho)$, independent of $\eta$.  By contrast, the delta method applied to $\hat\eta$ gives $\Var(\hat\eta) \approx \eta^{2}(\eta-1)/n$, which varies from near zero (when $\eta \approx 1$) to large values (when $\eta \gg 1$).
+
+\begin{remark}
+The coordinate $\psi$ is the PEF analogue of Fisher's $z = \arctanh\rho$ \parencite{fisher1921} for the bivariate-normal correlation: both are Fisher--Rao arc lengths \parencite{amari2016} for their respective one-parameter families.  The PEF family has a richer parameter space $(\tau,\rho)$, and $\psi$ maps the two-dimensional family down to a one-dimensional arc length via the projection $u = \rho\,\sech\tau$.
+\end{remark}
+
+\subsection{Regime Change at \texorpdfstring{$\rho = 0$}{rho = 0}}
+\label{sec:psi_regime}
+
+The coordinate $\psi$ is defined for $u = \rho\,\sech\tau \in (0,1)$, i.e.\ $\rho > 0$.  For $\rho < 0$ the quantity $\rho\,\sech\tau$ is negative, and $\arctanh$ of a negative square root is not real.  The natural extension is to define
+\begin{equation}
+  \psi = \operatorname{sign}(\rho)\cdot 2\,\arctanh\!\sqrt{|\rho|\,\sech\tau},
+  \label{eq:psi_signed}
+\end{equation}
+so that $\psi \in \mathbb{R}$ for all $(\tau,\rho)$ in the physical domain and $\psi = 0 \Leftrightarrow \rho = 0$.
+
+The change of sign at $\rho = 0$ is not a coordinate singularity: $\psi$ is continuous through $\rho = 0$.  However, the Fisher information $\mathcal{I}(\theta) = \eta(\eta-1)$ changes sign there as well (from positive for $\eta > 1$ to negative for $\eta < 1$), reflecting the geometric fact that the partition-function reading of \cref{sec:partition} switches branches.  The asymptotic variance $\Var(\hat\psi) \approx 1/n$ holds in each regime separately; the regime boundary at $\rho = 0$ is a locus where the local curvature of the exponential family changes character.  This is the content of the regime-change LRT test in \cref{sec:val_regime}, implemented following Davies \parencite{davies1987}.
+
+\subsection{Implication for Cross-Domain Meta-Analysis}
+\label{sec:psi_meta}
+
+In the six datasets of \textcite{brownPEFempirical}, mean $\eta$ varies from $0.88$ (football) to $3.13$ (finance) --- a factor of 3.6.  On the $\psi$ scale the values are (from \texttt{psi\_per\_domain.csv}, omitting the single healthcare observation): football $\hat\psi = -0.730$, rugby $+0.217$, manufacturing $+0.017$, clinical genomics $+1.869$, finance $+2.251$.  Bootstrap 95\% confidence intervals for $\psi$ have widths of $0.35$--$0.81$ (the wider end for the smaller rugby dataset, $n=283$), consistent with the $1/\sqrt{n}$ scaling of \cref{eq:psi_clt}.
+
+For meta-analytic pooling, the variance-stabilising property implies that a fixed-effects or random-effects model on the $\psi$ scale \parencite{dersimonianLaird1986} will not be dominated by high-$\eta$ domains (whose $\hat\eta$ has large sampling variance) or compressed by low-$\eta$ domains.  Across the positive-$\rho$ domains (finance, clinical genomics, healthcare) the between-domain coefficient of variation of $\psi$ ($\mathrm{CV}_\psi = 0.41$) is close to that of $\eta$ ($\mathrm{CV}_\eta = 0.33$), confirming that $\psi$ resolves between-domain differences to a similar degree as $\eta$ whilst providing more uniform within-domain confidence intervals.
+
+The practical recipe is: (1) estimate $(\hat\kappa, \hat\rho)$ per KPI; (2) compute $\hat\tau = \tfrac{1}{2}\log\hat\kappa$ and $\hat\psi$ via \cref{eq:psi_signed}; (3) bootstrap $\hat\psi$ confidence intervals; (4) pool on the $\psi$ scale using standard meta-analytic procedures; (5) back-transform to the $\eta$ scale for reporting via $\eta = 1/(1 - \tanh^{2}(\psi/2))$ for $\psi > 0$.
+
+\subsection{Comparison with Related Coordinates}
+\label{sec:psi_comparison}
+
+Three coordinates serve analogous roles in related problems:
+\begin{itemize}
+  \item \textbf{Fisher's $z = \arctanh\rho$ \parencite{fisher1921}.}  Variance-stabilising for the bivariate-normal correlation at equal variances ($\kappa = 1$).  Small-sample bias corrections for $\hat\rho$ are classical \parencite{olkinPratt1958}; an analogous correction for $\hat\psi$ remains open.  Recovers from $\psi$ at $\tau = 0$: $\psi = 2\,\arctanh\!\sqrt{\rho} \ne \arctanh\rho$ in general, but at $\rho \to 0$, $\psi \approx 2\sqrt{\rho} \approx 2z/\sqrt{z}$ --- the two are distinct transformations of the same parameter.
+  \item \textbf{Logit $\log(p/(1-p))$.}  Variance-stabilising for binomial proportions.  The cumulant structure is analogous to the geometric family here, with $\eta$ playing the role of $1/q$.
+  \item \textbf{Sphere angle $\sigma = \arccos(\rho\,\sech\tau)$.}  Measures colatitude from the marked pole on the unit sphere (\cref{sec:sphere}); related to $\psi$ by $\sigma = \arccos(\tanh^{2}(\psi/2))$, equivalently $\psi = 2\,\arctanh\!\sqrt{\cos\sigma}$, the classical inverse once the sphere lift is fixed.
+\end{itemize}
+Among these, $\psi$ is the natural one for the geometric exponential family identified in \cref{sec:partition}.
+
+\begin{remark}[Non-parametric extension]
+Substituting Spearman or Kendall rank correlation for Pearson $\rho$ in \cref{eq:psi_def} gives a distribution-free version of $\psi$ with the same functional form.  The cumulant identities of \cref{prop:cumulants} no longer have a parametric Fisher-information interpretation, but the coordinate itself remains well-defined and the variance-stabilising property holds approximately for large $n$ by the delta method applied to the rank-correlation estimator.  We leave a formal treatment to future work.
+\end{remark}

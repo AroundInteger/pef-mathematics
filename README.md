@@ -2,7 +2,21 @@
 
 Solo-authored mathematical companion to the empirical PEF paper in [`pef-empirical`](../pef-empirical).
 
-**Project memory (both repos, workspace, archive):** [PEF_PROJECT_MEMORY.md](PEF_PROJECT_MEMORY.md)
+**Project memory:** [`PEF_PROJECT_MEMORY.md`](PEF_PROJECT_MEMORY.md)  
+**Roadmap:** canonical checklist in [`../pef-empirical/PAPER_ROADMAP.md`](../pef-empirical/PAPER_ROADMAP.md) (local stub: [`PAPER_ROADMAP.md`](PAPER_ROADMAP.md))  
+**Literature / priority claims:** [`RESEARCH_README.md`](RESEARCH_README.md)
+
+## Status
+
+**First full draft** (2026-06-22): all sections (`abstract` through `discussion`, plus appendix) have prose; §7 reports numbers from `validation_inputs/` (empirical commit `5aa9cfc` per `_manifest.csv`).
+
+**Polish still open before submission:**
+
+- Wire `figures/Figure_4_sphere.png` into §4 (`\includegraphics` not yet added)
+- §7.6 regime-change LRT: direction reported; full test statistics pending pipeline update
+- Local compile check with `latexmk` (biber)
+
+Empirical paper submits first; this companion preprints around the same time.
 
 ## Scope
 
@@ -13,22 +27,34 @@ Distribution-free geometry of \(\eta = (1+\kappa)/(1+\kappa-2\sqrt{\kappa}\,\rho
 ```
 pef-mathematics/
 ├── main.tex, sections/, references.bib
-├── figures/                 % companion-specific figures (when drafted)
-├── validation_inputs/       % CSVs imported from pef-empirical pipeline (§7)
-└── .cursor/rules/           % empirical-paper, git workflow, project context
+├── figures/Figure_4_sphere.png   §4 sphere plot (script-generated)
+├── validation_inputs/            CSVs + _manifest.csv (§7 provenance)
+├── scripts/
+│   ├── generate_figure_sphere.m  companion Fig 4
+│   └── lib/                      mirrored pef_theory_helpers.m (read-only)
+└── .cursor/rules/
 ```
 
 ## Numerical validation (§7)
 
-**Do not** duplicate `run_paper_pipeline.m` here. Regenerate inputs in the empirical repo, then refresh:
+**Do not** duplicate `run_paper_pipeline.m` here. Regenerate inputs in the empirical repo, then sync from the **empirical repo root**:
 
 ```bash
-EMPIRICAL=../pef-empirical
-cp "$EMPIRICAL"/scripts/paper_pipeline/outputs/{kappa_symmetry_*,psi_*,pef_landscape_2season_geometry.csv} \
-   validation_inputs/
+cd ../pef-empirical
+bash scripts/paper_pipeline/sync_to_companion.sh
 ```
 
-Or re-run `paper/create_pef_mathematics_repo.sh` after a pipeline run.
+This copies eight CSVs (`kappa_symmetry_*`, `psi_*`, `pef_landscape_2season_geometry.csv`, `domain_summary.csv`, `table_numbers.csv`), mirrors `scripts/lib/pef_theory_helpers.m`, and writes `validation_inputs/_manifest.csv` with SHA256 provenance.
+
+## Figures
+
+Regenerate the companion sphere figure from this repo root:
+
+```bash
+/Applications/MATLAB_R2025b.app/bin/matlab -batch "cd('scripts'); run('generate_figure_sphere.m')"
+```
+
+Input: `validation_inputs/pef_landscape_2season_geometry.csv`. Output: `figures/Figure_4_sphere.png`.
 
 ## Compile
 
@@ -36,9 +62,7 @@ Or re-run `paper/create_pef_mathematics_repo.sh` after a pipeline run.
 latexmk -pdf -bibtex- -e '$bibtex = q/biber %O %B;' main.tex
 ```
 
-## Submission order
-
-Empirical paper first; this companion preprints around the same time but does not gate empirical reproducibility.
+Requires pdfLaTeX + biber. UK English throughout.
 
 ## Archive
 

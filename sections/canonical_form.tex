@@ -1,45 +1,111 @@
 \section{Canonical Form and the \texorpdfstring{$\kappa \leftrightarrow 1/\kappa$}{kappa <-> 1/kappa} Symmetry}
 \label{sec:canonical}
 
-% Intended content (~2 pages):
-%
-%  2.1 The change of variables.
-%      Derive tau = (1/2) log kappa, sqrt(kappa) + 1/sqrt(kappa) = 2 cosh tau,
-%      and the canonical form
-%        eta(tau, rho) = cosh tau / (cosh tau - rho).
-%      State explicitly that everything in Sections 3--6 is a consequence
-%      of this identity.
-%
-%  2.2 The involution.
-%      Theorem: eta(kappa, rho) = eta(1/kappa, rho) for all kappa > 0 and
-%      rho in (-1, 1) such that the denominator is non-zero.  One-line proof
-%      from the canonical form.  Corollary: the substantive moduli space is
-%      tau >= 0 (equivalently kappa >= 1), modulo the involution kappa -> 1/kappa.
-%
-%  2.3 Domain and singularity locus.
-%      The denominator vanishes on rho = cosh tau, which intersects the
-%      physical domain rho in [-1, 1] only at (tau, rho) = (0, 1).  Local
-%      parabolic blow-up
-%        eta ~ 1 / ((1 - rho) + (1/2) tau^2).
-%      Iso-eta contours near the pole are parabolas, not circles.
-%
-%  2.4 Differential structure.
-%      d_rho eta > 0 everywhere; d_tau eta = 0 on tau = 0 and on rho = 0;
-%      sensitivity to correlation is maximised at tau = 0 and decays as
-%      |tau| -> infinity.  Mixed derivative analysis.  No interior critical
-%      points.
-%
-%  2.5 Special values.
-%      Tabulate boundary values eta(rho = +1, tau), eta(rho = -1, tau),
-%      eta(kappa -> 0 or infinity), and the reciprocal identity
-%        eta(rho = +1, tau) * eta(rho = -1, tau) = 1.
-%      Flag this as a residual echo of the kappa <-> 1/kappa duality.
-%
-%  2.6 Consequence for the empirical four-quadrant taxonomy.
-%      The four-quadrant taxonomy of the empirical companion is a 2:1 covering
-%      of the substantive half-strip (|tau|, rho).  Falsifiable: pooling
-%      kappa -> max(kappa, 1/kappa) across the six empirical datasets must
-%      collapse Q1 <-> Q2 and Q3 <-> Q4 within bootstrap tolerance.  Validated
-%      in Section 7.
+\subsection{The Change of Variables}
 
-% TODO: drafting.
+Fisher's paired efficiency \parencite{fisher1935} is the benchmark case $\kappa = 1$; when the two margins differ, the ratio-of-variances literature \parencite{bose1935} and the Pitman--Morgan test for equal paired variances \parencite{pitman1939,morgan1939} address related distributional questions but not the canonical efficiency coordinate developed below.
+
+The Paired Efficiency Factor \parencite{brownPEFempirical} is defined as the ratio of unpaired to paired variance,
+\begin{equation}
+  \eta(\kappa,\rho)
+  = \frac{1+\kappa}{1+\kappa-2\sqrt{\kappa}\,\rho},
+  \label{eq:pef_original}
+\end{equation}
+where $\kappa = \sigma_{\mathrm{B}}^{2}/\sigma_{\mathrm{A}}^{2} > 0$ is the variance ratio and $\rho \in (-1,1)$ is the Pearson correlation.  Setting
+\begin{equation}
+  \tau = \tfrac{1}{2}\log\kappa,
+  \label{eq:tau_def}
+\end{equation}
+so that $\sqrt{\kappa} = e^{\tau}$ and $1/\sqrt{\kappa} = e^{-\tau}$, the denominator of \cref{eq:pef_original} becomes
+\[
+  1 + \kappa - 2\sqrt{\kappa}\,\rho
+  = e^{-\tau}(e^{\tau} + e^{-\tau}) e^{\tau} - 2\rho e^{\tau} e^{-\tau} \cdot \tfrac{e^{\tau}+e^{-\tau}}{e^{\tau}+e^{-\tau}}
+\]
+and, after dividing numerator and denominator by $\sqrt{\kappa} = e^{\tau}$, we obtain the \emph{canonical form}:
+\begin{equation}
+  \eta(\tau,\rho)
+  = \frac{\cosh\tau}{\cosh\tau - \rho}.
+  \label{eq:canonical}
+\end{equation}
+Here $\tau \in \mathbb{R}$ parameterises variance asymmetry on a symmetric log-scale, whilst $\rho$ retains its role as correlation.  The half-strip $\{\tau \ge 0,\, \rho \in (-1,1)\}$ is the \emph{fundamental domain}: the original parameterisation $(\kappa,\rho)$ with $\kappa \ge 1$ maps bijectively onto it.  Everything in Sections~\ref{sec:mobius}--\ref{sec:fisher_rao} is a consequence of this identity.
+
+\subsection{The \texorpdfstring{$\kappa \leftrightarrow 1/\kappa$}{kappa <-> 1/kappa} Involution}
+
+\begin{theorem}[Involution]
+\label{thm:involution}
+For all $\kappa > 0$ and $\rho \in (-1,1)$ with $\cosh\tau \ne \rho$,
+\[
+  \eta(\kappa,\rho) = \eta(1/\kappa,\rho).
+\]
+\end{theorem}
+
+\begin{proof}
+Substituting $\kappa \mapsto 1/\kappa$ replaces $\tau = \tfrac{1}{2}\log\kappa$ by $-\tau$.  Since $\cosh$ is even, $\cosh(-\tau)=\cosh\tau$, and the right-hand side of \cref{eq:canonical} is unchanged.
+\end{proof}
+
+\begin{corollary}
+The map $\kappa \mapsto 1/\kappa$ is an involution on the parameter space that acts trivially on $\eta$.  The four-quadrant taxonomy of \textcite{brownPEFempirical} partitions $(\kappa,\rho)$ by the signs of $(\kappa-1)$ and $\rho$; the involution exchanges Quadrants~1 and~2, and Quadrants~3 and~4, whilst fixing $\eta$.  Consequently, the four-quadrant structure is a \emph{two-to-one covering} of the fundamental domain $\tau \ge 0$; all geometric content resides in the half-strip.
+\end{corollary}
+
+The involution is validated empirically in \cref{sec:numerical}: across all 113 sports KPI studies and 19\,903 non-sports units, the estimator-level residual $|\hat{\eta}(\kappa,\rho) - \hat{\eta}(1/\kappa,\rho)|$ is at most $1.78 \times 10^{-15}$, consistent with machine-precision equality.
+
+\subsection{Domain and Singularity Locus}
+
+The denominator $\cosh\tau - \rho$ vanishes when $\rho = \cosh\tau \ge 1$, which is outside the physical domain $\rho \in (-1,1)$ except at the single boundary point $(\tau,\rho) = (0,1)$, where $\eta \to +\infty$.  Near this pole, set $\tau = \varepsilon_1$ and $\rho = 1 - \varepsilon_2$ with $\varepsilon_1, \varepsilon_2 \to 0^+$.  Then $\cosh\tau - \rho \approx (1 + \tfrac{1}{2}\varepsilon_1^2) - (1-\varepsilon_2) = \varepsilon_2 + \tfrac{1}{2}\varepsilon_1^2$, giving the local parabolic blow-up
+\begin{equation}
+  \eta \;\approx\; \frac{1}{(1-\rho) + \tfrac{1}{2}\tau^{2}}.
+  \label{eq:parabolic_blowup}
+\end{equation}
+Iso-$\eta$ contours near the pole are therefore parabolas $1-\rho = C - \tfrac{1}{2}\tau^2$ in the $(\tau,\rho)$-plane, not circles.  This geometric fact is made precise in \cref{sec:sphere}, where the pole is identified with a marked point on the Riemann sphere.
+
+\subsection{Differential Structure}
+
+From \cref{eq:canonical},
+\begin{align}
+  \frac{\partial\eta}{\partial\rho}
+  &= \frac{\cosh\tau}{(\cosh\tau-\rho)^{2}} > 0,
+  \label{eq:deta_drho}\\[4pt]
+  \frac{\partial\eta}{\partial\tau}
+  &= \frac{-\sinh\tau\,(\cosh\tau-\rho) + \cosh\tau\sinh\tau}{(\cosh\tau-\rho)^{2}}
+   = \frac{\rho\sinh\tau}{(\cosh\tau-\rho)^{2}}.
+  \label{eq:deta_dtau}
+\end{align}
+Thus $\eta$ is strictly increasing in $\rho$ for all $\tau$.  In $\tau$, the sign of $\partial\eta/\partial\tau$ matches the sign of $\rho$: $\eta$ increases with $|\tau|$ when $\rho > 0$ and decreases when $\rho < 0$.  The critical set $\partial\eta/\partial\tau = 0$ is the union of the lines $\tau = 0$ and $\rho = 0$.  There are no interior critical points in $(\tau,\rho) \in (0,\infty)\times(-1,0)\cup(0,1)$.  Sensitivity to correlation, measured by \cref{eq:deta_drho}, is maximised at $\tau = 0$ (Fisher's equal-variance case) and decays monotonically as $|\tau| \to \infty$.
+
+\subsection{Special Values}
+\label{sec:special_values}
+
+\begin{table}[t]
+  \centering
+  \caption{Boundary behaviour of the canonical form~\cref{eq:canonical}.}
+  \label{tab:special_values}
+  \begin{tabular}{@{}llll@{}}
+    \toprule
+    \textbf{Condition} & \textbf{$\tau$} & $\eta$ & \textbf{Note} \\
+    \midrule
+    $\kappa = 1$ (Fisher case) & $0$ & $\dfrac{1}{1-\rho}$ & Classical formula \\[6pt]
+    $\rho = 0$                 & any & $1$                   & Correlation-free baseline \\[2pt]
+    $\rho \to +1$              & $0$ & $+\infty$             & Perfect pairing, equal variances \\[2pt]
+    $\rho \to -1$              & $0$ & $\tfrac{1}{2}$        & Maximum variance amplification \\[2pt]
+    $\kappa \to 0$ or $\infty$ & $|\tau| \to \infty$ & $1$ & Extreme asymmetry collapses to baseline \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+A notable identity follows from evaluating \cref{eq:canonical} at $\rho = +1$ and $\rho = -1$:
+\begin{equation}
+  \eta(\tau,+1)\cdot\eta(\tau,-1)
+  = \frac{\cosh\tau}{\cosh\tau-1}\cdot\frac{\cosh\tau}{\cosh\tau+1}
+  = \frac{\cosh^{2}\tau}{\cosh^{2}\tau-1}
+  = \frac{\cosh^{2}\tau}{\sinh^{2}\tau}
+  = \coth^{2}\tau.
+  \label{eq:reciprocal_product}
+\end{equation}
+At $\tau = 0$ (Fisher's case), $\coth\tau \to \infty$, reflecting the pole.  For large $|\tau|$, $\coth\tau \to 1$, so the product approaches unity: the efficiency gain at maximal positive correlation is asymptotically the reciprocal of the efficiency loss at maximal negative correlation.  This is a residual echo of the involution.
+
+\subsection{Consequence for the Empirical Four-Quadrant Taxonomy}
+\label{sec:quadrant_coverage}
+
+The empirical paper partitions the $(\kappa,\rho)$ plane by the signs of $\kappa - 1$ and $\rho$, yielding four quadrants.  \Cref{thm:involution} shows this partition is a coordinate artefact: the pairs (Q1, Q2) and (Q3, Q4) each collapse to a single region under the substitution $\kappa \mapsto \max(\kappa,1/\kappa)$.  Equivalently, viewing the parameter space through the canonical coordinates $(\tau,\rho)$ with $\tau \ge 0$, the four-quadrant taxonomy reduces to the two regimes $\rho > 0$ and $\rho < 0$.  The qualitative difference between the regimes -- explored in the partition-function context in \cref{sec:partition} and in the Fisher--Rao context in \cref{sec:fisher_rao} -- is therefore a genuine feature of the geometry, whilst the Q1-vs-Q2 and Q3-vs-Q4 distinctions are artefacts of the original $(\kappa,\rho)$ chart.
+
+This has a concrete empirical implication: pooling estimators $\hat{\kappa} \mapsto \max(\hat{\kappa},1/\hat{\kappa})$ across the six datasets of \textcite{brownPEFempirical} must collapse Q1~$\leftrightarrow$~Q2 and Q3~$\leftrightarrow$~Q4 within bootstrap tolerance.  The symmetry audit (\cref{sec:numerical}) validates this at machine precision.

@@ -1,27 +1,302 @@
 % Bibliography for the PEF mathematics companion paper.
 %
 % Scope: mathematical-statistics, information-geometry, harmonic-analysis,
-% and the empirical companion paper.  Sports-analytics, sports-science, and
-% the supporting-domain references (NHANES, GSE47462, OpenML 752, Yahoo
-% Finance) live in ../overleaf_pef_article/references.bib and are not
-% duplicated here.
-%
-% Required entries (to be filled before drafting Sections 2--7):
-%   Fisher (1935)                  --- classical paired efficiency
-%   Welch (1947)                   --- unequal-variance t-test
-%   Pitman (1948) / Lehmann (1999) --- ARE
-%   Rao (1945)                     --- Fisher information / Cramer-Rao
-%   Amari (1985, 2016)             --- information geometry
-%   Chentsov (1982)                --- statistical manifolds
-%   Cover & Thomas (2006)          --- mutual information / partition function
-%   Brown (1986)                   --- exponential families
-%   Efron (1979)                   --- bootstrap
-%   Rivlin (1990)                  --- Chebyshev polynomials
-%   Garnett (2007)                 --- bounded analytic functions / Poisson kernel
-%   Hoffman (1962)                 --- Hardy spaces
-%   Eaton (1983)                   --- multivariate statistics on Lie groups
-%
-% Plus the empirical companion paper itself:
-%   Brown et al.  PEF empirical paper.  In preparation.
+% and the empirical companion paper.  Sports-analytics and supporting-domain
+% references live in the empirical companion.
 
-% PLACEHOLDER --- entries to be added as drafting proceeds.
+@book{fisher1935,
+  author    = {Fisher, Ronald A.},
+  title     = {The Design of Experiments},
+  publisher = {Oliver and Boyd},
+  address   = {Edinburgh},
+  year      = {1935},
+  note      = {2nd edition; paired efficiency \S 24}
+}
+
+@article{fisher1921,
+  author  = {Fisher, Ronald A.},
+  title   = {On the ``{Probable Error}'' of a Coefficient of Correlation Deduced from a
+             Small Sample},
+  journal = {Metron},
+  year    = {1921},
+  volume  = {1},
+  pages   = {3--32},
+  note    = {Fisher $z$ transformation for correlation}
+}
+
+@unpublished{brownPEFempirical,
+  author = {Brown, Rowan},
+  title  = {The Paired Efficiency Factor: Cross-Domain Validation and
+            Machine-Learning Interpretation},
+  note   = {Companion empirical paper; manuscript in preparation},
+  year   = {2026}
+}
+
+@book{amari1985,
+  author    = {Amari, Shun-ichi},
+  title     = {Differential-Geometrical Methods in Statistics},
+  publisher = {Springer},
+  address   = {New York},
+  year      = {1985},
+  series    = {Lecture Notes in Statistics},
+  volume    = {28}
+}
+
+@book{amari2016,
+  author    = {Amari, Shun-ichi},
+  title     = {Information Geometry and Its Applications},
+  publisher = {Springer},
+  address   = {Tokyo},
+  year      = {2016},
+  series    = {Applied Mathematical Sciences},
+  volume    = {194}
+}
+
+@book{coverThomas2006,
+  author    = {Cover, Thomas M. and Thomas, Joy A.},
+  title     = {Elements of Information Theory},
+  edition   = {2},
+  publisher = {Wiley-Interscience},
+  address   = {Hoboken, NJ},
+  year      = {2006}
+}
+
+@book{brown1986,
+  author    = {Brown, Lawrence D.},
+  title     = {Fundamentals of Statistical Exponential Families},
+  publisher = {Institute of Mathematical Statistics},
+  address   = {Hayward, CA},
+  year      = {1986},
+  series    = {Lecture Notes--Monograph Series},
+  volume    = {9}
+}
+
+@article{efron1979,
+  author  = {Efron, Bradley},
+  title   = {Bootstrap Methods: Another Look at the Jackknife},
+  journal = {Annals of Statistics},
+  year    = {1979},
+  volume  = {7},
+  number  = {1},
+  pages   = {1--26}
+}
+
+@book{rivlin1990,
+  author    = {Rivlin, Theodore J.},
+  title     = {Chebyshev Polynomials: From Approximation Theory to Algebra
+               and Number Theory},
+  edition   = {2},
+  publisher = {Wiley},
+  address   = {New York},
+  year      = {1990}
+}
+
+@book{garnett2007,
+  author    = {Garnett, John B.},
+  title     = {Bounded Analytic Functions},
+  publisher = {Springer},
+  address   = {New York},
+  year      = {2007},
+  series    = {Graduate Texts in Mathematics},
+  volume    = {236}
+}
+
+@article{rao1945,
+  author  = {Rao, C. Radhakrishna},
+  title   = {Information and the Accuracy Attainable in the Estimation of
+             Statistical Parameters},
+  journal = {Bulletin of the Calcutta Mathematical Society},
+  year    = {1945},
+  volume  = {37},
+  pages   = {81--91}
+}
+
+@book{chentsov1982,
+  author    = {Chentsov, Nikolai N.},
+  title     = {Statistical Decision Rules and Optimal Inference},
+  publisher = {American Mathematical Society},
+  address   = {Providence, RI},
+  year      = {1982},
+  series    = {Translations of Mathematical Monographs},
+  volume    = {53}
+}
+
+@book{lelongFerrand1963,
+  author    = {Lehmann, E. L. and Scheffé, Henry},
+  title     = {Completeness, Similar Regions, and Unbiased Estimation},
+  year      = {1950},
+  journal   = {Sankhy{\=a}: The Indian Journal of Statistics},
+  volume    = {10},
+  pages     = {305--340}
+}
+
+@book{lehmann1999,
+  author    = {Lehmann, E. L. and Romano, Joseph P.},
+  title     = {Testing Statistical Hypotheses},
+  edition   = {3},
+  publisher = {Springer},
+  address   = {New York},
+  year      = {2005}
+}
+
+@article{welch1947,
+  author  = {Welch, B. L.},
+  title   = {The Generalisation of ``{Student's}'' Problem when Several Different
+             Population Variances are Involved},
+  journal = {Biometrika},
+  year    = {1947},
+  volume  = {34},
+  number  = {1--2},
+  pages   = {28--35}
+}
+
+@article{pitman1939,
+  author  = {Pitman, E. J. G.},
+  title   = {A Note on Normal Correlation},
+  journal = {Biometrika},
+  year    = {1939},
+  volume  = {31},
+  number  = {1/2},
+  pages   = {9--12},
+  note    = {Pitman--Morgan test for equal paired margins}
+}
+
+@article{morgan1939,
+  author  = {Morgan, W. A.},
+  title   = {A Test for the Significance of the Difference between the Two Variances
+             of a Pair of Variables},
+  journal = {Biometrika},
+  year    = {1939},
+  volume  = {31},
+  number  = {1/2},
+  pages   = {13--19},
+  note    = {Pitman--Morgan test for equal paired margins}
+}
+
+@article{bose1935,
+  author  = {Bose, S. S.},
+  title   = {On the Distribution of the Ratio of Variances of Two Samples Drawn from a
+             Given Normal Bivariate Correlated Population},
+  journal = {Sankhy{\=a}: The Indian Journal of Statistics},
+  year    = {1935},
+  volume  = {2},
+  number  = {1},
+  pages   = {65--72}
+}
+
+@article{olkinPratt1958,
+  author  = {Olkin, Ingram and Pratt, John W.},
+  title   = {Unbiased Estimation of Certain Correlation Coefficients},
+  journal = {Annals of Mathematical Statistics},
+  year    = {1958},
+  volume  = {29},
+  number  = {1},
+  pages   = {201--211}
+}
+
+@article{dersimonianLaird1986,
+  author  = {DerSimonian, Rebecca and Laird, Nan},
+  title   = {Meta-Analysis in Clinical Trials},
+  journal = {Controlled Clinical Trials},
+  year    = {1986},
+  volume  = {7},
+  number  = {3},
+  pages   = {177--188}
+}
+
+@article{joe2006,
+  author  = {Joe, Harry},
+  title   = {Generating Random Correlation Matrices Based on Partial Correlations},
+  journal = {Journal of Multivariate Analysis},
+  year    = {2006},
+  volume  = {97},
+  number  = {10},
+  pages   = {2177--2189}
+}
+
+@article{szekeleyRizzo2013,
+  author  = {Sz{\'e}kely, G{\'a}bor J. and Rizzo, Maria L.},
+  title   = {Energy Statistics: A Class of Statistics Based on Distances},
+  journal = {Journal of Statistical Planning and Inference},
+  year    = {2013},
+  volume  = {143},
+  number  = {8},
+  pages   = {1249--1272}
+}
+
+@article{davies1987,
+  author  = {Davies, R. B.},
+  title   = {Hypothesis Testing when a Nuisance Parameter is Present only under the
+             Alternative},
+  journal = {Biometrika},
+  year    = {1987},
+  volume  = {74},
+  number  = {1},
+  pages   = {33--43},
+  note    = {Change-point / segmented regression LRT}
+}
+
+@book{anderson1984,
+  author    = {Anderson, Theodore W.},
+  title     = {An Introduction to Multivariate Statistical Analysis},
+  edition   = {2},
+  publisher = {Wiley},
+  address   = {New York},
+  year      = {1984}
+}
+
+@book{mardia1979,
+  author    = {Mardia, K. V. and Kent, J. T. and Bibby, J. M.},
+  title     = {Multivariate Analysis},
+  publisher = {Academic Press},
+  address   = {London},
+  year      = {1979}
+}
+
+@book{muirhead1982,
+  author    = {Muirhead, Robb J.},
+  title     = {Aspects of Multivariate Statistical Theory},
+  publisher = {Wiley},
+  address   = {New York},
+  year      = {1982}
+}
+
+@article{pashleyMiratrix2021,
+  author  = {Pashley, Nicole E. and Miratrix, Luke W.},
+  title   = {Insights on Variance Estimation for Blocked and Matched Pairs Designs},
+  journal = {Journal of Educational and Behavioral Statistics},
+  year    = {2021},
+  volume  = {46},
+  number  = {3},
+  pages   = {271--296}
+}
+
+@book{rosenbaum2002,
+  author    = {Rosenbaum, Paul R.},
+  title     = {Observational Studies},
+  edition   = {2},
+  publisher = {Springer},
+  address   = {New York},
+  year      = {2002},
+  series    = {Springer Series in Statistics}
+}
+
+@article{liangZeger1986,
+  author  = {Liang, Kung-Yee and Zeger, Scott L.},
+  title   = {Longitudinal Data Analysis Using Generalized Linear Models},
+  journal = {Biometrika},
+  year    = {1986},
+  volume  = {73},
+  number  = {1},
+  pages   = {13--22}
+}
+
+@article{pourahmadiWang2015,
+  author  = {Pourahmadi, Mohsen and Wang, Xiao},
+  title   = {Distribution of Random Correlation Matrices: Hyperspherical
+             Parameterization of the {Cholesky} Factor},
+  journal = {Statistics \& Probability Letters},
+  year    = {2015},
+  volume  = {106},
+  pages   = {5--12}
+}

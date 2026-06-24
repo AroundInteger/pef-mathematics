@@ -1,62 +1,92 @@
 \section{Discussion}
 \label{sec:discussion}
 
-% Intended content (~2 pages).
-%
-%  8.1 What the geometry buys.
-%      Summarise: a coordinate-free description of paired efficiency in which
-%      the four-quadrant taxonomy of the empirical companion is a coordinate
-%      artefact; a distribution-free signal/information pair via the
-%      partition-function reading; a meta-analytic scale (psi) on which
-%      cross-domain effect sizes are properly comparable; a single
-%      Riemann-sphere figure that organises the framework.
-%
-%  8.2 Information geometry context.
-%      The paired-efficiency family sits inside the broader information-
-%      geometric program initiated by Rao (1945), Amari (1985), and others.
-%      Brief comparison with Fisher information metrics on more familiar
-%      exponential families.  This is the section that earns the paper
-%      its place in the information-geometry literature.
-%
-%  8.3 Relation to the empirical companion paper.
-%      Concretely: which results in this paper are *used* by the empirical
-%      companion (the kappa <-> 1/kappa symmetry, the psi coordinate, the
-%      partition-function remark, the regime-change observation), and which
-%      are stand-alone contributions of this paper (the canonical form,
-%      Moebius linearisation, Chebyshev/Poisson expansion, sphere lift,
-%      Fisher--Rao identification).
-%
-%  8.4 Limitations.
-%      - All results are univariate-pair: an extension to multivariate paired
-%        efficiency (PEF matrices) is outlined in Section 8.5 but not
-%        developed here.
-%      - The partition-function reading requires rho sech tau in (0, 1);
-%        the rho < 0 regime is mathematically distinct and is treated by
-%        sign-carry, not by analytic continuation.
-%      - Numerical validation depends on bootstrap inference; finite-sample
-%        coverage of the psi-scale intervals is checked but not theoretically
-%        derived to high order.
-%
-%  8.5 Future directions.
-%      Six concrete extensions:
-%        (i)   multivariate PEF: a matrix-valued generalisation with its own
-%              spectral / spherical structure;
-%        (ii)  non-parametric psi: substitute rank correlation for rho-hat
-%              and derive the corresponding stabilising transform;
-%        (iii) operator-theoretic / Hardy-space treatment building on the
-%              Poisson-kernel decomposition of Section 3.4;
-%        (iv)  small-sample bias correction for eta-hat and psi-hat;
-%        (v)   regime-change asymptotics: refined treatment of the rho = 0
-%              singularity in the latent geometric family;
-%        (vi)  causal-inference connections: when does correlation-based
-%              variance reduction preserve causal estimates?
-%
-%  8.6 Closing.
-%      One-paragraph summary: Fisher's generalised paired efficiency formula
-%      is, beneath the algebra, a piece of spherical and information geometry
-%      with a distribution-free signal/information pair.  The empirical
-%      companion paper validates the formula across six domains; this paper
-%      explains *why* the validation works as well as it does, and provides
-%      the meta-analytic infrastructure for future cross-domain pooling.
+\subsection{What the Geometry Buys}
 
-% TODO: drafting.
+The main contribution of this paper is a coordinate-free characterisation of paired efficiency.  Written in the original parameters $(\kappa,\rho)$, Fisher's generalised formula \cref{eq:pef_intro} looks like a rational function with no particular structure.  Written in canonical coordinates $(\tau,\rho)$ with $\tau = \tfrac{1}{2}\log\kappa$, it becomes $\eta = \cosh\tau/(\cosh\tau - \rho)$, and four structures become visible at once:
+
+\begin{enumerate}[label=(\roman*)]
+  \item \textbf{Coordinate symmetry.}  The $\kappa \leftrightarrow 1/\kappa$ involution (\cref{thm:involution}) is exact and trivial: $\tau \mapsto -\tau$, $\cosh\tau$ is even.  The four-quadrant empirical taxonomy is a two-to-one covering of the fundamental half-strip, and the Q1-vs-Q2 and Q3-vs-Q4 distinctions are coordinate artefacts, not substantive ones.
+
+  \item \textbf{Geometric object.}  The formula $\eta = 1/(1-\cos\sigma)$ (\cref{thm:sphere}) identifies each $(\kappa,\rho)$ pair with a point on the Riemann sphere at angular distance $\sigma$ from a marked pole.  Iso-$\eta$ surfaces are latitude circles; the four quadrants are four sectors of a single sphere; the parabolic blow-up near $\eta = \infty$ is the familiar behaviour of $1/(1-\cos\sigma)$ near $\sigma = 0$.  A single sphere figure organises the entire framework.
+
+  \item \textbf{Distribution-free signal and information.}  The partition-function identity $\log\eta = A(\theta)$ for $\theta = \log(\rho\,\sech\tau)$ (\cref{thm:exp_family}) yields a distribution-free signal quantity $\mathbb{E}[N] = \eta - 1$ and information quantity $\Var[N] = \eta(\eta-1)$ without any Gaussian assumptions.  The Gaussian mutual-information link of the empirical companion \parencite{brownPEFempirical} is the specialisation of this to the bivariate-normal case; the present paper shows the structure is more general.
+
+  \item \textbf{Meta-analytic scale.}  The Fisher--Rao arc-length coordinate $\psi = 2\,\arctanh\!\sqrt{\rho\,\sech\tau}$ has sampling variance $\approx 1/n$ uniformly across the half-strip (\cref{prop:psi}), making it the natural scale for cross-domain pooling.  Confidence intervals on the $\psi$ scale are width-comparable across domains in a way that $\eta$-scale intervals are not.
+\end{enumerate}
+
+Together these four properties explain \emph{why} the empirical validation of \textcite{brownPEFempirical} is as clean as it is: the symmetry, the sphere, and the partition function are not post-hoc observations but algebraic consequences of a single identity.
+
+\subsection{Information-Geometry Context}
+
+The paired-efficiency family sits naturally within the information-geometric programme of \textcite{rao1945}, \textcite{chentsov1982}, and \textcite{amari1985,amari2016}.  The one-parameter exponential family of \cref{thm:exp_family} is an instance of a dually-flat statistical manifold with canonical coordinates $(\theta, \eta)$ on the primal and dual sides.  The Fisher--Rao metric $\mathcal{I}(\theta) = \eta(\eta-1)$ plays the role of the Fisher information matrix, and the geodesic distance from independence is precisely $\psi$.
+
+What distinguishes the paired-efficiency family from more familiar exponential families (Gaussian, Poisson, Binomial) is that the natural parameter $\theta = \log(\rho\,\sech\tau)$ is itself a nonlinear function of two physically observable parameters $(\kappa,\rho)$.  The mapping from $(\kappa,\rho)$ to $\theta$ is the composition of the variance-ratio log-transform with the correlation-compression $\rho \mapsto \rho\,\sech\tau$.  The partition-function structure is therefore a consequence of the algebraic form of the PEF, not an assumption about the data.
+
+The sphere realisation (\cref{sec:sphere}) has a further information-geometric reading: the Fisher--Rao arc length $\psi$ from independence and the colatitude $\sigma$ from the marked pole satisfy $\psi = 2\,\arctanh\!\sqrt{\cos\sigma}$, or equivalently $\sigma = \arccos(\tanh^{2}(\psi/2))$ for $\sigma \in (0,\pi)$, linking the variance-stabilising coordinate to the spherical chart once the lift $\cos\sigma = \rho\,\sech\tau$ is in place.
+
+\subsection{Relation to the Empirical Companion Paper}
+\label{sec:discussion_companion}
+
+The two papers have a clean division of labour.  \Cref{tab:cross_ref} summarises which results this paper contributes to the empirical companion and which are stand-alone contributions of the geometry.
+
+\begin{table}[h]
+  \centering
+  \caption{Division of contributions between the two papers.}
+  \label{tab:cross_ref}
+  \small
+  \begin{tabular}{@{}p{5.5cm}p{5.5cm}@{}}
+    \toprule
+    \textbf{Used by empirical companion \parencite{brownPEFempirical}} &
+    \textbf{Stand-alone geometry contributions (this paper)} \\
+    \midrule
+    $\kappa \leftrightarrow 1/\kappa$ involution (\cref{thm:involution}) &
+    Canonical form derivation (\cref{sec:canonical}) \\
+    $\psi$ coordinate and meta-analytic recipe (\cref{sec:psi_meta}) &
+    Affine linearisation and series expansion (\cref{sec:mobius}) \\
+    Partition-function remark: $\eta-1$ as signal (\cref{sec:partition}) &
+    Sphere realisation theorem (\cref{thm:sphere}) \\
+    Regime-change at $\rho = 0$ as mathematical prediction (\cref{sec:regime}) &
+    Cumulant-generating identity (\cref{thm:exp_family,prop:cumulants}) \\
+    CSV inputs for §7 validation (\cref{sec:numerical}) &
+    Fisher--Rao metric and $\psi$ proof (\cref{prop:psi}) \\
+    & Harmonic-analysis connection (\cref{sec:harmonic}) \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+The empirical paper is submitted first; the geometry paper is intended to appear shortly afterwards.  The validation results of \cref{sec:numerical} are based on the empirical pipeline's output CSVs, ensuring numerical consistency between the two papers.
+
+\subsection{Limitations}
+
+Three limitations are worth stating explicitly.
+
+\textbf{Univariate pairs only.}  All results concern a single paired measurement per observation.  A multivariate generalisation --- a \emph{PEF matrix} for $(X_{\mathrm{A}},X_{\mathrm{B}}) \in \mathbb{R}^{p}$ --- would replace the scalar $(\kappa,\rho)$ with a pair of positive-definite matrices and the efficiency formula with the ratio of determinants or traces; canonical correlations provide the natural spectral extension \parencite{anderson1984,mardia1979}.  The canonical-form reparameterisation would extend to the eigenvalues of the variance-ratio matrix, and the sphere realisation might generalise to a flag manifold or Grassmannian.  We leave this for future work.
+
+\textbf{Regime boundary.}  The partition-function reading requires $\rho\,\sech\tau \in (0,1)$, i.e.\ $\rho > 0$.  For $\rho < 0$ we use the signed extension \cref{eq:psi_signed} and treat the two branches separately.  An analytic-continuation treatment of the boundary at $\rho = 0$ --- for instance, via complex extension $\rho \to i|\rho|$ in the series $\sum_{n=0}^{\infty}(\rho\,\sech\tau)^{n}$ --- may provide a unified formula, but we do not pursue this here.
+
+\textbf{Finite-sample coverage.}  The variance-stabilising property of $\psi$ is established asymptotically via the delta method (\cref{eq:psi_clt}).  Bootstrap coverage of $\psi$-scale confidence intervals is empirically checked in \cref{sec:val_psi} but is not derived to higher order.  For small samples ($n \lesssim 50$), second-order corrections analogous to those for Fisher's $z$ \parencite{olkinPratt1958} and bootstrap refinements \parencite{efron1979} would be needed for reliable coverage.
+
+\subsection{Future Directions}
+
+Six concrete extensions present themselves:
+
+\begin{enumerate}[label=(\roman*)]
+  \item \textbf{Multivariate PEF.}  Generalise $\eta(\kappa,\rho)$ to a matrix-valued efficiency with its own spectral and spherical structure, following the canonical-correlation programme \parencite{anderson1984,mardia1979,muirhead1982}.
+
+  \item \textbf{Non-parametric $\psi$.}  Substitute Spearman or Kendall rank correlation for $\hat\rho$ and derive the corresponding variance-stabilising transform.  The functional form of $\psi$ is preserved; the sampling theory requires a non-parametric delta-method argument.
+
+  \item \textbf{Operator-theoretic treatment.}  The Poisson-kernel decomposition of \cref{sec:harmonic} connects $\eta$ to Hardy-space theory on the disc \parencite{garnett2007}.  Hyperspherical correlation parameterisations \parencite{pourahmadiWang2015} suggest further links to random-matrix and harmonic-analysis bounds on the efficiency surface.
+
+  \item \textbf{Small-sample bias correction.}  The estimators $\hat\eta$ and $\hat\psi$ are asymptotically unbiased but have finite-sample bias in small populations.  Second-order corrections for the log-transformation and the arctanh step are tractable by the standard jackknife or bias-corrected bootstrap, following the template of \textcite{olkinPratt1958} for Fisher's $z$.
+
+  \item \textbf{Regime-change asymptotics.}  The boundary $\rho = 0$ is a locus of slope discontinuity in the natural-parameter map.  A local-asymptotic treatment of the regime change (analogous to the Pitman drift analysis for unit-root tests) would sharpen the LRT of \cref{sec:val_regime} \parencite{davies1987} and quantify the power of the test against local alternatives $\rho = n^{-1/2}h$.
+
+  \item \textbf{Causal-inference connections.}  Paired designs underlie difference-in-differences and regression-discontinuity estimators in causal inference.  Design-based variance for matched pairs \parencite{pashleyMiratrix2021} and sensitivity analysis for observational matching \parencite{rosenbaum2002} provide natural contexts for interpreting $\eta > 1$ as a design gain and $\rho < 0$ as a potential confounding signal.  Correlated longitudinal models \parencite{liangZeger1986} share functional forms for within-cluster dependence but address a different estimand.
+\end{enumerate}
+
+\subsection{Closing}
+
+Fisher's generalised paired-efficiency formula is, beneath the rational-function algebra, a piece of spherical and information geometry.  The change of variables $\tau = \tfrac{1}{2}\log\kappa$ reduces it to a Möbius fraction in $\rho$ with a single pole at $\sigma = 0$ on the Riemann sphere; the log of the formula is the cumulant-generating function of a geometric exponential family; and the Fisher--Rao arc length from independence is a well-behaved, variance-stabilising coordinate for cross-domain meta-analysis.
+
+The empirical companion paper \parencite{brownPEFempirical} validates the formula across six domains and six hundred thousand paired observations.  The present paper explains why the validation is as clean as it is: the algebraic symmetries, the sphere, and the partition-function structure are not emergent patterns in the data but necessary properties of the formula itself, visible only once the right coordinates are chosen.

@@ -1,45 +1,94 @@
 \section{M\"obius Linearisation and the Chebyshev/Poisson Expansion}
 \label{sec:mobius}
 
-% Intended content (~2 pages):
-%
-%  3.1 Moebius linearisation.
-%      From the canonical form,
-%        1/eta = 1 - rho sech tau.
-%      Define tilde-rho = rho / cosh tau and tilde-eta = 1 - 1/eta; the
-%      surface becomes the flat plane tilde-eta = tilde-rho.  Interpretation:
-%      eta is curved only because we view a flat object through nonlinear
-%      coordinates.
-%
-%  3.2 Iso-eta contours.
-%      In (tau, rho), contours of constant eta are the curves
-%        rho = c cosh tau,  c in (-1, 1).
-%
-%  3.3 Chebyshev generating function.
-%      The denominator 1 - 2 sqrt(kappa) rho + kappa is the classical
-%      generating-function denominator for the Chebyshev polynomials U_n of
-%      the second kind.  Expansion
-%        eta = U_0(rho) + U_1(rho) sqrt(kappa) + sum_{n >= 2} (U_n + U_{n-2}) kappa^{n/2}
-%      and the recurrence U_n + U_{n-2} = 2 rho U_{n-1} collapse the
-%      expansion to
-%        eta = 1 + 2 rho sqrt(kappa) + 2 rho sum_{n >= 1} U_n(rho) kappa^{(n+1)/2}.
-%
-%  3.4 Poisson-kernel form.
-%      With rho = cos theta and r = sqrt(kappa) = e^tau,
-%        eta = (1 + r^2) / |1 - r e^{i theta}|^2.
-%      Compare with the Poisson kernel
-%        P_r(theta) = (1 - r^2) / |1 - r e^{i theta}|^2.
-%      Decomposition
-%        eta = P_r(theta) + 2 r^2 / |1 - r e^{i theta}|^2.
-%      Consequence: eta is a sum of two non-negative kernels on S^1;
-%      eta >= P_r pointwise.
-%
-%  3.5 Discussion: connection to harmonic analysis on the disc.
-%      Optional remark on Bergman/Szego flavour --- short, signposted rather
-%      than developed in full.  This is where future work on a fully
-%      operator-theoretic treatment would attach.
+\subsection{M\"obius Linearisation}
+\label{sec:mobius_linear}
 
-% TODO: drafting.  Literature scan required: check whether the Chebyshev
-% expansion of (1 + kappa) / (1 + kappa - 2 sqrt(kappa) rho) has appeared
-% under a different name in the design-of-experiments or generalised
-% least-squares literature.
+From the canonical form \cref{eq:canonical}, taking the reciprocal gives immediately:
+\begin{equation}
+  \frac{1}{\eta} = 1 - \rho\,\sech\tau.
+  \label{eq:reciprocal_linear}
+\end{equation}
+The map $(\tau,\rho) \mapsto 1/\eta$ is therefore \emph{affine} in $\rho$ for fixed $\tau$, and affine in $\sech\tau$ for fixed $\rho$.  Define the rescaled correlation
+\begin{equation}
+  \tilde\rho = \rho\,\sech\tau = \cos\sigma,
+  \qquad\tilde\eta = 1 - 1/\eta.
+  \label{eq:mobius_coords}
+\end{equation}
+In the coordinates $(\tau,\tilde\rho)$, the level set $\{1/\eta = c\}$ becomes $\tilde\rho = 1 - c$: a horizontal plane.  The curvature of iso-$\eta$ contours in the original $(\tau,\rho)$-coordinates is entirely an artefact of viewing the flat surface $\tilde\eta = \tilde\rho$ through the nonlinear coordinate change $\tilde\rho = \rho\,\sech\tau$.
+
+The iso-$\eta$ contours are made explicit by setting $1/\eta = c$ in \cref{eq:reciprocal_linear}:
+\begin{equation}
+  \rho = (1-c)\cosh\tau, \qquad c \in (0,1)\cup(1,\infty).
+  \label{eq:iso_eta}
+\end{equation}
+For $\eta > 1$ ($c < 1$), contours are cosh curves that open upward from $(0,1-c)$; for $\eta < 1$ ($c > 1$), they open downward from $(0,1-c) < 0$.  At $\eta = 1$ the contour degenerates to $\rho = 0$.
+
+\subsection{Poisson-Kernel Form}
+
+Setting $r = \sqrt{\kappa} = e^{\tau}$ and $\rho = \cos\varphi$ with $\varphi \in (0,\pi)$, the original PEF formula \cref{eq:pef_original} becomes
+\begin{equation}
+  \eta = \frac{1 + r^{2}}{|1 - r\,e^{i\varphi}|^{2}}.
+  \label{eq:poisson_form}
+\end{equation}
+The classical Poisson kernel for the disc is $P_{r}(\varphi) = (1-r^{2})/|1-r\,e^{i\varphi}|^{2}$, so
+\begin{equation}
+  \eta = P_{r}(\varphi) + \frac{2r^{2}}{|1-r\,e^{i\varphi}|^{2}}
+       = P_{r}(\varphi) + 2r^{2}\,\eta/(1+r^{2}).
+  \label{eq:poisson_decomposition}
+\end{equation}
+Rearranging, $\eta\,(1-2r^{2}/(1+r^{2})) = P_{r}(\varphi)$, i.e.\ $\eta \cdot (1-r^{2})/(1+r^{2}) = P_{r}(\varphi)$.  Equivalently, $\eta = (1+r^{2})/(1-r^{2})\cdot P_{r}(\varphi)$, which gives a simple ratio representation:
+\begin{equation}
+  \frac{\eta(\tau,\rho)}{P_{r}(\varphi)}
+  = \frac{1+r^{2}}{1-r^{2}}
+  = \frac{\cosh(2\tau)}{\sinh(2\tau)}\cdot\sinh(2\tau)/(1+e^{-4\tau})
+  = \coth(\tau)\big|_{\tau>0}.
+  \label{eq:eta_poisson_ratio}
+\end{equation}
+In particular, $\eta \ge P_{r}(\varphi)$ everywhere with equality only as $\tau \to 0$.
+
+\subsection{Geometric and Chebyshev Expansions}
+\label{sec:chebyshev}
+
+From the affine reciprocal \cref{eq:reciprocal_linear}, write $w = \rho\,\sech\tau$.  Whenever $|w| < 1$ (equivalently $|\rho| < \sqrt{\kappa}$ on the fundamental domain $\tau \ge 0$),
+\begin{equation}
+  \eta(\tau,\rho)
+  = \frac{1}{1-w}
+  = \sum_{k=0}^{\infty}(\rho\,\sech\tau)^{k}.
+  \label{eq:geometric_series}
+\end{equation}
+Convergence is geometric since $|\rho\,\sech\tau| \le \sech\tau < 1$ for $\tau > 0$ and $|\rho| < 1$.
+
+\begin{proposition}[Geometric series]
+\label{prop:geometric_series}
+For $|\rho\,\sech\tau| < 1$,
+\begin{equation}
+  \eta(\tau,\rho) = \sum_{k=0}^{\infty}(\rho\,\sech\tau)^{k},
+  \label{eq:chebyshev_exp}
+\end{equation}
+with uniform convergence on compact subsets of $\{|\rho| < 1,\,\tau > 0\}$.
+\end{proposition}
+
+\begin{proof}
+Immediate from \cref{eq:reciprocal_linear} and the identity $1/(1-w) = \sum_{k=0}^{\infty}w^{k}$ for $|w| < 1$.
+\end{proof}
+
+\begin{remark}[Chebyshev-$U$ cognate]
+In the original variables with $r = \sqrt{\kappa}$, \cref{eq:pef_original} gives $\eta = (1+r^{2})/(1-2r\rho+r^{2})$.  The denominator is the generating function for Chebyshev polynomials of the second kind \parencite{rivlin1990}:
+\[
+  \frac{1}{1-2r\rho+r^{2}} = \sum_{n=0}^{\infty}U_{n}(\rho)\,r^{n},
+  \qquad |r| < 1,
+\]
+so $\eta = (1+r^{2})\sum_{n=0}^{\infty}U_{n}(\rho)\,r^{n}$ on the branch $\kappa < 1$.  On the fundamental domain $\kappa \ge 1$, use \cref{eq:geometric_series} instead.  Both are classical rearrangements of the same rational function; the novelty is their interpretation for paired efficiency, not the series identities themselves.
+\end{remark}
+
+\begin{remark}
+At $\tau = 0$ (Fisher's case), $\sech\tau = 1$ and \cref{eq:geometric_series} becomes $\eta = 1/(1-\rho) = \sum_{k=0}^{\infty}\rho^{k}$, the geometric series for the Fisher efficiency.
+\end{remark}
+
+\subsection{Connection to Harmonic Analysis}
+\label{sec:harmonic}
+
+The Poisson-kernel representation \cref{eq:poisson_form} places $\eta$ in the framework of bounded analytic functions on the disc \parencite{garnett2007}.  The function $f(z) = (1+|z|^{2})/|1-z|^{2}$ is harmonic in $z = re^{i\varphi}$ for $r < 1$ (with $r = \sqrt{\kappa}$ playing the role of the radial variable and $\varphi = \arccos\rho$ the angular variable).  The boundary behaviour as $r \to 1$ recovers Fisher's formula $\eta \to 1/(1-\rho)$ on the unit circle $|z| = 1$.
+
+This harmonic-analytic perspective suggests a richer operator-theoretic treatment (Toeplitz operators, Hardy-space norms) as future work, but we do not pursue this here beyond noting that $\eta$ is a positive harmonic function on the disc that extends to a meromorphic function on the Riemann sphere with a single pole at $z = 1$ (corresponding to $(\kappa,\rho) = (1,1)$), confirming the geometry of \cref{sec:sphere}.

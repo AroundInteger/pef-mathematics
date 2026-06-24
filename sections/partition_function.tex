@@ -1,56 +1,86 @@
 \section{Partition-Function Structure}
 \label{sec:partition}
 
-% Intended content (~3 pages --- the second of the two genuinely novel sections).
-%
-%  5.1 The identity.
-%      Theorem (cumulant generating function):
-%        log eta(tau, rho) = -log(1 - rho sech tau).
-%      Setting theta = log(rho sech tau) when rho sech tau in (0, 1), this is
-%      the cumulant generating function of a one-parameter geometric
-%      exponential family with natural parameter theta and sufficient
-%      statistic the latent count n in {0, 1, 2, ...}.
-%
-%  5.2 First and second cumulants.
-%      Proposition: at the natural parameter theta,
-%        d_theta log eta = <n> = eta - 1     (mean / signal),
-%        d_theta^2 log eta = Var(n) = eta (eta - 1)  (Fisher information).
-%      Interpretation: eta - 1 is the *signal* quantity and eta(eta - 1) is
-%      the *information* quantity, both properties of eta itself, distribution
-%      free, with no extra modelling assumptions beyond the PEF definition.
-%
-%  5.3 Regime change at rho = 0.
-%      For rho > 0, the series sum_{n >= 0} (rho sech tau)^n converges and the
-%      partition-function reading is well-defined.  For rho < 0, the series
-%      becomes sign-alternating: information content is read off |rho| sech tau
-%      with sign carried separately.
-%
-%      Phenomenology: the empirical "efficiency--power tension" of the
-%      companion paper is exactly the rho < 0 regime, where the latent
-%      geometric interpretation breaks.  This is a *prediction* the empirical
-%      paper's framing now supports rather than merely describes: the
-%      regime change at rho = 0 is mathematical, not phenomenological, and
-%      the empirical divergence-is-largest-in-competitive-settings finding
-%      is its signature.
-%
-%  5.4 Distribution-free scope.
-%      The mutual-information derivation in the empirical companion's
-%      Section 2.2 requires bivariate normality.  The cumulant identity in
-%      5.1--5.2 does not: it is a purely algebraic consequence of the PEF
-%      formula, valid for any (kappa, rho) such that rho sech tau in (0, 1).
-%      In this sense the partition-function reading is the natural
-%      distribution-free signal/information bridge for paired efficiency.
-%
-%  5.5 What the latent count means.
-%      Discussion: the latent geometric variable n has no direct physical
-%      interpretation as a counting variable in the original (X_A, X_B)
-%      problem; it is a *latent* statistic in the sense of the exponential
-%      family.  This is consistent with sufficient-statistic constructions
-%      elsewhere in statistics.  Worth flagging that this does not imply a
-%      generative model for the data --- only for the efficiency-information
-%      pair.
+\subsection{The Cumulant-Generating Identity}
 
-% TODO: drafting.  Literature scan required: the geometric exponential family
-% on (0, 1) with natural parameter log(p) and sufficient statistic n is
-% standard; the *novelty* here is identifying log eta as its CGF for the
-% paired-efficiency family.  Confirm this identification is new.
+The canonical form \cref{eq:canonical} yields an immediate log-identity:
+\begin{equation}
+  \log\eta(\tau,\rho)
+  = -\log\!\bigl(1 - \rho\,\sech\tau\bigr).
+  \label{eq:logeta_identity}
+\end{equation}
+Setting $u = \rho\,\sech\tau$ and $\theta = \log u$ for $u \in (0,1)$, the right-hand side becomes
+\[
+  -\log(1 - e^{\theta}) = \sum_{n=1}^{\infty}\frac{e^{n\theta}}{n},
+\]
+which is the log-partition function (cumulant generating function at zero argument) of the \emph{logarithmic series distribution}. A more elementary identification comes from the geometric series:
+\[
+  \eta = \frac{1}{1 - u} = \sum_{n=0}^{\infty}u^{n},\qquad u \in (0,1),
+\]
+recognising $u^n = e^{n\theta}$ as the natural-parameter exponential-family weighting of a latent count $n \in \{0,1,2,\dotsc\}$.
+
+\begin{theorem}[Geometric Exponential Family]
+\label{thm:exp_family}
+For $\rho\,\sech\tau \in (0,1)$, define the natural parameter $\theta = \log(\rho\,\sech\tau) < 0$ and the log-partition function $A(\theta) = \log\eta$.  Then
+\begin{equation}
+  p(n;\theta) = (1-e^{\theta})\,e^{n\theta},\qquad n \in \{0,1,2,\dotsc\},
+  \label{eq:geo_family}
+\end{equation}
+defines a one-parameter exponential family with sufficient statistic $N$, base measure $h(n) = 1$, and $A(\theta) = -\log(1-e^{\theta}) = \log\eta$.  The PEF $\eta(\tau,\rho)$ is the partition function of this family, evaluated at the effective parameter $\theta = \log(\rho\,\sech\tau)$ determined by the pair $(\tau,\rho)$.
+\end{theorem}
+
+\begin{proof}
+Normalisation: $\sum_{n=0}^{\infty}(1-e^{\theta})e^{n\theta} = (1-e^{\theta})/(1-e^{\theta}) = 1$ for $e^{\theta} \in (0,1)$.  The cumulant generating function is $\log\mathbb{E}[e^{tN}] = -\log(1-e^{t+\theta}) + \log(1-e^{\theta})$, so $A(\theta) = -\log(1-e^{\theta}) = \log\eta$ is the log-partition function evaluated at $t=0$.
+\end{proof}
+
+\subsection{First and Second Cumulants}
+\label{sec:cumulants}
+
+The standard exponential-family relations $\mathbb{E}[N] = A'(\theta)$ and $\Var(N) = A''(\theta)$ give:
+
+\begin{proposition}[Cumulant Identities]
+\label{prop:cumulants}
+\[
+  \mathbb{E}[N] = A'(\theta) = \frac{e^{\theta}}{1-e^{\theta}} = \eta - 1,
+  \qquad
+  \Var(N) = A''(\theta) = \frac{e^{\theta}}{(1-e^{\theta})^{2}} = \eta(\eta-1).
+\]
+\end{proposition}
+
+\begin{proof}
+$A'(\theta) = e^{\theta}/(1-e^{\theta})$.  Since $e^{\theta} = u = \rho\,\sech\tau$ and $1-u = 1/\eta$, we get $A'(\theta) = u\eta = \eta - 1/\eta \cdot \eta = \eta - 1$.  For the second derivative, $A''(\theta) = e^{\theta}/(1-e^{\theta})^{2} = u\eta^{2} = (\eta-1)\eta$.
+\end{proof}
+
+The identities admit a direct empirical reading.  The quantity $\eta - 1$ is the \emph{signal}: for $\eta > 1$ it is positive, measuring the fractional gain from pairing; for $\eta < 1$ it is negative, measuring the fractional loss.  The quantity $\eta(\eta-1)$ is the \emph{curvature of the log-partition function}, which determines how rapidly $A$ changes with the natural parameter: it is the Fisher information of the latent family, and it sets the scale of fluctuations of $\hat{\eta}$ around its expectation.  Both quantities are properties of $\eta$ alone, valid for any $(\kappa,\rho)$ such that $\rho\,\sech\tau \in (0,1)$, with no additional distributional assumptions beyond the PEF definition.
+
+\subsection{Regime Change at \texorpdfstring{$\rho = 0$}{rho = 0}}
+\label{sec:regime}
+
+The geometric-family identification requires $\rho\,\sech\tau \in (0,1)$, i.e.\ $\rho > 0$.  For $\rho < 0$, the series $\sum_{n=0}^{\infty}(\rho\,\sech\tau)^{n}$ becomes sign-alternating: even-$n$ terms contribute positively, odd-$n$ terms negatively.  The closed form $\eta = 1/(1-\rho\,\sech\tau)$ remains well-defined and finite (since $|\rho\,\sech\tau| < 1$ in the physical domain), but the partition-function reading breaks down because $\theta = \log(\rho\,\sech\tau)$ is undefined for $\rho < 0$.
+
+There is a symmetry that partially restores the picture: write $\eta(\tau,\rho)$ for $\rho < 0$ as
+\[
+  \eta(\tau,\rho)
+  = \frac{\cosh\tau}{\cosh\tau + |\rho|}
+  = 1 - \frac{|\rho|}{\cosh\tau + |\rho|} < 1.
+\]
+Setting $\tilde{u} = |\rho|\,\sech\tau \in (0,1)$, we have $\eta = 1 - \tilde{u}/(1+\tilde{u}) = 1/(1+\tilde{u})$, which is distinct from the $\rho > 0$ form $1/(1-u)$.  The two branches meet at $\eta = 1$ when $\rho = 0$.  The partition function structure is therefore intrinsically chiral: it requires a sign choice at $\rho = 0$ before the latent-geometric reading applies.
+
+This is the mathematical origin of the regime change that the empirical paper terms the `efficiency--power tension' in competitive settings.  The prediction is concrete: statistics and machine-learning diagnostics that are smooth functions of $\eta$ will show a detectable slope discontinuity at $\rho = 0$, reflecting the change in the curvature $A''(\theta)$ across the boundary.  \Cref{sec:val_regime} tests this empirically.
+
+\subsection{Distribution-Free Scope}
+\label{sec:distrib_free}
+
+The Gaussian mutual-information link of the empirical companion \parencite{brownPEFempirical} requires bivariate normality.  The cumulant identities of \cref{sec:cumulants} do not: they follow from the algebraic form of $\eta$ alone.  Specifically, \cref{prop:cumulants} uses no properties of the original data-generating distribution beyond the definition of $\kappa$ and $\rho$ as (population) variance ratio and correlation.  The result is:
+\begin{itemize}
+  \item the `signal' quantity $\eta-1$ and the `information' quantity $\eta(\eta-1)$ are \emph{distribution-free} properties of the efficiency landscape;
+  \item the Gaussian mutual information $I(X;Y) = -\tfrac{1}{2}\log(1-\rho^{2})$ is a $(\kappa,\rho)$-specific instance arising only when $\kappa = 1$ (Fisher's case) under joint normality;
+  \item the partition-function form $\log\eta = -\log(1-\rho\,\sech\tau)$ is the natural generalisation that replaces the Gaussian special case with a formula that is valid across all variance ratios and correlations without distributional assumptions.
+\end{itemize}
+
+\subsection{The Latent Count}
+\label{sec:latent_count}
+
+The random variable $N$ in \cref{thm:exp_family} has no direct interpretation as a counting variable in the original $(X_{\mathrm{A}},X_{\mathrm{B}})$ problem.  It is a \emph{latent} sufficient statistic in the sense of exponential-family theory \parencite{brown1986,coverThomas2006}: a formal object whose existence is implied by the algebraic form of $A(\theta)$, not by any physical counting process.  Analogous latent constructions appear throughout statistics; the Poisson--Binomial relationship and the Pólya-urn representation of the Dirichlet--Multinomial are comparable examples.
+
+The interpretation we adopt is functional rather than generative: $\mathbb{E}[N] = \eta - 1$ quantifies deviation from the pairing-null ($\eta = 1$, $N \equiv 0$), and $\Var(N) = \eta(\eta-1)$ quantifies the sensitivity of the log-partition function to changes in the effective parameter $\theta = \log(\rho\,\sech\tau)$.  These are empirically accessible through the estimator $\hat{\eta}$, and their validity is independent of the data-generating mechanism.

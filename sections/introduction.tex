@@ -1,41 +1,67 @@
 \section{Introduction}
 \label{sec:intro}
 
-% Intended content (~2 pages):
-%
-%  1.1 Fisher's paired efficiency and its generalisation.
-%      One paragraph recapping Fisher's 1/(1 - rho) and the PEF generalisation
-%      eta = (1 + kappa)/(1 + kappa - 2*sqrt(kappa)*rho).  Cite the empirical
-%      companion paper for the cross-domain validation; this paper studies
-%      the structure of the formula itself.
-%
-%  1.2 Why the formula has more structure than it appears to.
-%      Motivate the half-strip reparameterisation tau = (1/2) log kappa and
-%      the canonical form eta = cosh tau / (cosh tau - rho).  Explain that
-%      everything in Sections 2--6 is a consequence of this single identity.
-%
-%  1.3 Contributions.
-%      List six contributions:
-%        (i)   canonical form on the half-strip and the kappa <-> 1/kappa
-%              involution;
-%        (ii)  Moebius linearisation 1/eta = 1 - rho sech tau and the
-%              Chebyshev/Poisson series;
-%        (iii) Riemann-sphere realisation eta = 1/(1 - cos sigma) and the
-%              identification of the Fisher regime (kappa = 1) with the
-%              sphere's equator;
-%        (iv)  partition-function reading log eta = -log(1 - rho sech tau)
-%              and the latent geometric exponential family;
-%        (v)   Fisher-Rao geometry, the variance-stabilising coordinate psi,
-%              and the regime change at rho = 0;
-%        (vi)  numerical validation of (i)--(v) on the six datasets of the
-%              empirical companion.
-%
-%  1.4 Relation to the empirical companion paper.
-%      Forward reference: empirical companion uses Sections 2--6 results as
-%      cited infrastructure; this paper uses Section 7's numerical results to
-%      ground the geometry.  Each paper is independently readable.
-%
-%  1.5 Outline.
-%      Pointer to Sections 2--8.
+\subsection{Fisher's Paired Efficiency and Its Generalisation}
 
-% TODO: drafting.
+Fisher \parencite{fisher1935} showed that pairing $n$ matched observations reduces the variance of the mean-difference estimator by a factor $(1-\rho)^{-1}$ relative to the two-sample design, where $\rho$ is the intra-pair correlation.  This efficiency gain is the foundation of repeated-measures and before--after study designs across the sciences.  Fisher's formula, however, assumes the two members of each pair share the same marginal variance.
+
+The companion empirical paper \parencite{brownPEFempirical} extends Fisher's result to the general paired setting in which the two margins have variance ratio $\kappa = \sigma_{\mathrm{B}}^{2}/\sigma_{\mathrm{A}}^{2} \ne 1$.  The \emph{Paired Efficiency Factor} (PEF) is defined as
+\begin{equation}
+  \eta(\kappa,\rho)
+  = \frac{1+\kappa}{1+\kappa-2\sqrt{\kappa}\,\rho},
+  \label{eq:pef_intro}
+\end{equation}
+and it reduces to Fisher's $1/(1-\rho)$ at $\kappa = 1$.  Cross-domain empirical validation of~\cref{eq:pef_intro} -- on rugby union, association football, clinical genomics, healthcare, finance, and manufacturing data -- is provided in \textcite{brownPEFempirical}.  The present paper focuses on the mathematical structure of the formula itself.
+
+\subsection{Related Work}
+\label{sec:related}
+
+Fisher's paired efficiency \parencite{fisher1935} is standard in the correlated-pairs and repeated-measures literature: the variance of the mean difference scales as $(\sigma_A^2+\sigma_B^2-2\rho\sigma_A\sigma_B)/n$, giving relative efficiency $1/(1-\rho)$ against an independent two-sample design when $\kappa=1$.  Classical treatments of unequal paired margins test $\sigma_A^2=\sigma_B^2$ via the correlation of within-pair sums and differences \parencite{pitman1939,morgan1939}; the distribution of ratios of correlated sample variances was studied early by \textcite{bose1935}.  These results address \emph{testing} or \emph{distributional} questions in $(\sigma_A,\sigma_B,\rho)$; they do not exhibit a canonical efficiency coordinate or the geometric structure developed here.  The Behrens--Fisher problem for \emph{independent} groups with unequal variances \parencite{welch1947} is a distinct design: Welch's solution does not apply to paired observations.  Under bivariate normality, \textcite{brownPEFempirical} show in their appendix that~\cref{eq:pef_intro} equals the Pitman asymptotic relative efficiency of the paired versus independent $t$-test \parencite{lehmann1999}.
+
+On the analytic side, the identity $1/\eta = 1-\rho\sech\tau$ invites Chebyshev and Poisson-kernel expansions \parencite{rivlin1990,garnett2007}.  Correlation parameters admit hyperspherical and angular representations on correlation-matrix manifolds \parencite{joe2006}, but those constructions parameterise positive-definite matrices rather than scalar paired-design efficiency.  Our lift $\cos\sigma = 2\sqrt{\kappa}\,\rho/(1+\kappa)$ is the Pearson correlation of variance-normalised margins; the novelty is the identification $\eta = 1/(1-\cos\sigma)$ as inverse spherical chord length from a marked pole.
+
+The partition-function reading places $\log\eta$ in the framework of exponential families \parencite{brown1986,coverThomas2006}: for $\theta=\log(\rho\sech\tau)$, $\eta$ is the partition function of a geometric family with cumulant generating function $A(\theta)=-\log(1-e^\theta)$.  We have not found a prior identification of a paired \emph{efficiency} statistic with this geometric log-partition function.  Fisher--Rao geometry \parencite{rao1945,chentsov1982,amari1985,amari2016} supplies the arc-length coordinate $\psi$, which is the PEF analogue of Fisher's $z=\operatorname{arctanh}\rho$ \parencite{fisher1921}; small-sample bias corrections for $\hat\rho$ are classical \parencite{olkinPratt1958}, whilst an analogous correction for $\hat\psi$ remains open.  Cross-domain pooling on a variance-stabilising scale follows the meta-analytic paradigm \parencite{dersimonianLaird1986}.
+
+Numerical validation in \cref{sec:numerical} uses bootstrap confidence intervals \parencite{efron1979}, energy-statistics symmetry diagnostics \parencite{szekeleyRizzo2013}, and a Davies-type likelihood-ratio test for a slope discontinuity at $\rho=0$ \parencite{davies1987}.  The present paper's contribution is the chain of identifications linking $(\kappa,\rho)$ to canonical form, sphere geometry, partition function, and Fisher--Rao arc length; each link has classical neighbours, but the composite structure for paired efficiency appears to be new.
+
+\subsection{Why the Formula Has More Structure Than It Appears To}
+
+Written in the form~\cref{eq:pef_intro}, the PEF is a rational function of two parameters with no immediately obvious geometric or information-theoretic content.  The reparameterisation
+\[
+  \tau = \tfrac{1}{2}\log\kappa
+\]
+reveals that the formula is, in canonical coordinates, simply
+\begin{equation}
+  \eta(\tau,\rho) = \frac{\cosh\tau}{\cosh\tau - \rho},
+  \label{eq:pef_canonical_intro}
+\end{equation}
+a Möbius fraction in $\rho$ with hyperbolic-function coefficients.  This single identity unlocks a chain of geometric and analytic consequences that are the subject of Sections~\ref{sec:canonical}--\ref{sec:fisher_rao}:
+
+\begin{itemize}
+  \item The map $\kappa \mapsto 1/\kappa$ (equivalently $\tau \mapsto -\tau$) acts trivially on $\eta$, so the four-quadrant taxonomy of \textcite{brownPEFempirical} is a two-to-one covering of the half-strip $\tau \ge 0$ (\cref{sec:canonical}).
+  \item The reciprocal $1/\eta = 1 - \rho\,\sech\tau$ is affine in $\rho$, enabling a geometric/Chebyshev series and a Poisson-kernel representation on the disc (\cref{sec:mobius}).
+  \item The parameter $\sigma = \arccos(2\sqrt{\kappa}\,\rho/(1+\kappa))$ identifies each $(\kappa,\rho)$ pair with a point on the unit sphere, and $\eta = 1/(1-\cos\sigma)$ (\cref{sec:sphere}).
+  \item The function $\log\eta = -\log(1 - \rho\,\sech\tau)$ is the log-partition function of a one-parameter geometric exponential family with natural parameter $\theta = \rho\,\sech\tau$ (\cref{sec:partition}).
+  \item In Fisher--Rao geometry, the coordinate $\psi = 2\arctanh\!\sqrt{\rho\,\sech\tau}$ is variance-stabilising and reveals a regime change at $\rho = 0$ (\cref{sec:fisher_rao}).
+\end{itemize}
+
+\subsection{Contributions}
+
+This paper makes six contributions:
+
+\begin{enumerate}[label=(\roman*)]
+  \item \textbf{Canonical form and involution} (\cref{sec:canonical}).  The half-strip reparameterisation reduces $\eta$ to~\cref{eq:pef_canonical_intro}, from which the $\kappa \leftrightarrow 1/\kappa$ symmetry is an immediate corollary.
+  \item \textbf{Affine linearisation, Poisson kernel, and series} (\cref{sec:mobius}).  We show $1/\eta$ is affine in $\rho$ at fixed $\tau$, derive a Poisson-kernel representation on the unit disc (distinct from the classical Poisson kernel \parencite{garnett2007}), obtain the geometric series $\eta = \sum_{k=0}^{\infty}(\rho\,\sech\tau)^{k}$, and relate the rational form to the Chebyshev-$U$ generating function on the branch $\kappa < 1$.
+  \item \textbf{Riemann-sphere realisation} (\cref{sec:sphere}).  We identify the parameter space with a subset of the unit sphere and show that $\eta$ measures the reciprocal of the spherical `one-minus-cosine' distance from the marked pole.  The Fisher case $\kappa=1$ is a meridian through that pole; independence ($\rho=0$) is the equator.
+  \item \textbf{Partition-function reading} (\cref{sec:partition}).  We exhibit $\eta$ as the partition function of a one-parameter geometric exponential family with natural parameter $\theta = \rho\,\sech\tau$ and derive cumulant-generating and moment identities.
+  \item \textbf{Fisher--Rao geometry and $\psi$-coordinate} (\cref{sec:fisher_rao}).  We compute the Fisher information metric on the $(\tau,\rho)$-plane and show that $\psi = 2\arctanh\!\sqrt{\rho\,\sech\tau}$ is a variance-stabilising coordinate for $\hat\eta$.  The metric changes character at $\rho = 0$, predicting a detectable regime change in empirical ML residuals.
+  \item \textbf{Numerical validation} (\cref{sec:numerical}).  We validate contributions~(i)--(v) on the six empirical datasets: the $\kappa \leftrightarrow 1/\kappa$ symmetry holds at machine precision (maximum residual $1.78\times10^{-15}$) across all 20{,}016 $(\hat\kappa,\hat\rho)$ estimates; the cumulant identity and sphere equivalence are verified within bootstrap confidence bands; and the regime-change LRT detects the discontinuity at $\rho = 0$ in pooled ML residuals.
+\end{enumerate}
+
+\subsection{Relation to the Empirical Companion Paper}
+
+The relationship between the two papers is deliberately one-directional: the empirical paper \parencite{brownPEFempirical} uses the results of Sections~\ref{sec:canonical}--\ref{sec:fisher_rao} as cited infrastructure, whilst the present paper uses the empirical pipeline's CSV outputs as the numerical witnesses of \cref{sec:numerical}.  Both papers are independently readable.  The bivariate-normal mutual-information relationship discussed in the empirical companion is the Gaussian specialisation of the partition-function representation of \cref{sec:partition}; the mathematical derivation and distributional generality are established here.
+
+\subsection{Outline}
+
+\Cref{sec:related} surveys prior work on paired efficiency and information geometry.  \Cref{sec:canonical} introduces the canonical form and the $\kappa \leftrightarrow 1/\kappa$ involution.  \Cref{sec:mobius} develops the Möbius and Chebyshev/Poisson series.  \Cref{sec:sphere} gives the sphere realisation.  \Cref{sec:partition} derives the partition-function structure.  \Cref{sec:fisher_rao} studies the Fisher--Rao geometry and $\psi$-coordinate.  \Cref{sec:numerical} reports the numerical validation.  \Cref{sec:discussion} discusses implications and future directions.

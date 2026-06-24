@@ -1,34 +1,73 @@
 \section{Mathematical Appendix}
 \label{sec:appendix}
 
-% Intended content (~2 pages of detailed algebra that would clutter the main text).
-%
-%  A.1 Derivation of the canonical form (full algebra).
-%      Step-by-step from eta = (1 + kappa)/(1 + kappa - 2 sqrt(kappa) rho)
-%      to eta = cosh tau / (cosh tau - rho).
-%
-%  A.2 Proof of the kappa <-> 1/kappa involution.
-%      Direct substitution.
-%
-%  A.3 Proof of the cumulant identity log eta = -log(1 - rho sech tau).
-%      Differentiate the canonical form; verify the first two cumulants
-%      match eta - 1 and eta (eta - 1).
-%
-%  A.4 Proof of the sphere realisation eta = 1/(1 - cos sigma).
-%      Compute cos sigma = 2 sqrt(kappa) rho / (1 + kappa) directly from the
-%      stereographic lift.
-%
-%  A.5 Variance-stabilising property of psi.
-%      Delta-method calculation.
-%
-%  A.6 Chebyshev/Poisson expansion details.
-%      Verification of the identity U_n + U_{n-2} = 2 rho U_{n-1} and
-%      collapse of the eta expansion.
-%
-%  A.7 Bootstrap procedures used in Section 7.
-%      Pseudocode for the symmetry test (levels 1, 2, 2.5, 3), cumulant
-%      identity check, psi-stabilisation, and regime-change LRT.
+\subsection{Canonical Form: Full Derivation}
 
-% TODO: drafting.  These appendix sections are intentionally separated from
-% the main text so that the main text remains readable end-to-end without
-% appendix detours.
+Starting from the original formula $\eta = (1+\kappa)/(1+\kappa-2\sqrt{\kappa}\,\rho)$, divide numerator and denominator by $\sqrt{\kappa}$:
+\[
+  \eta = \frac{\sqrt{\kappa}^{-1}(1+\kappa)}{{\sqrt{\kappa}}^{-1}(1+\kappa) - 2\rho}
+       = \frac{\sqrt{\kappa}^{-1} + \sqrt{\kappa}}{\sqrt{\kappa}^{-1}+\sqrt{\kappa}-2\rho}.
+\]
+With $\tau = \tfrac{1}{2}\log\kappa$, we have $\sqrt{\kappa} = e^{\tau}$, $\sqrt{\kappa}^{-1} = e^{-\tau}$, and
+$\sqrt{\kappa}^{-1}+\sqrt{\kappa} = e^{-\tau}+e^{\tau} = 2\cosh\tau$,
+giving $\eta = 2\cosh\tau/(2\cosh\tau - 2\rho) = \cosh\tau/(\cosh\tau-\rho)$.
+
+\subsection{Proof of the Involution}
+
+Direct: $\kappa \mapsto 1/\kappa$ sends $\tau = \tfrac{1}{2}\log\kappa \mapsto -\tau$.  Since $\cosh(-\tau) = \cosh\tau$, the canonical form $\eta = \cosh\tau/(\cosh\tau-\rho)$ is unchanged.  \qed
+
+\subsection{Cumulant Identity: Verification}
+
+From $\log\eta = -\log(1-u)$ with $u = \rho\,\sech\tau = e^{\theta}$:
+\[
+  \frac{\mathrm{d}\log\eta}{\mathrm{d}\theta}
+  = \frac{e^{\theta}}{1-e^{\theta}}
+  = \frac{u}{1-u}
+  = u\eta
+  = \rho\,\sech\tau\cdot\frac{\cosh\tau}{\cosh\tau-\rho}
+  = \frac{\rho}{\cosh\tau-\rho}
+  = \eta - \frac{\cosh\tau}{\cosh\tau-\rho} + \frac{\cosh\tau-\rho}{\cosh\tau-\rho}
+  = \eta - 1.
+\]
+Differentiating again: $\mathrm{d}^{2}\log\eta/\mathrm{d}\theta^{2} = \mathrm{d}(\eta-1)/\mathrm{d}\theta = \mathrm{d}\eta/\mathrm{d}\theta$.  From $\eta = 1/(1-u)$, $\mathrm{d}\eta/\mathrm{d}u = 1/(1-u)^{2} = \eta^{2}$, and $\mathrm{d}u/\mathrm{d}\theta = u = e^{\theta}$, so $\mathrm{d}\eta/\mathrm{d}\theta = \eta^{2} u = \eta^{2}(1-1/\eta) = \eta(\eta-1)$.  \qed
+
+\subsection{Sphere Realisation: Proof of \texorpdfstring{$\cos\sigma = \rho\,\sech\tau$}{cos sigma = rho sech tau}}
+
+Direct computation:
+\[
+  \frac{2\sqrt{\kappa}\,\rho}{1+\kappa}
+  = \frac{2e^{\tau}\rho}{e^{-\tau}(e^{2\tau}+1)e^{\tau}/(e^{\tau})}
+  = \frac{2\rho}{e^{\tau}+e^{-\tau}}
+  = \frac{2\rho}{2\cosh\tau}
+  = \rho\,\sech\tau.
+\]
+Therefore $\cos\sigma = \rho\,\sech\tau$ and $\eta = \cosh\tau/(\cosh\tau-\rho) = 1/(1-\rho\,\sech\tau) = 1/(1-\cos\sigma)$.  \qed
+
+\subsection{Variance-Stabilising Property: Delta-Method Calculation}
+
+Let $\hat\theta$ be the MLE of $\theta$ with $\sqrt{n}(\hat\theta-\theta)\xrightarrow{d}\mathcal{N}(0,\mathcal{I}(\theta)^{-1})$ where $\mathcal{I}(\theta) = A''(\theta) = \eta(\eta-1)$.  Define $\psi(\theta) = 2\,\arctanh(e^{\theta/2})$.  By the chain rule,
+\[
+  \frac{\mathrm{d}\psi}{\mathrm{d}\theta}
+  = 2\cdot\frac{1}{1-e^{\theta}}\cdot\tfrac{1}{2}e^{\theta/2}
+  = \frac{e^{\theta/2}}{1-e^{\theta}}
+  = \frac{\sqrt{u}}{1-u}
+  = \sqrt{\mathcal{I}(\theta)}.
+\]
+Delta method: $\Var(\hat\psi) \approx (\mathrm{d}\psi/\mathrm{d}\theta)^{2}\,\Var(\hat\theta) \approx \mathcal{I}(\theta)\cdot(n\,\mathcal{I}(\theta))^{-1} = 1/n$.  \qed
+
+\subsection{Bootstrap Procedures (§7)}
+\label{sec:bootstrap_pseudo}
+
+The following pseudocode describes the bootstrap procedures used in \cref{sec:numerical}.
+
+\textbf{Level-2 symmetry test (§7.2.2).}
+For each KPI with $n$ observations: (1) compute $\hat\eta_{AB}$ from $(X_A, X_B)$ and $\hat\eta_{BA}$ from $(X_B, X_A)$; (2) record $|d_\eta| = |\hat\eta_{AB} - \hat\eta_{BA}|$.  Pass threshold: $|d_\eta| < 10^{-12}$.
+
+\textbf{Level-2.5 bootstrap joint test (§7.2.3).}
+For each KPI: (1) draw $B = 300$ team-stratified bootstrap samples; (2) compute $(\hat\tau^{(b)}, \hat\rho^{(b)})$ for each sample under both label orderings; (3) compute the energy distance $E_n$ between the two bootstrap clouds; (4) compare to the 95th percentile of a permutation null.  Pass threshold: $p > 0.05$.
+
+\textbf{$\psi$-stabilisation test (§7.5).}
+For each domain: (1) draw $B = 500$ bootstrap samples of the within-domain units; (2) compute $\hat\psi^{(b)}$ for each; (3) record the 95\% CI width and compare across domains scaled by $1/\sqrt{n}$.
+
+\textbf{Regime-change LRT (§7.6).}
+Fit two models to $(rho_i, \Delta\mathrm{ML}_i)$ across all KPIs: (1) $\Delta\mathrm{ML} = \alpha + \beta\rho + \varepsilon$ (continuous linear); (2) $\Delta\mathrm{ML} = \alpha + \beta_{+}\rho\,\mathbb{1}(\rho > 0) + \beta_{-}\rho\,\mathbb{1}(\rho < 0) + \varepsilon$ (slope-change at $\rho = 0$).  LRT statistic: $2(\ell_2 - \ell_1) \sim \chi^{2}_1$ under $H_0: \beta_{+} = \beta_{-}$.

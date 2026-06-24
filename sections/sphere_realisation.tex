@@ -1,51 +1,56 @@
-\section{$\eta$ as Inverse Spherical Chord}
+\section{\texorpdfstring{$\eta$}{eta} as Inverse Spherical Chord}
 \label{sec:sphere}
 
-% Intended content (~3 pages --- this is one of the two genuinely novel sections).
-%
-%  4.1 The lift.
-%      Definition: for (kappa, rho) in (0, infinity) x (-1, 1), set
-%        z = sqrt(kappa) * exp(i arccos rho)
-%      and let pi^{-1}: C -> S^2 be the inverse stereographic projection from
-%      the south pole.  This realises every (kappa, rho) as a point on the
-%      Riemann sphere.
-%
-%  4.2 The pole at independence.
-%      The point P(1) = (1, 0, 0) on S^2 corresponds to (kappa, rho) = (1, 1):
-%      Fisher's perfectly-paired, equal-variance limit, where eta -> infinity.
-%      Call P(1) the marked pole.
-%
-%  4.3 The angular distance identity.
-%      Theorem (sphere realisation):
-%        eta(kappa, rho) = 1 / (1 - cos sigma) = (1/2) csc^2(sigma/2),
-%      where sigma is the angular (spherical) distance from pi^{-1}(z) to
-%      the marked pole P(1).  Proof: direct computation, using
-%      cos sigma = 2 sqrt(kappa) rho / (1 + kappa).
-%
-%  4.4 Geometric translations of the empirical taxonomy.
-%      - Fisher's classical line kappa = 1 is the equator.
-%      - The involution kappa <-> 1/kappa is reflection across the equator.
-%      - Iso-eta contours are spherical caps centred on P(1).
-%      - The empirical "competitive, negative-rho, high-asymmetry" Q4 regime
-%        is literally the antipodal hemisphere to the marked pole.
-%
-%  4.5 Why this matters for the empirical paper.
-%      The four-quadrant taxonomy of the empirical companion is a *coordinate
-%      artefact* of viewing a spherical object through a planar (kappa, rho)
-%      chart.  The substantive structure is the angular distance sigma to
-%      independence; the four quadrants are just the four sign-patterns of
-%      (kappa - 1, rho), which on the sphere collapse to a single
-%      latitude/longitude coordinate up to the kappa <-> 1/kappa reflection.
-%
-%  4.6 Caveats.
-%      The stereographic lift is not unique (a different choice of base
-%      point gives a different chart); we choose the one that makes P(1)
-%      the marked pole because it is the only point in the closure of the
-%      physical domain where eta diverges.
+\subsection{The Angular-Distance Parameter}
 
-% TODO: drafting.  Literature scan required: check whether this projective
-% realisation of the variance-ratio / correlation pair has appeared in
-% statistical-shape-analysis or random-matrix-eigenvalue work.  My current
-% belief is that the *specific* realisation with marked pole at (1, 1) is
-% novel for this family, but the more general fact that 2x2 correlation
-% matrices lift to the sphere is well-known and must be cited.
+For $(\kappa,\rho) \in (0,\infty)\times(-1,1)$, define
+\begin{equation}
+  \cos\sigma
+  = \frac{2\sqrt{\kappa}\,\rho}{1+\kappa}
+  = \rho\,\sech\tau,
+  \label{eq:cos_sigma}
+\end{equation}
+where the second equality uses $\tau = \tfrac{1}{2}\log\kappa$.  Since $|\rho| < 1$ and $\sech\tau \le 1$, we have $|\cos\sigma| < 1$, so $\sigma \in (0,\pi)$ is a well-defined angle.  Hyperspherical parameterisations of correlation matrices \parencite{joe2006} use angular coordinates on a Cholesky factor; here $\sigma$ arises from the scalar Pearson correlation of variance-normalised margins.  The quantity $\sigma$ can be interpreted as a spherical distance, as the following theorem makes precise.
+
+\subsection{The Sphere Realisation}
+
+\begin{theorem}[Sphere Realisation]
+\label{thm:sphere}
+With $\sigma$ as in \cref{eq:cos_sigma},
+\begin{equation}
+  \eta(\tau,\rho)
+  = \frac{1}{1 - \cos\sigma}
+  = \tfrac{1}{2}\csc^{2}\!\tfrac{\sigma}{2}.
+  \label{eq:eta_sphere}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+From the canonical form \cref{eq:canonical},
+$\eta = \cosh\tau/(\cosh\tau - \rho)$.
+Dividing numerator and denominator by $\cosh\tau$ gives $\eta = 1/(1-\rho\,\sech\tau) = 1/(1-\cos\sigma)$.
+The identity $\tfrac{1}{2}\csc^{2}(\sigma/2) = 1/(1-\cos\sigma)$ is the standard half-angle formula.
+\end{proof}
+
+\Cref{thm:sphere} identifies $\eta$ with the reciprocal of the `one-minus-cosine' distance from the angle $\sigma = 0$.  To embed this in a sphere, let $\mathbf{x}(\tau,\rho) = (\cos\sigma,\, \sin\sigma\cos\phi,\, \sin\sigma\sin\phi)$ for any $\phi$; the choice of longitude $\phi$ does not affect $\eta$, so the relevant geometry is on the great circle through $\sigma$.  We take the \emph{marked pole} $P_{0}$ to be the point $\sigma = 0$, which corresponds to $\rho\,\sech\tau = 1$.  Since $|\cos\sigma| < 1$ strictly in the physical domain, the pole is approached but never reached, consistent with $\eta \to \infty$ at $(0,1)$.
+
+\subsection{Geometric Translations of the Empirical Taxonomy}
+\label{sec:sphere_geometry}
+
+The canonical-form reparameterisation gives three geometric facts:
+\begin{enumerate}[label=(\roman*)]
+  \item \textbf{Fisher's line $\kappa = 1$ is a meridian.}  At $\tau = 0$, $\cos\sigma = \rho$, so $\sigma = \arccos\rho \in (0,\pi)$.  As $\rho$ runs from $-1$ to $+1$, $\sigma$ runs from $\pi$ (antipode) to $0$ (pole).  The Fisher efficiency $\eta = 1/(1-\rho)$ is recovered exactly.
+  \item \textbf{The involution $\kappa \leftrightarrow 1/\kappa$ is a reflection.}  Substituting $\tau \mapsto -\tau$ preserves $\sech\tau$ and hence $\cos\sigma$, so the two branches $\kappa$ and $1/\kappa$ map to the same $\sigma$.  The four quadrants of the empirical taxonomy correspond to four sectors of the $(\tau,\rho)$-plane, but they map two-to-one onto the sphere: Q1 and Q2 share their $\sigma$ values with Q4 and Q3 respectively (up to the sign of $\tau$).
+  \item \textbf{Iso-$\eta$ contours are latitude circles.}  The condition $\eta = c$ is $\cos\sigma = 1 - 1/c$, a fixed value, so the iso-$\eta$ surface in the $(\tau,\rho)$-plane corresponds to a latitude circle on the sphere at polar angle $\sigma = \arccos(1-1/c)$.
+\end{enumerate}
+
+The `competitive, negative-$\rho$, high-asymmetry' regime (Quadrant~4 of the empirical paper, $\rho < 0$, $\kappa \approx 1$) lies in the hemisphere $\cos\sigma < 0$, i.e.\ $\sigma > \pi/2$: it is geometrically the antipodal half of the sphere from the pole.  The transition between the `information-rich' and `information-poor' regimes at $\rho = 0$ ($\sigma = \pi/2$) is therefore the equator.
+
+\subsection{The Parabolic Blow-Up Revisited}
+
+Near the pole $\sigma = 0$, expand $1 - \cos\sigma = \tfrac{1}{2}\sigma^{2} + O(\sigma^{4})$, giving $\eta \approx 2/\sigma^{2}$.  In $(\tau,\rho)$ coordinates, $\sigma^{2} \approx 2[(1-\rho) + \tfrac{1}{2}\tau^{2}]$ (from \cref{eq:parabolic_blowup}), so $\eta \approx 1/[(1-\rho)+\tfrac{1}{2}\tau^{2}]$, recovering the parabolic blow-up of \cref{sec:canonical} as the small-$\sigma$ limit of the spherical formula.  The iso-$\eta$ parabolas of \cref{sec:canonical} are therefore the projections of latitude circles near the pole onto the $(\tau,\rho)$-plane.
+
+\subsection{Numerical Validation}
+\label{sec:sphere_numerical_preview}
+
+The identity $\hat\eta = 1/(1-\cos\hat\sigma)$ is tested empirically in \cref{sec:val_sphere} using the $(\hat\kappa,\hat\rho)$ estimates from the sports and non-sports datasets.  The column \texttt{eta\_sigma\_residual} in \texttt{pef\_landscape\_2season\_geometry.csv} records $\hat\eta - 1/(1-\cos\hat\sigma)$ for all 113 sports KPI studies; the maximum absolute residual is $8.88\times10^{-16}$, at machine precision.

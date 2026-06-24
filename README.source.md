@@ -1,6 +1,6 @@
 # PEF Mathematics — Companion Paper
 
-This folder contains the Overleaf project for the **mathematical companion** to the empirical PEF paper at [`../overleaf_pef_article/`](../overleaf_pef_article/).
+This folder contains the LaTeX project for the **mathematical companion** to the empirical PEF paper at [`../pef-empirical/`](../pef-empirical/).
 
 ## Scope
 
@@ -8,7 +8,7 @@ The empirical paper generalises Fisher's paired efficiency formula to unequal va
 
 - Canonical form on the half-strip $(|\tau|, \rho)$ with $\tau = \tfrac{1}{2}\log\kappa$.
 - The $\kappa \leftrightarrow 1/\kappa$ involution.
-- Möbius linearisation and Chebyshev/Poisson series.
+- Affine linearisation (`1/η` affine in `ρ`), Poisson-kernel form, and geometric/Chebyshev‑`U` series.
 - Riemann-sphere realisation $\eta = 1/(1 - \cos\sigma)$ with marked pole at independence.
 - Partition-function reading $\log\eta = -\log(1 - \rho\,\operatorname{sech}\tau)$ as the cumulant generating function of a one-parameter geometric exponential family.
 - Fisher–Rao geometry and the variance-stabilising coordinate $\psi = 2\operatorname{arctanh}\sqrt{\rho\,\operatorname{sech}\tau}$.
@@ -21,62 +21,61 @@ Solo-authored (Rowan Brown). The empirical companion paper carries the group aut
 
 ## Status
 
-**Scaffolded only.** The empirical paper is the immediate priority and should be submitted first. This companion will be drafted in parallel once the empirical paper is in final-draft form, and preprinted on arXiv around the same time as the empirical paper's submission.
+**First full draft** (2026-06-22). All body sections have prose; §7 uses CSVs in `validation_inputs/` stamped by `_manifest.csv` (empirical commit `5aa9cfc`).
+
+Open polish: include Figure 4 in §4 LaTeX; finalise §7.6 LRT statistics in the empirical pipeline; compile with biber before submission.
+
+The empirical paper remains the immediate submission priority.
 
 ## Structure
 
 ```
-overleaf_pef_mathematics/
-├── main.tex                          --- Overleaf entry-point
-├── references.bib                    --- companion-specific bibliography (math/stats only)
-├── README.md                         --- this file
+pef-mathematics/
+├── main.tex                          --- entry-point
+├── references.bib                    --- companion bibliography
 ├── sections/
 │   ├── abstract.tex
-│   ├── introduction.tex              --- §1: motivation and contributions
-│   ├── canonical_form.tex            --- §2: cosh-τ form and κ↔1/κ symmetry
-│   ├── mobius_chebyshev.tex          --- §3: Möbius linearisation and series expansion
-│   ├── sphere_realisation.tex        --- §4: η as inverse spherical chord [novel]
-│   ├── partition_function.tex        --- §5: CGF and the latent geometric family [novel]
-│   ├── fisher_rao.tex                --- §6: ψ coordinate and meta-analytic scale
-│   ├── numerical_validation.tex      --- §7: six-domain numerical validation
-│   ├── discussion.tex                --- §8: information geometry and future work
-│   └── appendix.tex                  --- detailed algebra and pseudocode
-└── figures/                          --- planned figures listed in figures/.gitkeep
+│   ├── introduction.tex              --- §1
+│   ├── canonical_form.tex            --- §2
+│   ├── mobius_chebyshev.tex          --- §3
+│   ├── sphere_realisation.tex        --- §4
+│   ├── partition_function.tex        --- §5
+│   ├── fisher_rao.tex                --- §6
+│   ├── numerical_validation.tex      --- §7
+│   ├── discussion.tex                --- §8
+│   └── appendix.tex
+├── figures/Figure_4_sphere.png
+├── scripts/generate_figure_sphere.m
+├── scripts/lib/pef_theory_helpers.m  --- read-only mirror from empirical sync
+└── validation_inputs/                --- §7 CSVs + _manifest.csv
 ```
 
-Sections 4 and 5 are the genuinely novel contributions; Sections 2, 3, and 6 are scaffolding (likely admit related forms elsewhere in the design-of-experiments / information-geometry literature and require a directed literature scan before drafting).
+Sections 4 and 5 are the headline novel identifications (sphere and partition-function reading). Priority-claim audit: `RESEARCH_README.md` (literature scan 2026-06-23).
 
 ## Relation to the empirical paper
 
 The two papers cross-cite without circular dependency:
 
-- Empirical paper cites this paper for: the geometric structure, the $\psi$ coordinate, the partition-function identity, and the regime-change observation at $\rho = 0$. These are referenced as cited infrastructure rather than reproduced.
-- This paper cites the empirical paper for: the six-domain validation data, the four-quadrant taxonomy as a teaching device, and the empirical machine-learning improvement numbers used in §7.
+- Empirical paper cites this paper for geometric structure, $\psi$, partition-function identity, and the regime change at $\rho = 0$.
+- This paper cites the empirical paper for six-domain validation data, the four-quadrant taxonomy, and ML numbers in §7.
 
-Either paper is readable independently. The companion does not depend on the empirical paper for any mathematical claim; the empirical paper does not depend on the companion for any reproducibility claim.
+Either paper is readable independently.
 
 ## Numerical pipeline
 
-The numerical validation in §7 reuses the MATLAB pipeline at [`../overleaf_pef_article/scripts/paper_pipeline/`](../overleaf_pef_article/scripts/paper_pipeline/). New scripts (symmetry tests at all three levels, cumulant identity check, sphere-distance equivalence, $\psi$ stabilisation, regime-change LRT) are added to that pipeline rather than duplicated here, and this paper imports the resulting CSVs.
+§7 numbers come from [`pef-empirical/scripts/paper_pipeline/`](../pef-empirical/scripts/paper_pipeline/). Refresh via:
 
-## Target venues (provisional)
+```bash
+cd ../pef-empirical
+bash scripts/paper_pipeline/sync_to_companion.sh
+```
 
-In rough order of fit:
-
-1. **Information Geometry** (Springer) — best fit for Sections 4–6 as headline contributions.
-2. **Bernoulli** — strong methodological fit for the CGF identity and the $\psi$ coordinate.
-3. **Journal of Multivariate Analysis** — appropriate if the operator-theoretic / Hardy-space extension (§3.5) is developed.
-4. **Biometrika** — appropriate if the writing emphasises hypothesis testing and $\psi$ as a meta-analytic scale.
-
-Final venue decision deferred until the draft is complete.
+Do not maintain a second pipeline here.
 
 ## Compilation
 
-Standard Overleaf pdfLaTeX + biber. Locally:
-
-```
-cd paper/overleaf_pef_mathematics
-latexmk -pdf -bibtex- -e '$bibtex = q/biber %O %B/' main.tex
+```bash
+latexmk -pdf -bibtex- -e '$bibtex = q/biber %O %B;' main.tex
 ```
 
-UK English throughout (per [`../draft_v13_comprehensive_theoretical/documentation/OVERLEAF_BEST_PRACTICES.md`](../draft_v13_comprehensive_theoretical/documentation/OVERLEAF_BEST_PRACTICES.md)). All mathematics in LaTeX, no raw Unicode Greek.
+UK English throughout. All mathematics in LaTeX, no raw Unicode Greek.
