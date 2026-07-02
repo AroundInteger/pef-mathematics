@@ -1,7 +1,7 @@
 \section{Numerical Validation}
 \label{sec:numerical}
 
-This section validates the geometric claims of Sections~\ref{sec:canonical}--\ref{sec:fisher_rao} on the six empirical datasets of \textcite{brownPEFempirical}.  All computations use the outputs of \texttt{run\_paper\_pipeline.m} and its companion scripts, and the input CSVs in \texttt{validation\_inputs/} are stamped with the provenance manifest \texttt{\_manifest.csv} (empirical commit \texttt{5aa9cfc}, 2026-06-22).
+This section validates the geometric claims of Sections~\ref{sec:canonical}--\ref{sec:fisher_rao} on the six empirical datasets of \textcite{brownPEFempirical}.  All computations use the outputs of \texttt{run\_paper\_pipeline.m} and its companion scripts; the input CSVs in \texttt{validation\_inputs/} are stamped with SHA256 hashes and the empirical source commit in \texttt{\_manifest.csv} (refreshed via \texttt{sync\_to\_companion.sh} from \texttt{pef-empirical}).
 
 \subsection{Datasets}
 \label{sec:val_datasets}
@@ -130,7 +130,7 @@ Across the 113 sports KPIs, 27 have $\hat\rho > 0$ and 86 have $\hat\rho < 0$.  
 \begin{table}[t]
   \centering
   \caption{Falsifiability summary for the five numerical tests.
-           All tests pass on the current datasets (empirical commit \texttt{5aa9cfc}).}
+           All tests pass on the current datasets (provenance in \texttt{validation\_inputs/\_manifest.csv}).}
   \label{tab:falsifiability}
   \small
   \begin{tabular}{@{}lllp{4cm}@{}}

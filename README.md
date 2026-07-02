@@ -64,6 +64,14 @@ latexmk -pdf -bibtex- -e '$bibtex = q/biber %O %B;' main.tex
 
 Requires pdfLaTeX + biber. UK English throughout.
 
+## Independent paper review
+
+Structured review skill files live in the empirical repo:
+
+**[`../pef-empirical/Paper Review Process/`](../pef-empirical/Paper%20Review%20Process/)**
+
+For companion reviews, read `review-pef-papers.md` (scope boundaries, §7 CSV provenance, Mode D joint consistency with empirical). Default venue: **AoAS** (see empirical `TARGET_JOURNAL_MATRIX.md`).
+
 ## Archive
 
 Development history lives in `UP1_PEF` (archived). These two repos are the maintained sources.
