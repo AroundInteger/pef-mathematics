@@ -11,7 +11,7 @@ The Paired Efficiency Factor \parencite{brownPEFempirical} is defined as the rat
   = \frac{1+\kappa}{1+\kappa-2\sqrt{\kappa}\,\rho},
   \label{eq:pef_original}
 \end{equation}
-where $\kappa = \sigma_{\mathrm{B}}^{2}/\sigma_{\mathrm{A}}^{2} > 0$ is the variance ratio and $\rho \in (-1,1)$ is the Pearson correlation.  Setting
+where $\kappa = \sigma_{\mathrm{B}}^{2}/\sigma_{\mathrm{A}}^{2} > 0$ is the variance ratio and $\rho \in (-1,1)$ is the Pearson correlation between the two margins of each paired observation.  In the sports datasets of \textcite{brownPEFempirical}, each index corresponds to one fixture and $\hat\rho$ is the cross-fixture correlation of home and away KPI vectors (one paired count per game), not serial correlation within a single team's time series.  Setting
 \begin{equation}
   \tau = \tfrac{1}{2}\log\kappa,
   \label{eq:tau_def}

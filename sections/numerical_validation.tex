@@ -29,6 +29,8 @@ The six datasets span four domains; full data provenance is given in \textcite{b
 
 Across all six domains the total number of $(\hat\kappa,\hat\rho)$ estimates is 20{,}016 (113 sports KPIs and 19{,}903 non-sports units).
 
+For the sports rows of \cref{tab:datasets}, each KPI study supplies $n$ same-fixture home--away pairs (entity~A = home throughout).  The estimator $\hat\rho$ is the sample Pearson correlation between the home and away KPI vectors across those $n$ fixtures---a cross-fixture summary of contemporaneous co-movement, not correlation within a single match or serial dependence of one team's KPI across games (\textcite{brownPEFempirical}, Parameter Estimation and Independence Considerations).  All numerical tests in this section inherit that estimand from the empirical pipeline outputs.
+
 \subsection{Symmetry Tests}
 \label{sec:val_symmetry}
 
