@@ -12,13 +12,14 @@ alwaysApply: true
 
 - Mathematical structure of \(\eta\): canonical form, symmetries, sphere, partition function, Fisher–Rao \(\psi\)
 - Proofs and series expansions (§§2–6 scaffold)
-- §7 **numerical validation** of geometry claims using CSVs in `validation_inputs/`
+- §7 **numerical validation** in two tiers: (i) half-strip geometry model (`scripts/run_pef_geometry_numerical_model.m`) for involution, sphere, cumulants, and \(\Var(\hat\psi)\approx 1/n\); (ii) empirical CSVs in `validation_inputs/`
 - Regime-change and \(\psi\)-scale narrative tied to ML residuals
 
 ## Empirical repo owns (cite, do not duplicate)
 
 - Sports and supporting-domain **data** and PEF estimation per KPI
 - `run_paper_pipeline.m`, `numbers.tex`, main figures 1–3
+- Idealised probit simulation under (A1)–(A2) — Gaussian \(\eta\leftrightarrow I(X;Y)\) with ML
 - Four-quadrant **practical guidance** table and application domains
 - Primary \(\eta \leftrightarrow I(X;Y)\) **empirical** correlation on KPI studies
 
@@ -26,7 +27,8 @@ alwaysApply: true
 
 - **Do not** copy sports raw CSVs or re-implement the full pipeline here
 - Refresh `validation_inputs/` from `pef-empirical/scripts/paper_pipeline/outputs/` after empirical pipeline runs
-- Draft §7 from those CSVs; do not invent numbers not in the inputs
+- Draft empirical-CSV §7 from those inputs; do not invent numbers not in the CSVs
+- The half-strip geometry model is companion-owned and does **not** replace the empirical probit sim
 
 ## Writing guardrails
 

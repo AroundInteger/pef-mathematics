@@ -1,0 +1,35 @@
+=== PEF geometry numerical model summary ===
+Date: 06-Sep-2026 15:55:08
+RNG base: 20260905
+SMOKE_TEST: 0
+tau grid: [0 0.1 0.25 0.5 1 1.5]
+N_GEO=50000, N_GEO_PSI=200, N_PAIR=500, N_TRIALS=400
+
+--- Block A: algebraic ---
+cells: 234
+max involution residual: 0.000e+00
+max sphere residual: 2.132e-14
+max series residual (|u|<0.85): 2.487e-14
+
+--- Block B: geometric family MC ---
+cells: 36, n=50000
+max rel mean error: 3.100e-02
+max rel var error: 4.390e-02
+
+--- Block C: geometric-family MLE psi ---
+cells: 36, n=200, trials=400
+median n*Var(psi): 1.0110 (target 1)
+CV n*Var(psi): 0.0729
+CV Var(eta)/theory: 0.4214
+
+--- Block D: BVN plug-in diagnostic ---
+cells: 66, n=500, trials=400
+CV n*Var(psi_plug-in): 1.3023
+CV n*Var(eta_plug-in): 3.1617
+
+--- Pass/fail ---
+Block A (algebraic): PASS
+Block B (cumulants): PASS
+Block C (psi MLE): PASS
+Block D (BVN diagnostic): PASS
+Overall: PASS

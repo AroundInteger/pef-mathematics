@@ -28,16 +28,31 @@ Distribution-free geometry of \(\eta = (1+\kappa)/(1+\kappa-2\sqrt{\kappa}\,\rho
 pef-mathematics/
 ├── main.tex, sections/, references.bib
 ├── figures/Figure_4_sphere.png   §4 sphere plot (script-generated)
-├── validation_inputs/            CSVs + _manifest.csv (§7 provenance)
+├── validation_inputs/            CSVs + _manifest.csv (§7 empirical provenance)
 ├── scripts/
-│   ├── generate_figure_sphere.m  companion Fig 4
-│   └── lib/                      mirrored pef_theory_helpers.m (read-only)
+│   ├── generate_figure_sphere.m
+│   ├── run_pef_geometry_numerical_model.m   half-strip geometry model (§7)
+│   ├── outputs/                  geometry_*.csv + summary
+│   └── lib/
+│       ├── pef_geometry_helpers.m   companion-owned (edit here)
+│       └── pef_theory_helpers.m     mirrored from empirical (read-only)
 └── .cursor/rules/
 ```
 
 ## Numerical validation (§7)
 
-**Do not** duplicate `run_paper_pipeline.m` here. Regenerate inputs in the empirical repo, then sync from the **empirical repo root**:
+Two tiers:
+
+1. **Half-strip geometry model** (this repo). Controlled witness of involution, sphere, geometric-family cumulants, and $\Var(\hat\psi)\approx 1/n$:
+
+```bash
+cd scripts
+/Applications/MATLAB_R2025b.app/bin/matlab -batch "run('run_pef_geometry_numerical_model.m')"
+```
+
+Outputs: `scripts/outputs/geometry_*.csv` and `geometry_numerical_summary.txt`.
+
+2. **Empirical CSV witnesses.** **Do not** duplicate `run_paper_pipeline.m` here. Regenerate inputs in the empirical repo, then sync from the **empirical repo root**:
 
 ```bash
 cd ../pef-empirical
@@ -45,6 +60,8 @@ bash scripts/paper_pipeline/sync_to_companion.sh
 ```
 
 This copies eight CSVs (`kappa_symmetry_*`, `psi_*`, `pef_landscape_2season_geometry.csv`, `domain_summary.csv`, `table_numbers.csv`), mirrors `scripts/lib/pef_theory_helpers.m`, and writes `validation_inputs/_manifest.csv` with SHA256 provenance.
+
+The empirical idealised probit simulation (`run_pef_idealised_probit_sim.m`) remains in `pef-empirical`: it validates the Gaussian $\eta\leftrightarrow I(X;Y)$ story under (A1)–(A2). The half-strip model here validates the *geometry* without an outcome layer.
 
 ## Figures
 

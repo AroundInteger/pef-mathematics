@@ -1,6 +1,6 @@
 # PEF project memory (master reference)
 
-**Last updated:** 2026-05-21  
+**Last updated:** 2026-09-05  
 **Purpose:** Single source of truth for humans and Cursor agents across `pef-empirical`, `pef-mathematics`, and the archived monorepo.
 
 ---
@@ -12,7 +12,7 @@ Two maintained Git repositories for a **split publication strategy**:
 | Paper | Repo | Audience / role |
 |-------|------|-----------------|
 | Empirical PEF | `pef-empirical` | Cross-domain validation, quadrants, KPI ML, Gaussian information link — **submit first** |
-| Mathematics companion | `pef-mathematics` | Geometry, symmetries, sphere, partition function, Fisher–Rao ψ, §7 numeric tests |
+| Mathematics companion | `pef-mathematics` | Geometry, symmetries, sphere, partition function, Fisher–Rao ψ, half-strip numerical model, §7 CSV tests |
 
 The old monorepo **`UP1_PEF`** (~29 GB history) is **archive / reference only**. Live sources are the two new repos.
 
@@ -63,7 +63,9 @@ cd /Users/rowanbrown/Documents/GitHub/pef-empirical/scripts/paper_pipeline
 
 **SI figures:** `scripts/matlab_figures/generate_figure_S1_info_sensitivity.m`, `generate_figure_S2_labelled_kpis.m`
 
-**Idealised probit sim:** `scripts/paper_pipeline/run_pef_idealised_probit_sim.m` (theory-aligned A1–A2; outputs `idealised_probit_*.csv/png` in `outputs/`)
+**Idealised probit sim (empirical):** `pef-empirical/scripts/paper_pipeline/run_pef_idealised_probit_sim.m` (theory-aligned A1–A2; outputs `idealised_probit_*.csv/png` in `outputs/`). Validates Gaussian $\eta\leftrightarrow I(X;Y)$ and efficiency–power under a probit outcome model.
+
+**Half-strip geometry model (companion):** `pef-mathematics/scripts/run_pef_geometry_numerical_model.m` with `scripts/lib/pef_geometry_helpers.m`. Controlled witness of involution, sphere, geometric-family cumulants, and $\Var(\hat\psi)\approx 1/n$ on $\tau\ge 0$; no outcome/ML layer. Outputs in `pef-mathematics/scripts/outputs/`.
 
 **Pre-submission finalize diagnostics:** `scripts/paper_pipeline/run_pef_finalize_diagnostics.m` (after pipeline + idealised sim; per-KPI `I_pred`, stratified idealised corr, iso-η/iso-I, bootstrap, Q4 Bayes gap, season drift → `outputs/finalize_*.csv`, `figures/Figure_S3`–`S7` + `Figure_finalize_bootstrap_exemplars.png`)
 

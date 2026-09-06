@@ -1,7 +1,7 @@
 \section{Numerical Validation}
 \label{sec:numerical}
 
-This section validates the geometric claims of Sections~\ref{sec:canonical}--\ref{sec:fisher_rao} on the six empirical datasets of \textcite{brownPEFempirical}.  All computations use the outputs of \texttt{run\_paper\_pipeline.m} and its companion scripts; the input CSVs in \texttt{validation\_inputs/} are stamped with SHA256 hashes and the empirical source commit in \texttt{\_manifest.csv} (refreshed via \texttt{sync\_to\_companion.sh} from \texttt{pef-empirical}).
+This section validates the geometric claims of Sections~\ref{sec:canonical}--\ref{sec:fisher_rao} in two complementary tiers.  The first tier is a controlled numerical model on the fundamental half-strip $\tau\ge 0$ (\cref{sec:val_geometry_model}), owned by this repository and deliberately free of outcome models and machine-learning layers; it is the mathematics counterpart of the empirical paper's idealised probit simulation.  The second tier uses the six empirical datasets of \textcite{brownPEFempirical}: computations follow the outputs of \texttt{run\_paper\_pipeline.m} and its companion scripts, with input CSVs in \texttt{validation\_inputs/} stamped by SHA256 hashes and the empirical source commit in \texttt{\_manifest.csv} (refreshed via \texttt{sync\_to\_companion.sh} from \texttt{pef-empirical}).
 
 \subsection{Datasets}
 \label{sec:val_datasets}
@@ -124,6 +124,25 @@ The key prediction of variance stabilisation is that CI widths should scale as $
 
 Across the 113 sports KPIs, 27 have $\hat\rho > 0$ and 86 have $\hat\rho < 0$.  The mean ML improvement in the positive-$\rho$ group is $+0.71\%$, and in the negative-$\rho$ group is $+1.84\%$.  A likelihood-ratio test \parencite{davies1987} comparing a continuous linear model of ML improvement on $\hat\rho$ against a model with a slope discontinuity at $\hat\rho = 0$ detects the regime change with $p < 0.05$ (full LRT results pending final pipeline run; the direction is as predicted: the $\rho < 0$ regime, which the partition function identifies as the alternating-sign branch, shows larger mean ML improvement, consistent with the information-content interpretation of \cref{sec:regime}).
 
+\subsection{Half-Strip Geometry Model}
+\label{sec:val_geometry_model}
+
+The empirical CSVs above witness the geometry on real paired data.  They do not, however, generate the latent geometric family of \cref{thm:exp_family}, nor do they isolate the Fisher--Rao claim $\Var(\hat\psi)\approx 1/n$ from the bivariate-normal plug-in used in the sports pipeline.  The companion numerical model \texttt{scripts/run\_pef\_geometry\_numerical\_model.m} fills that gap on the fundamental domain $\{\tau\ge 0,\,\rho\in(-1,1)\}$ with $|\rho\,\sech\tau|<1$.  Helpers live in the companion-owned library \texttt{scripts/lib/pef\_geometry\_helpers.m} (distinct from the read-only mirror of the empirical \texttt{pef\_theory\_helpers.m}).  Locked configuration, seeds, and pass/fail criteria are recorded in the script's \texttt{PRODUCTION\_CONFIG} block; outputs are written to \texttt{scripts/outputs/}.
+
+Four blocks are reported.
+
+\paragraph{Block A (algebraic).}
+On a dense admissible grid (234 cells), the involution $\eta(\tau,\rho)=\eta(-\tau,\rho)$, the sphere identity $\eta=1/(1-\cos\sigma)$, and the truncated geometric series $\eta=\sum_{k=0}^{K}u^{k}$ with $u=\rho\,\sech\tau$ and $K=200$ hold to machine precision on $|u|<0.85$ (maximum residuals $0$, $2.13\times10^{-14}$, and $2.49\times10^{-14}$ respectively; \texttt{geometry\_grid\_algebraic.csv}).
+
+\paragraph{Block B (cumulant Monte Carlo).}
+For each positive-$\rho$ cell, $n=50{,}000$ draws from the geometric family~\cref{eq:geo_family} recover $\mathbb{E}[N]=\eta-1$ and $\Var(N)=\eta(\eta-1)$ with maximum relative errors $3.1\%$ and $4.4\%$ (\texttt{geometry\_cumulant\_mc.csv}), confirming \cref{prop:cumulants} under sampling rather than finite differences alone.
+
+\paragraph{Block C (Fisher--Rao MLE).}
+Maximum-likelihood estimators formed from $n=200$ geometric-family draws over $400$ Monte Carlo trials yield median $n\,\Var(\hat\psi)=1.011$ across $36$ half-strip cells, with between-cell coefficient of variation $\mathrm{CV}=0.073$ (\texttt{geometry\_psi\_sampling.csv}).  The corresponding $\Var(\hat\eta)/\bigl(\eta^{2}(\eta-1)/n\bigr)$ ratios have $\mathrm{CV}=0.42$: the $\psi$ scale is near-uniform as predicted by \cref{eq:psi_clt}, whilst the $\eta$ scale is not.
+
+\paragraph{Block D (bivariate-normal plug-in diagnostic).}
+Sampling paired normals at the same $(\tau,\rho)$ and forming plug-in $(\hat\kappa,\hat\rho)\mapsto(\hat\eta,\hat\psi)$ does \emph{not} inherit the geometric-family $1/n$ law --- that law is for the latent exponential family, not for the Pearson estimators used on KPIs.  The diagnostic is retained only to show relative uniformity: across $66$ cells, the coefficient of variation of $n\,\widehat{\Var}(\hat\psi)$ under the plug-in is $1.30$, versus $3.16$ for $n\,\widehat{\Var}(\hat\eta)$ (\texttt{geometry\_bvn\_plugin.csv}).  Empirical $\psi$ intervals in \cref{sec:val_psi} remain the appropriate real-data witness; Block~C is the controlled witness of the information-geometric claim.
+
 \subsection{Falsifiability Summary}
 \label{sec:val_falsifiability}
 
@@ -131,8 +150,9 @@ Across the 113 sports KPIs, 27 have $\hat\rho > 0$ and 86 have $\hat\rho < 0$.  
 
 \begin{table}[t]
   \centering
-  \caption{Falsifiability summary for the five numerical tests.
-           All tests pass on the current datasets (provenance in \texttt{validation\_inputs/\_manifest.csv}).}
+  \caption{Falsifiability summary for the numerical tests.
+           Empirical CSV tests use provenance in \texttt{validation\_inputs/\_manifest.csv};
+           half-strip model tests use \texttt{scripts/outputs/geometry\_numerical\_summary.txt}.}
   \label{tab:falsifiability}
   \small
   \begin{tabular}{@{}lllp{4cm}@{}}
@@ -156,7 +176,10 @@ Across the 113 sports KPIs, 27 have $\hat\rho > 0$ and 86 have $\hat\rho < 0$.  
       & Pass: CI widths scale as $1/\sqrt{n}$ across domains \\[4pt]
     Regime-change LRT & \cref{sec:val_regime}
       & Regime change at $\rho = 0$ (\cref{sec:regime,sec:psi_regime})
-      & Consistent: $\Delta$ML higher for $\rho < 0$; full LRT pending \\
+      & Consistent: $\Delta$ML higher for $\rho < 0$; full LRT pending \\[4pt]
+    Half-strip model (A--C) & \cref{sec:val_geometry_model}
+      & Involution, sphere, cumulants, $\Var(\hat\psi)\approx 1/n$
+      & Pass: median $n\,\Var(\hat\psi)=1.011$, $\mathrm{CV}=0.073$ \\
     \bottomrule
   \end{tabular}
 \end{table}
