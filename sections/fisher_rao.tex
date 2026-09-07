@@ -58,14 +58,14 @@ The coordinate $\psi$ is defined for $u = \rho\,\sech\tau \in (0,1)$, i.e.\ $\rh
   \psi = \operatorname{sign}(\rho)\cdot 2\,\arctanh\!\sqrt{|\rho|\,\sech\tau},
   \label{eq:psi_signed}
 \end{equation}
-so that $\psi \in \mathbb{R}$ for all $(\tau,\rho)$ in the physical domain and $\psi = 0 \Leftrightarrow \rho = 0$.
+so that $\psi \in \mathbb{R}$ for all $(\tau,\rho)$ in the physical domain and $\psi = 0 \Leftrightarrow \rho = 0$.  \Cref{fig:psi_partition} (right) plots this signed extension against $u=\rho\,\sech\tau$.
 
 The change of sign at $\rho = 0$ is not a coordinate singularity: $\psi$ is continuous through $\rho = 0$.  However, the Fisher information $\mathcal{I}(\theta) = \eta(\eta-1)$ changes sign there as well (from positive for $\eta > 1$ to negative for $\eta < 1$), reflecting the geometric fact that the partition-function reading of \cref{sec:partition} switches branches.  The asymptotic variance $\Var(\hat\psi) \approx 1/n$ holds in each regime separately; the regime boundary at $\rho = 0$ is a locus where the local curvature of the exponential family changes character.  This is the content of the regime-change LRT test in \cref{sec:val_regime}, implemented following Davies \parencite{davies1987}.
 
 \subsection{Implication for Cross-Domain Meta-Analysis}
 \label{sec:psi_meta}
 
-In the six datasets of \textcite{brownPEFempirical}, mean $\eta$ varies from $0.88$ (football) to $3.13$ (finance) --- a factor of 3.6.  On the $\psi$ scale the values are (from \texttt{psi\_per\_domain.csv}, omitting the single healthcare observation): football $\hat\psi = -0.730$, rugby $+0.217$, manufacturing $+0.017$, clinical genomics $+1.869$, finance $+2.251$.  Bootstrap 95\% confidence intervals for $\psi$ have widths of $0.35$--$0.81$ (the wider end for the smaller rugby dataset, $n=283$), consistent with the $1/\sqrt{n}$ scaling of \cref{eq:psi_clt}.
+In the six datasets of \textcite{brownPEFempirical}, mean $\eta$ varies from $0.88$ (football) to $3.13$ (finance), a factor of 3.6.  On the $\psi$ scale the values are (from \texttt{psi\_per\_domain.csv}, omitting the single healthcare observation): football $\hat\psi = -0.730$, rugby $+0.217$, manufacturing $+0.017$, clinical genomics $+1.869$, finance $+2.251$.  Bootstrap 95\% confidence intervals for $\psi$ have widths of $0.35$--$0.81$ (the wider end for the smaller rugby dataset, $n=283$), consistent with the $1/\sqrt{n}$ scaling of \cref{eq:psi_clt}.
 
 For meta-analytic pooling, the variance-stabilising property implies that a fixed-effects or random-effects model on the $\psi$ scale \parencite{dersimonianLaird1986} will not be dominated by high-$\eta$ domains (whose $\hat\eta$ has large sampling variance) or compressed by low-$\eta$ domains.  Across the positive-$\rho$ domains (finance, clinical genomics, healthcare) the between-domain coefficient of variation of $\psi$ ($\mathrm{CV}_\psi = 0.41$) is close to that of $\eta$ ($\mathrm{CV}_\eta = 0.33$), confirming that $\psi$ resolves between-domain differences to a similar degree as $\eta$ whilst providing more uniform within-domain confidence intervals.
 
@@ -76,7 +76,7 @@ The practical recipe is: (1) estimate $(\hat\kappa, \hat\rho)$ per KPI; (2) comp
 
 Three coordinates serve analogous roles in related problems:
 \begin{itemize}
-  \item \textbf{Fisher's $z = \arctanh\rho$ \parencite{fisher1921}.}  Variance-stabilising for the bivariate-normal correlation at equal variances ($\kappa = 1$).  Small-sample bias corrections for $\hat\rho$ are classical \parencite{olkinPratt1958}; an analogous correction for $\hat\psi$ remains open.  Recovers from $\psi$ at $\tau = 0$: $\psi = 2\,\arctanh\!\sqrt{\rho} \ne \arctanh\rho$ in general, but at $\rho \to 0$, $\psi \approx 2\sqrt{\rho} \approx 2z/\sqrt{z}$ --- the two are distinct transformations of the same parameter.
+  \item \textbf{Fisher's $z = \arctanh\rho$ \parencite{fisher1921}.}  Variance-stabilising for the bivariate-normal correlation at equal variances ($\kappa = 1$).  Small-sample bias corrections for $\hat\rho$ are classical \parencite{olkinPratt1958}; an analogous correction for $\hat\psi$ remains open.  Recovers from $\psi$ at $\tau = 0$: $\psi = 2\,\arctanh\!\sqrt{\rho} \ne \arctanh\rho$ in general.  At $\rho \to 0$, $\psi \approx 2\sqrt{\rho} \approx 2z/\sqrt{z}$.  The two are distinct transformations of the same parameter.
   \item \textbf{Logit $\log(p/(1-p))$.}  Variance-stabilising for binomial proportions.  The cumulant structure is analogous to the geometric family here, with $\eta$ playing the role of $1/q$.
   \item \textbf{Sphere angle $\sigma = \arccos(\rho\,\sech\tau)$.}  Measures colatitude from the marked pole on the unit sphere (\cref{sec:sphere}); related to $\psi$ by $\sigma = \arccos(\tanh^{2}(\psi/2))$, equivalently $\psi = 2\,\arctanh\!\sqrt{\cos\sigma}$, the classical inverse once the sphere lift is fixed.
 \end{itemize}

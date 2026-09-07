@@ -1,0 +1,63 @@
+---
+description: Sentence clarity and em-dash house style for PEF companion prose
+globs: "**/*.tex"
+alwaysApply: false
+---
+
+# Writing clarity — PEF mathematics companion
+
+Applies when editing companion manuscript `.tex`. Use with `latex-paper.mdc` (British English, maths). Adapted from the Football-TDA / Paper A clarity ruleset that proved valuable on grant and journal prose.
+
+## Em dashes and asides
+
+- **Do not use em dashes as parenthetical asides.** In LaTeX that means avoid `---` (and Unicode `—`) for clause interruptions.
+- Prefer **commas**, a **colon**, or a **new sentence**.
+- Number ranges and mathematical en-dashes stay: `$0.94$--$0.95$`, theorem ranges — those are not asides.
+- At most **one** aside (parenthesis *or* a short comma gloss) per sentence; **none** if the sentence already has a subordinate clause (*which*, *where*, *because*, *whilst*).
+
+**Avoid:**
+
+```latex
+The involution---$\kappa\mapsto 1/\kappa$---leaves $\eta$ unchanged when $\rho$ is fixed.
+```
+
+**Prefer:**
+
+```latex
+The involution $\kappa\mapsto 1/\kappa$ leaves $\eta$ unchanged when $\rho$ is fixed.
+```
+
+or:
+
+```latex
+Under the involution $\kappa\mapsto 1/\kappa$, $\eta$ is unchanged at fixed $\rho$.
+```
+
+## One sentence, one message
+
+Write sentences a reader grasps in a single pass.
+
+1. One idea per sentence; split independent claims.
+2. Target **25–30 words**; rewrite anything over about **35**.
+3. At most one subordinate clause; do not stack *because…, which…, where…, aligning…*.
+4. Subject and main verb early; avoid long run-ups before the main clause.
+5. Do not parallel-load lists where each item carries example + rationale + citation — use separate sentences or an `itemize`/`enumerate`.
+6. Prefer full stops to semicolons; reserve a semicolon for a tight, symmetrical pair.
+7. One citation cluster per clause; do not interleave several cite commands through one argument.
+8. Read-aloud test: if you must re-read to find the main claim, split the sentence.
+
+Dense theorems and displays are fine; the rule applies to **connecting prose**, not to displayed equations.
+
+## Section headings
+
+Every concept named in a heading should be addressed and evidenced in that section. Verbatim repetition of the heading word is not required; demonstrate the concept.
+
+## Tone (companion)
+
+- Theory-first; §7 numbers must match `validation_inputs/` — do not invent CSV values.
+- Cross-cite the empirical paper for KPI data and ML; do not re-derive six-domain sports tables here.
+- $\psi$ headline interpretation belongs in this manuscript, not in empirical Results.
+
+## When editing
+
+Before finishing a prose edit, skim for `---` asides and sentences over ~35 words. Split or re-punctuate rather than packing more into the same clause.
