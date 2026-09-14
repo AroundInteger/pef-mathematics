@@ -232,6 +232,10 @@ C2–C5 are the safe, provable core. C6–C7 are speculative and must be labelle
 ### 5.7 Open decisions for the author
 
 - **D1:** Include the §7 analytic equivariance check now, or defer? (Recommend: include — cheap, no ML.)
+  **Status: done (14 Sep 2026).** Added as "Level 3: Signal-Coordinate Equivariance" in
+  `sections/numerical_validation.tex`, backed by `scripts/verify_involution_equivariance.m`
+  and `scripts/outputs/involution_equivariance_check.csv`. All three identities (C2–C4) pass
+  at machine precision on the 113-KPI grid; the $\sqrt{\kappa}$ factor spans $[0.741,1.192]$.
 - **D2:** Pursue the Fisher–Rao chart conjecture (C6), or leave as a note-only open direction?
 - **D3:** Target the equivariance proposition at `canonical_form.tex` (recommended) or at the
   involution passage wherever it currently sits?
