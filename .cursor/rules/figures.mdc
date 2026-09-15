@@ -1,0 +1,47 @@
+---
+description: House style for companion-paper figures (type, panel letters, legends, captions)
+globs: "**/figures/**,**/scripts/generate_figure*.m,**/sections/*.tex"
+alwaysApply: false
+---
+
+# Figure presentation (companion paper)
+
+Match the empirical house style so the two papers look like a pair.
+Canonical checklist: `pef-empirical/.cursor/rules/figures.mdc`.
+Implement in this repo's `scripts/generate_figure*.m` (do not copy the empirical pipeline).
+
+## Type
+
+| Element | Size |
+|---------|------|
+| Axis labels, colourbar labels | 12 pt (minimum 10 pt) |
+| Tick labels, contour clabels | 10 pt |
+| Panel letters, notes, annotations | 12 pt |
+| Legends | 12 pt |
+
+Export at 300 dpi. White figure background.
+
+## Titles and captions
+
+- No axes `title` / `sgtitle` on published figures.
+- Narrative lives in the LaTeX caption.
+- Captions use (A), (B), (C) to match panel letters. British English.
+
+## Panel letters
+
+- Multi-panel: `(A)`, `(B)`, `(C)` inside the axes, default northwest inset.
+- White background, 12 pt bold. Another corner only when northwest sits on data.
+- Single-panel figures do not need a letter.
+
+## Legends and annotations
+
+- Legends 12 pt, box off, in empty space (not on curves or markers).
+- Labels must not overlap each other, data, or panel letters.
+
+## Pre-export check
+
+1. No title on the figure.
+2. Panel letters inside the box, same corner across panels.
+3. Axis labels 12 pt, ticks 10 pt, annotations and legends 12 pt.
+4. Legend and labels clear of data.
+5. Caption describes panels without repeating a figure title.

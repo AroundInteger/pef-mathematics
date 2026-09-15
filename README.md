@@ -12,9 +12,10 @@ Solo-authored mathematical companion to the empirical PEF paper in [`pef-empiric
 
 **Polish still open before submission:**
 
-- Wire `figures/Figure_4_sphere.png` into §4 (`\includegraphics` not yet added)
 - §7.6 regime-change LRT: direction reported; full test statistics pending pipeline update
 - Local compile check with `latexmk` (biber)
+
+**Figures (ideal main-text sequence):** `Figure_1` … `Figure_6` generated and cited in §§2–7 (2026-09-06).
 
 Empirical paper submits first; this companion preprints around the same time.
 
@@ -27,51 +28,52 @@ Distribution-free geometry of \(\eta = (1+\kappa)/(1+\kappa-2\sqrt{\kappa}\,\rho
 ```
 pef-mathematics/
 ├── main.tex, sections/, references.bib
-├── figures/Figure_4_sphere.png   §4 sphere plot (script-generated)
+├── figures/
+│   ├── Figure_1_halfstrip_domain.png
+│   ├── Figure_2_mobius_linearisation.png
+│   ├── Figure_3_sphere_theory.png
+│   ├── Figure_4_psi_partition.png
+│   ├── Figure_5_halfstrip_geometry.png
+│   ├── Figure_5b_psi_stabilisation.png
+│   └── Figure_6_sphere_empirical.png
 ├── validation_inputs/            CSVs + _manifest.csv (§7 empirical provenance)
 ├── scripts/
-│   ├── generate_figure_sphere.m
-│   ├── run_pef_geometry_numerical_model.m   half-strip geometry model (§7)
-│   ├── outputs/                  geometry_*.csv + summary
+│   ├── generate_figures_companion_main.m   Figs 1–4
+│   ├── generate_figure_geometry_model.m    Fig 5 / 5b
+│   ├── generate_figure_sphere.m            Fig 6
+│   ├── run_pef_geometry_numerical_model.m
+│   ├── outputs/
 │   └── lib/
-│       ├── pef_geometry_helpers.m   companion-owned (edit here)
-│       └── pef_theory_helpers.m     mirrored from empirical (read-only)
 └── .cursor/rules/
+```
+
+## Figures
+
+Ideal main-text sequence (standalone companion numbering):
+
+| Fig | File | Section | Script |
+|-----|------|---------|--------|
+| 1 | `Figure_1_halfstrip_domain.png` | §2 Canonical | `generate_figures_companion_main.m` |
+| 2 | `Figure_2_mobius_linearisation.png` | §3 Möbius | same |
+| 3 | `Figure_3_sphere_theory.png` | §4 Sphere | same |
+| 4 | `Figure_4_psi_partition.png` | §5–6 Partition / ψ | same |
+| 5 | `Figure_5_halfstrip_geometry.png` | §7 model | `generate_figure_geometry_model.m` |
+| 5b | `Figure_5b_psi_stabilisation.png` | §7 model | same |
+| 6 | `Figure_6_sphere_empirical.png` | §7 empirical | `generate_figure_sphere.m` |
+
+```bash
+cd scripts
+/Applications/MATLAB_R2025b.app/bin/matlab -batch "run('generate_figures_companion_main.m')"
+/Applications/MATLAB_R2025b.app/bin/matlab -batch "run('generate_figure_geometry_model.m')"   # needs outputs/
+/Applications/MATLAB_R2025b.app/bin/matlab -batch "run('generate_figure_sphere.m')"            # needs validation_inputs/
 ```
 
 ## Numerical validation (§7)
 
-Two tiers:
+1. **Half-strip geometry model** (this repo): `run_pef_geometry_numerical_model.m` → `scripts/outputs/`
+2. **Empirical CSV witnesses:** sync from `pef-empirical` via `sync_to_companion.sh` (do not re-run the sports pipeline here)
 
-1. **Half-strip geometry model** (this repo). Controlled witness of involution, sphere, geometric-family cumulants, and $\Var(\hat\psi)\approx 1/n$:
-
-```bash
-cd scripts
-/Applications/MATLAB_R2025b.app/bin/matlab -batch "run('run_pef_geometry_numerical_model.m')"
-```
-
-Outputs: `scripts/outputs/geometry_*.csv` and `geometry_numerical_summary.txt`.
-
-2. **Empirical CSV witnesses.** **Do not** duplicate `run_paper_pipeline.m` here. Regenerate inputs in the empirical repo, then sync from the **empirical repo root**:
-
-```bash
-cd ../pef-empirical
-bash scripts/paper_pipeline/sync_to_companion.sh
-```
-
-This copies eight CSVs (`kappa_symmetry_*`, `psi_*`, `pef_landscape_2season_geometry.csv`, `domain_summary.csv`, `table_numbers.csv`), mirrors `scripts/lib/pef_theory_helpers.m`, and writes `validation_inputs/_manifest.csv` with SHA256 provenance.
-
-The empirical idealised probit simulation (`run_pef_idealised_probit_sim.m`) remains in `pef-empirical`: it validates the Gaussian $\eta\leftrightarrow I(X;Y)$ story under (A1)–(A2). The half-strip model here validates the *geometry* without an outcome layer.
-
-## Figures
-
-Regenerate the companion sphere figure from this repo root:
-
-```bash
-/Applications/MATLAB_R2025b.app/bin/matlab -batch "cd('scripts'); run('generate_figure_sphere.m')"
-```
-
-Input: `validation_inputs/pef_landscape_2season_geometry.csv`. Output: `figures/Figure_4_sphere.png`.
+The empirical idealised probit simulation stays in `pef-empirical`. The half-strip model here validates geometry without an outcome layer.
 
 ## Compile
 

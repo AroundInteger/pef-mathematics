@@ -34,4 +34,5 @@ Regenerate numbers in `pef-empirical`, then refresh `validation_inputs/`. §7 dr
 ## Writing defaults
 
 - British English; LaTeX maths per `latex-paper.mdc`
+- Figures: `figures.mdc` (same type and panel-letter rules as the empirical paper)
 - Do not duplicate sports data or full `run_paper_pipeline.m` here
