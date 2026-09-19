@@ -30,7 +30,7 @@ Export at 300 dpi. White figure background.
 ## Panel letters
 
 - Multi-panel: `(A)`, `(B)`, `(C)` inside the axes, default northwest inset.
-- White background, 12 pt bold. Another corner only when northwest sits on data.
+- No white patch. 12 pt bold. Another corner only when northwest sits on data.
 - Single-panel figures do not need a letter.
 
 ## Legends and annotations

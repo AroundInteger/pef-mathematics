@@ -2,7 +2,7 @@
 
 **Date:** 14 September 2026
 **Provenance:** finding obtained in the empirical repository `pef-empirical`
-(idealised probit simulation, Supplementary Note S2, Figure S4b).
+(idealised probit simulation, Supplementary Note S2, Figure S1).
 This note records how that outcome-layer result interacts with the
 companion's canonical geometry, and flags a possible extension on the
 $\kappa\leftrightarrow1/\kappa$ looped domain. It is a pointer, not a
@@ -118,7 +118,7 @@ following are natural companion-side questions on the looped domain:
 
 ## 4. Reproducibility and cross-references
 
-- Empirical figure and derivation: `pef-empirical/figures/Figure_S4b_idealised_I_vs_dML_overlay.png`
+- Empirical figure and derivation: `pef-empirical/figures/Figure_S1_idealised_I_vs_dML_overlay.png`
   and Supplementary Note S2, "Validation 4" (`pef-empirical/sections/supplementary.tex`).
 - Generator: `pef-empirical/scripts/matlab_figures/regenerate_figure_S4_overlay.m`
   (panel C draws the master surface and both envelopes).
@@ -152,7 +152,7 @@ blocks the empirical submission.
 
 **Out of scope (empirical-owned; cite only):**
 - The master surface $\Delta\mathrm{ML}=F(d_{\mathrm{rel}},r)$, $\mathrm{acc}_R$, $\mathrm{acc}_A$,
-  the envelopes, and Figure S4b. These require the outcome/ML layer and stay in `pef-empirical`.
+  the envelopes, and Figure S1. These require the outcome/ML layer and stay in `pef-empirical`.
 
 ### 5.2 Precise claims and proof status
 
@@ -198,7 +198,7 @@ C2–C5 are the safe, provable core. C6–C7 are speculative and must be labelle
 
 4. **`discussion.tex` — one cross-citing sentence.**
    "The companion efficiency invariant $\eta$ is lifted once an outcome layer is attached; see
-   `pef-empirical` (Note S2, Fig S4b) for the predictive-gain surface and its envelopes."
+   `pef-empirical` (Note S2, Fig S1) for the predictive-gain surface and its envelopes."
    **Risk:** low.
 
 5. **`sphere_realisation.tex` / `partition_function.tex` — defer (C7).**
@@ -208,7 +208,7 @@ C2–C5 are the safe, provable core. C6–C7 are speculative and must be labelle
 
 - **No new companion figure required** for C2–C5. If a visual is wanted later, a small
   $(\tau,d_{\mathrm{rel}})$ equivariance schematic ($\tau\mapsto-\tau$, $d_{\mathrm{rel}}\mapsto\sqrt{\kappa}d_{\mathrm{rel}}$)
-  could live in the companion; the outcome-coloured Fig S4b stays empirical and is cited.
+  could live in the companion; the outcome-coloured Fig S1 stays empirical and is cited.
 
 ### 5.5 Sequencing and dependencies
 
