@@ -12,8 +12,8 @@
 % Blocks:
 %   A  Dense half-strip algebraic checks (involution, sphere, series)
 %   B  Latent geometric-family Monte Carlo (cumulant identities)
-%   C  Geometric-family MLE Monte Carlo (Var(psi)~1/n; contrast Var(eta))
-%   D  BVN plug-in diagnostic (half-strip uniformity of psi vs eta; no 1/n claim)
+%   C  Geometric-family MLE Monte Carlo (Var(psi)~1/n; Var(eta)~eta(eta-1)/n)
+%   D  BVN plug-in: Var(u_hat) against the delta-method formula
 %
 % Outputs (scripts/outputs/):
 %   geometry_grid_algebraic.csv
@@ -221,7 +221,8 @@ for it = 1:numel(TAU_GRID)
         var_eta = var(eta_s, 0);
         var_psi = var(psi_s, 0);
         var_psi_th = 1 / N_GEO_PSI;
-        var_eta_th = (eta0^2 * (eta0 - 1)) / N_GEO_PSI;
+        % d(eta)/d(theta) = eta*(eta-1), so Var(eta_hat) ~ eta*(eta-1)/n.
+        var_eta_th = (eta0 * (eta0 - 1)) / N_GEO_PSI;
 
         rows_C = [rows_C; tau, rho, eta0, psi0, u0, var_eta, var_psi, ...
             var_eta_th, var_psi_th, ...
@@ -244,24 +245,26 @@ fprintf('  MLE cells: %d (n=%d, trials=%d)\n', ...
     height(psi_tbl), N_GEO_PSI, N_TRIALS);
 fprintf('  median n*Var(psi) = %.3f (target 1)\n', med_n_var_psi);
 fprintf('  CV of n*Var(psi) = %.3f\n', cv_psi);
-fprintf('  CV of Var(eta)/theory = %.3f (eta scale is non-uniform)\n', ...
-    cv_eta_ratio);
+med_eta_ratio = median(psi_tbl.var_eta_ratio);
+fprintf('  median Var(eta)/[eta(eta-1)/n] = %.3f\n', med_eta_ratio);
+fprintf('  CV of Var(eta)/theory = %.3f\n', cv_eta_ratio);
 
 log_lines{end+1} = '--- Block C: geometric-family MLE psi ---';
 log_lines{end+1} = sprintf('cells: %d, n=%d, trials=%d', ...
     height(psi_tbl), N_GEO_PSI, N_TRIALS);
 log_lines{end+1} = sprintf('median n*Var(psi): %.4f (target 1)', med_n_var_psi);
 log_lines{end+1} = sprintf('CV n*Var(psi): %.4f', cv_psi);
+log_lines{end+1} = sprintf('median Var(eta)/[eta(eta-1)/n]: %.4f', med_eta_ratio);
 log_lines{end+1} = sprintf('CV Var(eta)/theory: %.4f', cv_eta_ratio);
 log_lines{end+1} = '';
 
 writetable(psi_tbl, fullfile(OUT_DIR, 'geometry_psi_sampling.csv'));
 
-%% Block D --- BVN plug-in diagnostic (uniformity only) -------------------
-% Plug-in estimators under bivariate-normal pairing do *not* inherit the
-% geometric-family 1/n law; this block only checks that n*Var(psi_hat) is
-% more stable across the half-strip than raw Var(eta_hat).
-fprintf('Block D: BVN plug-in uniformity diagnostic...\n');
+%% Block D --- BVN plug-in variance of u ----------------------------------
+% Compare Monte Carlo Var(u_hat) with
+% (sech(tau)^2 - u^2) * (1-u^2) / n.
+% Also record n*Var(psi_hat), which the formula says diverges as u -> 0.
+fprintf('Block D: BVN plug-in variance of u...\n');
 
 rho_samp = [RHO_NEG, RHO_POS];
 rows_D = [];
@@ -274,18 +277,25 @@ for it = 1:numel(TAU_GRID)
         end
         eta0 = H.eta_canonical(tau, rho);
         psi0 = H.psi_signed(tau, rho);
+        u0   = H.u_eff(tau, rho);
+        sech2 = sech(tau)^2;
+        var_u_th = (sech2 - u0^2) * (1 - u0^2) / N_PAIR;
 
         eta_s = nan(N_TRIALS, 1);
         psi_s = nan(N_TRIALS, 1);
+        u_s   = nan(N_TRIALS, 1);
         for t = 1:N_TRIALS
             rng(RNG_BASE + 300000*it + 1000*ir + t, 'twister');
             [A, B] = H.sample_bvn_tau(tau, rho, N_PAIR, 1);
             est = H.estimate_pair(A, B);
             eta_s(t) = est.eta;
             psi_s(t) = est.psi;
+            u_s(t) = est.u;
         end
 
-        rows_D = [rows_D; tau, rho, eta0, psi0, ...
+        var_u = var(u_s, 0);
+        rows_D = [rows_D; tau, rho, u0, eta0, psi0, ...
+            var_u, var_u_th, var_u / var_u_th, ...
             var(eta_s, 0), var(psi_s, 0), ...
             N_PAIR * var(psi_s, 0), ...
             N_PAIR * var(eta_s, 0)]; %#ok<AGROW>
@@ -293,21 +303,28 @@ for it = 1:numel(TAU_GRID)
 end
 
 bvn_tbl = array2table(rows_D, 'VariableNames', { ...
-    'tau', 'rho', 'eta', 'psi', 'var_eta_mc', 'var_psi_mc', ...
+    'tau', 'rho', 'u', 'eta', 'psi', ...
+    'var_u_mc', 'var_u_theory', 'var_u_ratio', ...
+    'var_eta_mc', 'var_psi_mc', ...
     'n_times_var_psi', 'n_times_var_eta'});
 
-cv_bvn_psi = std(bvn_tbl.n_times_var_psi) / mean(bvn_tbl.n_times_var_psi);
-cv_bvn_eta = std(bvn_tbl.n_times_var_eta) / mean(bvn_tbl.n_times_var_eta);
+med_u_ratio = median(bvn_tbl.var_u_ratio);
+near0 = abs(bvn_tbl.u) < 0.15;
+far_u = bvn_tbl.u > 0.5;
+med_psi_near = median(bvn_tbl.n_times_var_psi(near0));
+med_psi_far = median(bvn_tbl.n_times_var_psi(far_u));
 
 fprintf('  BVN cells: %d (n=%d, trials=%d)\n', height(bvn_tbl), N_PAIR, N_TRIALS);
-fprintf('  CV n*Var(psi_plug-in) = %.3f\n', cv_bvn_psi);
-fprintf('  CV n*Var(eta_plug-in) = %.3f\n', cv_bvn_eta);
+fprintf('  median Var(u_mc)/theory = %.3f\n', med_u_ratio);
+fprintf('  median n*Var(psi) for |u|<0.15 = %.3f\n', med_psi_near);
+fprintf('  median n*Var(psi) for u>0.5 = %.3f\n', med_psi_far);
 
-log_lines{end+1} = '--- Block D: BVN plug-in diagnostic ---';
+log_lines{end+1} = '--- Block D: BVN plug-in variance of u ---';
 log_lines{end+1} = sprintf('cells: %d, n=%d, trials=%d', ...
     height(bvn_tbl), N_PAIR, N_TRIALS);
-log_lines{end+1} = sprintf('CV n*Var(psi_plug-in): %.4f', cv_bvn_psi);
-log_lines{end+1} = sprintf('CV n*Var(eta_plug-in): %.4f', cv_bvn_eta);
+log_lines{end+1} = sprintf('median Var(u)/theory: %.4f', med_u_ratio);
+log_lines{end+1} = sprintf('median n*Var(psi) |u|<0.15: %.4f', med_psi_near);
+log_lines{end+1} = sprintf('median n*Var(psi) u>0.5: %.4f', med_psi_far);
 log_lines{end+1} = '';
 
 writetable(bvn_tbl, fullfile(OUT_DIR, 'geometry_bvn_plugin.csv'));
@@ -318,10 +335,12 @@ TOL_SER = 1e-6;
 TOL_CUM_REL = 0.05;
 PASS_A = (max_inv < TOL_ALG) && (max_sph < TOL_ALG) && (max_ser < TOL_SER);
 PASS_B = (rel_mean < TOL_CUM_REL) && (rel_var < TOL_CUM_REL);
-% Geometric-family psi: median n*Var within [0.7, 1.4]; CV modest
-PASS_C = (med_n_var_psi > 0.7) && (med_n_var_psi < 1.4) && (cv_psi < 0.35);
-% BVN diagnostic is informational (no hard fail on absolute level)
-PASS_D = isfinite(cv_bvn_psi) && isfinite(cv_bvn_eta);
+% Geometric-family MLE: both n*Var(psi) and Var(eta)/theory near 1.
+PASS_C = (med_n_var_psi > 0.7) && (med_n_var_psi < 1.4) && (cv_psi < 0.35) ...
+    && (med_eta_ratio > 0.7) && (med_eta_ratio < 1.4);
+% Plug-in formula: median ratio near 1, and psi less stable near u = 0.
+PASS_D = (med_u_ratio > 0.7) && (med_u_ratio < 1.4) ...
+    && (med_psi_near > med_psi_far);
 
 log_lines{end+1} = '--- Pass/fail ---';
 log_lines{end+1} = sprintf('Block A (algebraic): %s', tern(PASS_A, 'PASS', 'FAIL'));

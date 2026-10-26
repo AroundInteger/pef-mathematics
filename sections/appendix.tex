@@ -1,73 +1,84 @@
 \section{Mathematical Appendix}
 \label{sec:appendix}
 
-\subsection{Canonical Form: Full Derivation}
+\subsection{Canonical Form}
+\label{sec:appendix_canonical}
 
-Starting from the original formula $\eta = (1+\kappa)/(1+\kappa-2\sqrt{\kappa}\,\rho)$, divide numerator and denominator by $\sqrt{\kappa}$:
+Start from $\eta = (1+\kappa)/(1+\kappa-2\sqrt{\kappa}\,\rho)$ and divide the numerator and the denominator by $\sqrt{\kappa}$:
 \[
-  \eta = \frac{\sqrt{\kappa}^{-1}(1+\kappa)}{{\sqrt{\kappa}}^{-1}(1+\kappa) - 2\rho}
-       = \frac{\sqrt{\kappa}^{-1} + \sqrt{\kappa}}{\sqrt{\kappa}^{-1}+\sqrt{\kappa}-2\rho}.
+  \eta
+  = \frac{\kappa^{-1/2}+\kappa^{1/2}}{\kappa^{-1/2}+\kappa^{1/2}-2\rho}.
 \]
-With $\tau = \tfrac{1}{2}\log\kappa$, we have $\sqrt{\kappa} = e^{\tau}$, $\sqrt{\kappa}^{-1} = e^{-\tau}$, and
-$\sqrt{\kappa}^{-1}+\sqrt{\kappa} = e^{-\tau}+e^{\tau} = 2\cosh\tau$,
-giving $\eta = 2\cosh\tau/(2\cosh\tau - 2\rho) = \cosh\tau/(\cosh\tau-\rho)$.
+With $\tau = \tfrac{1}{2}\log\kappa$ one has $\kappa^{1/2} = e^{\tau}$ and $\kappa^{-1/2}+\kappa^{1/2} = 2\cosh\tau$, so
+\[
+  \eta = \frac{2\cosh\tau}{2\cosh\tau-2\rho} = \frac{\cosh\tau}{\cosh\tau-\rho}.
+\]
 
-\subsection{Proof of the Involution}
+\subsection{Involution}
 
-Direct: $\kappa \mapsto 1/\kappa$ sends $\tau = \tfrac{1}{2}\log\kappa \mapsto -\tau$.  Since $\cosh(-\tau) = \cosh\tau$, the canonical form $\eta = \cosh\tau/(\cosh\tau-\rho)$ is unchanged.  \qed
+The substitution $\kappa\mapsto 1/\kappa$ sends $\tau$ to $-\tau$.
+Since $\cosh$ is even, \cref{eq:canonical} is unchanged.
 
-\subsection{Cumulant Identity: Verification}
+\subsection{Cumulants of the Latent Family}
 
-From $\log\eta = -\log(1-u)$ with $u = \rho\,\sech\tau = e^{\theta}$:
+Let $u = e^{\theta}\in(0,1)$ and $\log\eta = -\log(1-u)$.
+Then
 \[
   \frac{\mathrm{d}\log\eta}{\mathrm{d}\theta}
-  = \frac{e^{\theta}}{1-e^{\theta}}
-  = \frac{u}{1-u}
-  = u\eta
-  = \rho\,\sech\tau\cdot\frac{\cosh\tau}{\cosh\tau-\rho}
-  = \frac{\rho}{\cosh\tau-\rho}
-  = \eta - \frac{\cosh\tau}{\cosh\tau-\rho} + \frac{\cosh\tau-\rho}{\cosh\tau-\rho}
-  = \eta - 1.
+  = \frac{u}{1-u}.
 \]
-Differentiating again: $\mathrm{d}^{2}\log\eta/\mathrm{d}\theta^{2} = \mathrm{d}(\eta-1)/\mathrm{d}\theta = \mathrm{d}\eta/\mathrm{d}\theta$.  From $\eta = 1/(1-u)$, $\mathrm{d}\eta/\mathrm{d}u = 1/(1-u)^{2} = \eta^{2}$, and $\mathrm{d}u/\mathrm{d}\theta = u = e^{\theta}$, so $\mathrm{d}\eta/\mathrm{d}\theta = \eta^{2} u = \eta^{2}(1-1/\eta) = \eta(\eta-1)$.  \qed
+From $\eta = 1/(1-u)$ one has $u = 1-1/\eta$, so $u/(1-u) = \eta-1$.
+Differentiating again, $\mathrm{d}\eta/\mathrm{d}\theta = \eta^{2} u = \eta(\eta-1)$.
+These are $\mathbb{E}[N]$ and $\Var(N)$ for \cref{eq:geo_family}.
+They are not moments of $(X_{\mathrm{A}},X_{\mathrm{B}})$.
 
-\subsection{Sphere Realisation: Proof of \texorpdfstring{$\cos\sigma = \rho\,\sech\tau$}{cos sigma = rho sech tau}}
+\subsection{Cosine Form of \texorpdfstring{$u$}{u}}
 
-Direct computation:
 \[
   \frac{2\sqrt{\kappa}\,\rho}{1+\kappa}
-  = \frac{2e^{\tau}\rho}{e^{-\tau}(e^{2\tau}+1)e^{\tau}/(e^{\tau})}
   = \frac{2\rho}{e^{\tau}+e^{-\tau}}
-  = \frac{2\rho}{2\cosh\tau}
   = \rho\,\sech\tau.
 \]
-Therefore $\cos\sigma = \rho\,\sech\tau$ and $\eta = \cosh\tau/(\cosh\tau-\rho) = 1/(1-\rho\,\sech\tau) = 1/(1-\cos\sigma)$.  \qed
+Hence $\cos\sigma = u$ and $\eta = 1/(1-\cos\sigma)$ whenever that cosine is defined.
+The longitude is free.
 
-\subsection{Variance-Stabilising Property: Delta-Method Calculation}
+\subsection{Latent-Family Delta Method}
 
-Let $\hat\theta$ be the MLE of $\theta$ with $\sqrt{n}(\hat\theta-\theta)\xrightarrow{d}\mathcal{N}(0,\mathcal{I}(\theta)^{-1})$ where $\mathcal{I}(\theta) = A''(\theta) = \eta(\eta-1)$.  Define $\psi(\theta) = 2\,\arctanh(e^{\theta/2})$.  By the chain rule,
+Let $\mathcal{I}(\theta) = \eta(\eta-1)$ and $\psi(\theta) = 2\arctanh(e^{\theta/2})$ for $\theta<0$.
+Then $\mathrm{d}\psi/\mathrm{d}\theta = \sqrt{\mathcal{I}(\theta)}$.
+If $\hat\theta$ is the latent-family maximum-likelihood estimator,
 \[
-  \frac{\mathrm{d}\psi}{\mathrm{d}\theta}
-  = 2\cdot\frac{1}{1-e^{\theta}}\cdot\tfrac{1}{2}e^{\theta/2}
-  = \frac{e^{\theta/2}}{1-e^{\theta}}
-  = \frac{\sqrt{u}}{1-u}
-  = \sqrt{\mathcal{I}(\theta)}.
+  \Var(\hat\psi)
+  \approx \Bigl(\frac{\mathrm{d}\psi}{\mathrm{d}\theta}\Bigr)^{2}\frac{1}{n\,\mathcal{I}(\theta)}
+  = \frac{1}{n}.
 \]
-Delta method: $\Var(\hat\psi) \approx (\mathrm{d}\psi/\mathrm{d}\theta)^{2}\,\Var(\hat\theta) \approx \mathcal{I}(\theta)\cdot(n\,\mathcal{I}(\theta))^{-1} = 1/n$.  \qed
+Since $\mathrm{d}\eta/\mathrm{d}\theta = \eta(\eta-1)$,
+\[
+  \Var(\hat\eta) \approx \frac{\eta(\eta-1)}{n}.
+\]
 
-\subsection{Bootstrap Procedures (§7)}
-\label{sec:bootstrap_pseudo}
+\subsection{Plug-in Delta Method}
+\label{sec:appendix_plugin}
 
-The following pseudocode describes the bootstrap procedures used in \cref{sec:numerical}.
+Standard bivariate-normal expansions give $\Var(\hat\rho)\approx(1-\rho^{2})^{2}/n$ and $\Var(\log s^{2})\approx 2/n$, with $\Cov(\log s_{\mathrm{A}}^{2},\log s_{\mathrm{B}}^{2})\approx 2\rho^{2}/n$.
+Hence
+\[
+  \Var(\hat\tau)
+  = \Var\Bigl(\tfrac{1}{2}\log(s_{\mathrm{B}}^{2}/s_{\mathrm{A}}^{2})\Bigr)
+  \approx \frac{1-\rho^{2}}{n}.
+\]
+The pair $(\hat\rho,\hat\tau-\tau)$ is a function of the standardised sample.
+The swap $\mathrm{A}\leftrightarrow\mathrm{B}$ fixes $\hat\rho$ and sends $\hat\tau-\tau$ to its negative, so the asymptotic covariance is zero: $\Cov(\hat\rho,\hat\tau) = o(1/n)$.
 
-\textbf{Level-2 symmetry test (§7.2.2).}
-For each KPI with $n$ observations: (1) compute $\hat\eta_{AB}$ from $(X_A, X_B)$ and $\hat\eta_{BA}$ from $(X_B, X_A)$; (2) record $|d_\eta| = |\hat\eta_{AB} - \hat\eta_{BA}|$.  Pass threshold: $|d_\eta| < 10^{-12}$.
-
-\textbf{Level-2.5 bootstrap joint test (§7.2.3).}
-For each KPI: (1) draw $B = 300$ team-stratified bootstrap samples; (2) compute $(\hat\tau^{(b)}, \hat\rho^{(b)})$ for each sample under both label orderings; (3) compute the energy distance $E_n$ between the two bootstrap clouds; (4) compare to the 95th percentile of a permutation null.  Pass threshold: $p > 0.05$.
-
-\textbf{$\psi$-stabilisation test (§7.5).}
-For each domain: (1) draw $B = 500$ bootstrap samples of the within-domain units; (2) compute $\hat\psi^{(b)}$ for each; (3) record the 95\% CI width and compare across domains scaled by $1/\sqrt{n}$.
-
-\textbf{Regime-change LRT (§7.6).}
-Fit two models to $(rho_i, \Delta\mathrm{ML}_i)$ across all KPIs: (1) $\Delta\mathrm{ML} = \alpha + \beta\rho + \varepsilon$ (continuous linear); (2) $\Delta\mathrm{ML} = \alpha + \beta_{+}\rho\,\mathbb{1}(\rho > 0) + \beta_{-}\rho\,\mathbb{1}(\rho < 0) + \varepsilon$ (slope-change at $\rho = 0$).  LRT statistic: $2(\ell_2 - \ell_1) \sim \chi^{2}_1$ under $H_0: \beta_{+} = \beta_{-}$.
+Now $u = \rho\,\sech\tau$, $\partial u/\partial\rho = \sech\tau$, and $\partial u/\partial\tau = -u\tanh\tau$.
+Therefore
+\begin{align*}
+  \Var(\hat u)
+  &\approx \frac{\sech^{2}\tau\,(1-\rho^{2})^{2} + u^{2}\tanh^{2}\tau\,(1-\rho^{2})}{n}\\
+  &= \frac{\sech^{2}\tau\,(1-\rho^{2})\,(1-u^{2})}{n}.
+\end{align*}
+The identity $\sech^{2}\tau\,(1-\rho^{2}) = \sech^{2}\tau-u^{2}$ is \cref{eq:var_u_plugin}.
+For $\eta = 1/(1-u)$ one has $\mathrm{d}\eta/\mathrm{d}u = \eta^{2}$, which is \cref{eq:var_eta_plugin}.
+For $\psi = 2\arctanh\sqrt{u}$ one has $\mathrm{d}\psi/\mathrm{d}u = 1/(\sqrt{u}\,(1-u))$, which is \cref{eq:var_psi_plugin}.
+Both plug-in formulae require $u\in(0,1)$ when they invoke $\psi$ or the latent information.
+\Cref{eq:var_u_plugin} itself uses only $|u|<1$.

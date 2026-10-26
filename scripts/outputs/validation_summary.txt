@@ -1,0 +1,56 @@
+sports_kpis 86
+nonsports_units 19903
+total_estimates 19989
+level2_fail 0
+level2p5_fail 0
+max_d_eta 1.776357e-15
+max_disc_tau 1.110223e-16
+nonsports_fail 0
+nonsports_max_residual 0.000000e+00
+symmetry_domain rugby n 22 fail 0 max_d_eta 1.776357e-15
+symmetry_domain football n 64 fail 0 max_d_eta 2.220446e-16
+sphere_n 86
+sphere_max_abs 8.881784e-16
+sphere_n_at_max 1
+sphere_n_above_1e-14 0
+cos_sigma_min -0.646112
+cos_sigma_max 0.814190
+equiv_anchor 2.596534e-14
+equiv_eta 3.552714e-15
+equiv_c2 8.881784e-16
+equiv_c3 5.551115e-17
+equiv_c4 2.220446e-16
+sqrt_kappa_min 0.761183
+sqrt_kappa_max 1.159537
+n_rho_pos 24
+n_rho_neg 62
+n_rho_zero 0
+cumulant_max_dev_d1 3.837513e-07
+cumulant_max_dev_d2 2.824658e-06
+cv_psi 1.857698
+cv_eta 0.518519
+het_ratio 3.582701
+cv_psi_pos 0.396201
+cv_eta_pos 0.324860
+het_ratio_pos 1.219603
+psi_domain rugby n 22 mean_psi 0.239906 mean_eta 1.342075 ci_width 0.879774 half_width 0.439887
+psi_domain football n 64 mean_psi -0.852454 mean_eta 0.858610 ci_width 0.448345 half_width 0.224172
+psi_domain Healthcare n 1 mean_psi NaN mean_eta NaN ci_width NaN half_width NaN
+psi_domain Finance n 18 mean_psi 2.251056 mean_eta 3.128984 ci_width 0.401242 half_width 0.200621
+psi_domain Manufacturing n 16384 mean_psi 0.017125 mean_eta 1.381680 ci_width 0.048776 half_width 0.024388
+psi_domain ClinicalGenomics n 3500 mean_psi 1.869475 mean_eta 2.696337 ci_width 0.052562 half_width 0.026281
+lrt_n 86
+lrt_n_pos 24
+lrt_n_neg 62
+lrt_mean_pos 0.419391
+lrt_mean_neg 0.373812
+lrt_intercept 1.046083
+lrt_slope_neg 3.004730
+lrt_slope_pos -1.244402
+lrt_slope_common 1.446468
+lrt_rss0 404.243164
+lrt_rss1 390.744841
+lrt_stat 2.920717
+lrt_df 1
+lrt_p 8.744902e-02
+wrote /Users/rowanbrown/Documents/GitHub/pef-mathematics/scripts/outputs/regime_change_lrt.csv

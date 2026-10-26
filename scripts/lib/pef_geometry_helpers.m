@@ -118,7 +118,7 @@ function est = estimate_pair(A, B)
     vB = var(B, 0);
     if vA <= 0 || vB <= 0 || numel(A) < 3
         est = struct('kappa', NaN, 'rho', NaN, 'tau', NaN, ...
-            'eta', NaN, 'psi', NaN, 'n', numel(A));
+            'eta', NaN, 'psi', NaN, 'u', NaN, 'n', numel(A));
         return
     end
     kappa = vB / vA;
@@ -127,6 +127,7 @@ function est = estimate_pair(A, B)
     tau   = tau_from_kappa(kappa);
     eta   = eta_canonical(tau, rho);
     psi   = psi_signed(tau, rho);
+    u     = u_eff(tau, rho);
     est = struct('kappa', kappa, 'rho', rho, 'tau', tau, ...
-        'eta', eta, 'psi', psi, 'n', numel(A));
+        'eta', eta, 'psi', psi, 'u', u, 'n', numel(A));
 end

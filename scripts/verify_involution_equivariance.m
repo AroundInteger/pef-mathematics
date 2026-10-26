@@ -12,7 +12,7 @@
 %   r_A   = corr(X_A, X) = (1 - rho sqrt(kappa)) / sqrt(VarN)
 %   r_B   = corr(X_B, X) = (rho - sqrt(kappa))    / sqrt(VarN)
 %
-% Checks on the 113 sports KPI grid:
+% Checks on the sports KPI grid in the landscape CSV:
 %   C2  VarN(1/kappa)          = VarN(kappa) / kappa
 %   C3  d_rel(1/kappa)         = sqrt(kappa) * d_rel(kappa)   (delta/sigma_A fixed)
 %   C4  r_B(kappa)             = - r_A(1/kappa)

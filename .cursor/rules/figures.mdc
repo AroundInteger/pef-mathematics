@@ -7,6 +7,7 @@ alwaysApply: false
 # Figure presentation (companion paper)
 
 Match the empirical house style so the two papers look like a pair.
+Author-facing guide: `pef-empirical/documentation/PAPER_FORMATTING.md`.
 Canonical checklist: `pef-empirical/.cursor/rules/figures.mdc`.
 Implement in this repo's `scripts/generate_figure*.m` (do not copy the empirical pipeline).
 

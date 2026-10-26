@@ -3,17 +3,14 @@
 % Overleaf: set Compiler = pdfLaTeX, Main document = main.tex
 %
 % Companion paper to pef-empirical/.
-% Solo-authored mathematical infrastructure for the empirical PEF framework:
-% canonical form, geometry, partition-function structure, Fisher--Rao coordinates,
-% and numerical validation (§7 CSVs from validation_inputs/).
-% Empirical paper submits first; companion preprints around the same time.
+% Solo note: canonical form, the scalar u, and plug-in sampling theory.
+% Empirical paper submits first. This note is intended to appear with it.
 
 \documentclass[11pt,a4paper]{article}
 
 \usepackage[british]{babel}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
-\usepackage{bbm}
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{geometry}
@@ -22,7 +19,6 @@
 \usepackage{csquotes}
 \usepackage{enumitem}
 \usepackage{hyperref}
-\usepackage[nameinlink,noabbrev]{cleveref}
 
 \geometry{margin=1in}
 
@@ -41,10 +37,8 @@
 \newcommand{\Var}{\operatorname{Var}}
 \newcommand{\Cov}{\operatorname{Cov}}
 \DeclareMathOperator{\Corr}{Corr}
-\newcommand{\ind}{\mathbbm{1}}
 \newcommand{\sech}{\operatorname{sech}}
 \newcommand{\arctanh}{\operatorname{arctanh}}
-\newcommand{\Real}{\operatorname{Re}}
 
 % Theorem environments (kept light; numbering scheme chosen so the companion
 % paper carries its own theorem stream independent of the empirical paper).
@@ -60,10 +54,15 @@
 \theoremstyle{remark}
 \newtheorem{remark}[theorem]{Remark}
 
-\title{The Geometry of Paired Efficiency:\\
-       Canonical Form, Information-Geometric Structure,\\
-       and Cross-Domain Pooling for Fisher's Generalised Formula}
-\author{Rowan Brown}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+\title{Canonical Form and Sampling Theory\\
+       for a Generalisation of Fisher's Paired Efficiency}
+\author{%
+  M.~R. Brown\\[0.4em]
+  \normalsize Swansea University, Swansea, UK\\[0.3em]
+  \normalsize\href{mailto:m.r.brown@swansea.ac.uk}{\texttt{m.r.brown@swansea.ac.uk}}%
+}
 \date{}
 
 \begin{document}
@@ -72,10 +71,8 @@
 \input{sections/abstract}
 \input{sections/introduction}
 \input{sections/canonical_form}
-\input{sections/mobius_chebyshev}
-\input{sections/sphere_realisation}
-\input{sections/partition_function}
-\input{sections/fisher_rao}
+\input{sections/scalar_structure}
+\input{sections/sampling}
 \input{sections/numerical_validation}
 \input{sections/discussion}
 

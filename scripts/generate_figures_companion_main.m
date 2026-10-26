@@ -43,7 +43,8 @@ contourf(ax1, TT, RR, ETA, levels, ...
 colormap(ax1, brew_pef());
 cb = colorbar(ax1);
 cb.Label.String = '\eta';
-cb.Label.FontSize = 10;
+cb.Label.FontSize = 12;
+cb.FontSize = 10;
 caxis(ax1, [0.5 5]);
 
 % Explicit iso-eta cosh overlays: rho = (1 - 1/eta) * cosh(tau)
@@ -60,22 +61,21 @@ for k = 1:numel(eta_iso)
 end
 
 yline(ax1, 0, '-', 'Color', col_line, 'LineWidth', 1.8);
-xline(ax1, 0, ':', 'Color', [0.4 0.4 0.4], 'LineWidth', 1.2);
 plot(ax1, 0.03, 0.93, 'p', 'MarkerSize', 12, ...
     'MarkerFaceColor', [1 0.9 0.2], 'MarkerEdgeColor', [0.1 0.1 0.1], ...
     'LineWidth', 0.9, 'HandleVisibility', 'off');
-text(ax1, 0.12, 0.93, 'pole', 'FontSize', 8, 'Color', [0.25 0.25 0.25]);
+text(ax1, 0.22, 0.78, 'pole', 'FontSize', 12, 'Color', [0.25 0.25 0.25]);
 
 xlim(ax1, [0 1.65]);
 ylim(ax1, [-0.98 0.98]);
-xlabel(ax1, '\tau = (1/2) log \kappa', 'FontSize', 10);
-ylabel(ax1, '\rho', 'FontSize', 10);
-title(ax1, 'Fundamental domain  \tau \geq 0', 'FontSize', 11, 'FontWeight', 'normal');
-text(ax1, 1.15, 0.55, '\eta > 1', 'Color', col_pos, 'FontSize', 10, 'FontWeight', 'bold');
-text(ax1, 1.15, -0.55, '\eta < 1', 'Color', col_neg, 'FontSize', 10, 'FontWeight', 'bold');
-text(ax1, 0.08, 0.08, '\rho = 0  (regime)', 'FontSize', 8, 'Color', col_line);
-text(ax1, 0.05, -0.88, '\tau = 0  (Fisher)', 'FontSize', 8, 'Color', [0.35 0.35 0.35]);
-ax1.FontSize = 9;
+xlabel(ax1, '\tau = (1/2) log \kappa', 'FontSize', 12);
+ylabel(ax1, '\rho', 'FontSize', 12);
+text(ax1, 0.03, 0.04, '(A)', 'Units', 'normalized', ...
+    'FontSize', 12, 'FontWeight', 'bold', 'VerticalAlignment', 'bottom');
+text(ax1, 1.15, 0.55, '\eta > 1', 'Color', col_pos, 'FontSize', 12, 'FontWeight', 'bold');
+text(ax1, 1.15, -0.55, '\eta < 1', 'Color', col_neg, 'FontSize', 12, 'FontWeight', 'bold');
+text(ax1, 0.15, 0.08, '\rho = 0', 'FontSize', 12, 'Color', col_line);
+ax1.FontSize = 10;
 ax1.TickDir = 'out';
 ax1.Box = 'off';
 
@@ -116,19 +116,17 @@ xline(ax1b, 0, '-', 'Color', col_line, 'LineWidth', 1.4);
 yline(ax1b, 0, '-', 'Color', [0.5 0.5 0.5], 'LineWidth', 1.0);
 xlim(ax1b, [-1.5 1.5]);
 ylim(ax1b, [-1 1]);
-xlabel(ax1b, '\tau', 'FontSize', 9);
-ylabel(ax1b, '\rho', 'FontSize', 9);
-title(ax1b, {'Involution tau <-> -tau', 'four quadrants -> half-strip'}, ...
-    'FontSize', 9, 'FontWeight', 'normal', 'Interpreter', 'none');
-text(ax1b, -1.35, 0.85, 'Q2/Q3', 'FontSize', 8, 'Color', [0.4 0.4 0.4]);
-text(ax1b, 0.85, 0.85, 'Q1/Q4', 'FontSize', 8, 'Color', [0.2 0.35 0.55]);
-ax1b.FontSize = 8;
+xlabel(ax1b, '\tau', 'FontSize', 12);
+ylabel(ax1b, '\rho', 'FontSize', 12);
+text(ax1b, 0.03, 0.97, '(B)', 'Units', 'normalized', ...
+    'FontSize', 12, 'FontWeight', 'bold', 'VerticalAlignment', 'top');
+text(ax1b, -0.40, 0.86, '$\tau < 0$', 'Interpreter', 'latex', 'FontSize', 12, 'Color', [0.35 0.35 0.35]);
+text(ax1b, 0.40, 0.86, '$\tau \geq 0$', 'Interpreter', 'latex', 'FontSize', 12, 'Color', [0.2 0.35 0.55]);
+ax1b.FontSize = 10;
 ax1b.TickDir = 'out';
 ax1b.Box = 'off';
 axis(ax1b, 'square');
 
-sgtitle(fig1, 'Canonical form: the fundamental half-strip', ...
-    'FontSize', 12, 'FontWeight', 'normal');
 export_clean(fig1, fullfile(fig_dir, 'Figure_1_halfstrip_domain.png'));
 
 %% ========================================================================
@@ -151,27 +149,33 @@ for k = 1:numel(eta_list)
     lw = 1.0 + 1.2 * (e == 1);
     if e == 1
         plot(ax2a, tau_c, zeros(size(tau_c)), '-', 'Color', col_line, ...
-            'LineWidth', 2.0, 'DisplayName', '\eta = 1');
+            'LineWidth', 2.0, 'HandleVisibility', 'off');
     else
         plot(ax2a, tau_c(ok), rho_iso(ok), '-', 'Color', col, ...
             'LineWidth', lw, 'HandleVisibility', 'off');
-        % label at right end
-        idx = find(ok, 1, 'last');
-        if ~isempty(idx) && mod(k, 2) == 0
-            text(ax2a, tau_c(idx)-0.02, rho_iso(idx), sprintf('%.2g', e), ...
-                'FontSize', 7, 'Color', col*0.85, 'HorizontalAlignment', 'right');
+        if e >= 3
+            tau_lab = 0.12;
+        else
+            tau_lab = 0.45;
+        end
+        [~, jlab] = min(abs(tau_c - tau_lab));
+        if ok(jlab) && abs(rho_iso(jlab)) < 0.88
+            text(ax2a, tau_c(jlab) + 0.04, rho_iso(jlab), sprintf('%.2g', e), ...
+                'FontSize', 10, 'Color', col*0.75, ...
+                'HorizontalAlignment', 'left', 'VerticalAlignment', 'middle', ...
+                'Clipping', 'on');
         end
     end
 end
-xline(ax2a, 0, ':', 'Color', [0.5 0.5 0.5], 'LineWidth', 1.0, 'HandleVisibility', 'off');
 xlim(ax2a, [0 1.75]);
 ylim(ax2a, [-0.95 0.95]);
-xlabel(ax2a, '\tau', 'FontSize', 10);
-ylabel(ax2a, '\rho', 'FontSize', 10);
-title(ax2a, 'Iso-\eta contours:  \rho = (1 - 1/\eta) cosh \tau', ...
-    'FontSize', 10, 'FontWeight', 'normal');
-legend(ax2a, 'Location', 'southwest', 'FontSize', 8, 'Box', 'off');
-ax2a.FontSize = 9;
+xlabel(ax2a, '\tau', 'FontSize', 12);
+ylabel(ax2a, '\rho', 'FontSize', 12);
+text(ax2a, 0.90, 0.96, '(A)', 'Units', 'normalized', ...
+    'FontSize', 12, 'FontWeight', 'bold', 'VerticalAlignment', 'top', ...
+    'HorizontalAlignment', 'right');
+text(ax2a, 1.35, 0.08, '\eta = 1', 'FontSize', 12, 'Color', col_line);
+ax2a.FontSize = 10;
 ax2a.TickDir = 'out';
 ax2a.Box = 'off';
 grid(ax2a, 'on');
@@ -191,22 +195,25 @@ for k = 1:numel(tau_fixed)
 end
 yline(ax2b, 1, '--', 'Color', [0.5 0.5 0.5], 'LineWidth', 1.0, 'HandleVisibility', 'off');
 xline(ax2b, 0, ':', 'Color', [0.5 0.5 0.5], 'LineWidth', 1.0, 'HandleVisibility', 'off');
-xlabel(ax2b, '\rho', 'FontSize', 10);
-ylabel(ax2b, '1/\eta', 'FontSize', 10);
-title(ax2b, 'Affine reciprocal:  1/\eta = 1 - \rho sech \tau', ...
-    'FontSize', 10, 'FontWeight', 'normal');
-legend(ax2b, 'Location', 'northeast', 'FontSize', 8, 'Box', 'off');
+xlabel(ax2b, '\rho', 'FontSize', 12);
+ylabel(ax2b, '1/\eta', 'FontSize', 12);
+text(ax2b, 0.03, 0.97, '(B)', 'Units', 'normalized', ...
+    'FontSize', 12, 'FontWeight', 'bold', 'VerticalAlignment', 'top');
+legend(ax2b, 'Location', 'northeast', 'FontSize', 12, 'Box', 'off');
 xlim(ax2b, [-0.9 0.9]);
 ylim(ax2b, [0 2.2]);
-ax2b.FontSize = 9;
+ax2b.FontSize = 10;
 ax2b.TickDir = 'out';
 ax2b.Box = 'off';
 grid(ax2b, 'on');
 ax2b.GridAlpha = 0.12;
 
-sgtitle(fig2, 'Mobius linearisation of the reciprocal', ...
-    'FontSize', 12, 'FontWeight', 'normal');
 export_clean(fig2, fullfile(fig_dir, 'Figure_2_mobius_linearisation.png'));
+
+fprintf('Done: Figures 1--2 written to %s\n', fig_dir);
+return
+
+%% Unpublished plates (not inputs of the reduced note) -----------------
 
 %% ========================================================================
 %  Figure 3 — Clean sphere theory plate (§4)
@@ -380,7 +387,7 @@ function export_clean(fig, path)
             axs(ia).Toolbar.Visible = 'off';
         end
     end
-    exportgraphics(fig, path, 'Resolution', 220);
+    exportgraphics(fig, path, 'Resolution', 300);
     fprintf('Saved: %s\n', path);
 end
 

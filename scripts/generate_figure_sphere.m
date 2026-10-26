@@ -225,14 +225,11 @@ lighting(ax, 'gouraud');
 material(ax, 'dull');
 
 %% -------------------------------------------------------------------------
-%  12. Legend and title
+%  12. Legend
 % -------------------------------------------------------------------------
 leg = legend(ax, 'Location', 'northwest', 'FontSize', 7.5, ...
     'Box', 'on', 'EdgeColor', [0.7 0.7 0.7], ...
     'NumColumns', 1, 'Color', [0.98 0.98 0.98]);
-title(ax, {'Empirical witness on the sphere:', ...
-    '113 sports KPI studies'}, ...
-    'FontSize', 10, 'FontWeight', 'normal');
 
 %% -------------------------------------------------------------------------
 %  13. Side panel: sigma vs eta scatter (inset)

@@ -1,239 +1,125 @@
-\section{Numerical Validation}
+\section{Numerical Checks}
 \label{sec:numerical}
 
-This section validates the geometric claims of Sections~\ref{sec:canonical}--\ref{sec:fisher_rao} in two complementary tiers.  The first tier is a controlled numerical model on the fundamental half-strip $\tau\ge 0$ (\cref{sec:val_geometry_model}), owned by this repository and deliberately free of outcome models and machine-learning layers; it is the mathematics counterpart of the empirical paper's idealised probit simulation.  The second tier uses the six empirical datasets of \textcite{brownPEFempirical}: computations follow the outputs of \texttt{run\_paper\_pipeline.m} and its companion scripts, with input CSVs in \texttt{validation\_inputs/} stamped by SHA256 hashes and the empirical source commit in \texttt{\_manifest.csv} (refreshed via \texttt{sync\_to\_companion.sh} from \texttt{pef-empirical}).
+The algebra in \cref{sec:canonical,sec:scalar} does not need a data set.
+This section does two smaller things.
+It checks that the code evaluates the identities, and it compares \cref{prop:plugin} with bivariate-normal samples.
+The paired estimates come from the empirical pipeline.
+Provenance is \texttt{validation\_inputs/\_manifest.csv}.
+The simulation is \texttt{scripts/run\_pef\_geometry\_numerical\_model.m}.
 
 \subsection{Datasets}
 \label{sec:val_datasets}
 
-The six datasets span four domains; full data provenance is given in \textcite{brownPEFempirical}.
-
 \begin{table}[t]
   \centering
-  \caption{Datasets used in numerical validation.}
+  \caption{Paired estimates used as implementation checks.
+    Counts match the empirical pipeline: 22 rugby indicators on $n=283$ games, and 64 football indicators on $n=1{,}114$ games.}
   \label{tab:datasets}
   \small
-  \begin{tabular}{@{}lllr@{}}
+  \begin{tabular}{@{}llr@{}}
     \toprule
-    \textbf{Domain} & \textbf{Source} & \textbf{Paired feature} & \textbf{Units} \\
+    \textbf{Domain} & \textbf{Pairing} & \textbf{Units} \\
     \midrule
-    Rugby union   & URC, seasons 23/24--24/25 & Match KPIs (home vs away) & 24 KPIs, $n=283$ games \\
-    Football      & English Championship, same seasons & Match KPIs (home vs away) & 89 KPIs, $n=1{,}114$ games \\
-    Healthcare    & NHANES 2017 oscillometric & Systolic vs diastolic BP & 1 unit, $N=10{,}352$ \\
-    Finance       & S\&P~100 vs S\&P~500, 2020--2023 & Market-adjusted returns & 18 stocks \\
-    Manufacturing & Bosch OpenML 752 CNC & Axis position vs velocity & 16{,}384 pairings \\
-    Clin.\ genomics & GEO GSE47462 & Paired transcript profiles & 3{,}500 genes \\
+    Rugby union        & Home vs away, seasons 23/24--24/25 & 22 indicators \\
+    Football           & Home vs away, same seasons         & 64 indicators \\
+    Healthcare         & Systolic vs diastolic blood pressure & 1 study \\
+    Finance            & S\&P~100 name vs S\&P~500          & 18 names \\
+    Manufacturing      & OpenML 752, axis-wise pairings     & 16{,}384 pairings \\
+    Clinical genomics  & Paired transcript profiles         & 3{,}500 genes \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-Across all six domains the total number of $(\hat\kappa,\hat\rho)$ estimates is 20{,}016 (113 sports KPIs and 19{,}903 non-sports units).
+The manufacturing row is the empirical pipeline's OpenML~752 file, left under that name.
+Each cycle contributes pairings of a small number of axes: angular position against angular velocity, and torque against a displacement metric.
+The correlation in that row is not a long paired sample.
+Across the six files there are 19{,}989 estimates of $(\hat\kappa,\hat\rho)$: 86 sports indicators and 19{,}903 other units.
 
-For the sports rows of \cref{tab:datasets}, each KPI study supplies $n$ same-fixture home--away pairs (entity~A = home throughout).  The estimator $\hat\rho$ is the sample Pearson correlation between the home and away KPI vectors across those $n$ fixtures.  It is a cross-fixture summary of contemporaneous co-movement, not correlation within a single match or serial dependence of one team's KPI across games (\textcite{brownPEFempirical}, Parameter Estimation and Independence Considerations).  All numerical tests in this section inherit that estimand from the empirical pipeline outputs.
+\subsection{Implementation Checks}
+\label{sec:val_checks}
 
-\subsection{Symmetry Tests}
-\label{sec:val_symmetry}
-
-\Cref{thm:involution} predicts that swapping the labelling $(X_{\mathrm{A}},X_{\mathrm{B}}) \mapsto (X_{\mathrm{B}},X_{\mathrm{A}})$ leaves $\hat\eta$ invariant, since $\hat\kappa \mapsto 1/\hat\kappa$ under the swap and the involution guarantees $\eta(\kappa,\rho) = \eta(1/\kappa,\rho)$.  We test this at three levels.
-
-\subsubsection{Level 1: Algebraic Verification}
-\label{sec:val_sym_l1}
-
-On a dense $(\kappa,\rho)$ grid covering the physical domain, the identity $\eta(\kappa,\rho) = \eta(1/\kappa,\rho)$ holds to machine precision ($\lesssim 10^{-14}$) by construction of the canonical form~\cref{eq:canonical}.  This is a consistency check on the implementation in \texttt{lib/pef\_theory\_helpers.m} rather than an empirical test.
-
-\subsubsection{Level 2: Estimator-Level Symmetry}
-\label{sec:val_sym_l2}
-
-For each of the 113 sports KPI studies, both label orderings $(X_{\mathrm{A}},X_{\mathrm{B}})$ and $(X_{\mathrm{B}},X_{\mathrm{A}})$ were passed to the PEF estimator.  The results are recorded in \texttt{kappa\_symmetry\_audit.csv}; the relevant columns are \texttt{eta\_AB}, \texttt{eta\_BA}, and \texttt{d\_eta} $= |\hat\eta_{\mathrm{AB}} - \hat\eta_{\mathrm{BA}}|$.
-
-All 113 KPIs pass at machine precision:
-\begin{itemize}
-  \item maximum $|\hat\eta_{\mathrm{AB}} - \hat\eta_{\mathrm{BA}}| = 1.78\times10^{-15}$,
-  \item maximum $|\hat\tau_{\mathrm{AB}} - \hat\tau_{\mathrm{BA}}|$ (column \texttt{max\_disc\_tau}) $= 1.11\times10^{-16}$,
-  \item all 113 rows: \texttt{level2\_pass} $= 1$.
-\end{itemize}
-The same test applied to the four non-sports domains (recorded in \texttt{kappa\_symmetry\_nonsports.csv}) finds zero failures across all 19{,}903 units, with a maximum residual of 0 (exact floating-point equality at double precision).  \Cref{tab:sym_summary} summarises the results.
+\Cref{tab:impl_checks} records residuals of closed forms.
+A residual at machine precision means the code agrees with the formula.
+It does not test the formula.
 
 \begin{table}[t]
   \centering
-  \caption{Estimator-level symmetry audit across all six domains
-           (\texttt{kappa\_symmetry\_audit.csv}, \texttt{kappa\_symmetry\_nonsports.csv}).}
-  \label{tab:sym_summary}
-  \begin{tabular}{@{}lrrrr@{}}
+  \caption{Implementation checks.
+    Sports residuals use \texttt{kappa\_symmetry\_audit.csv} and \texttt{pef\_landscape\_2season\_geometry.csv}.
+    The half-strip grid is \texttt{scripts/outputs/geometry\_grid\_algebraic.csv} (234 cells).}
+  \label{tab:impl_checks}
+  \small
+  \begin{tabular}{@{}lrl@{}}
     \toprule
-    \textbf{Domain} & \textbf{Units} & \textbf{Failures} &
-    \textbf{Max $|\hat\eta_{\mathrm{AB}}-\hat\eta_{\mathrm{BA}}|$} &
-    \textbf{Pass} \\
+    \textbf{Identity} & \textbf{Maximum residual} & \textbf{Where} \\
     \midrule
-    Rugby union       & 24      & 0 & $1.78\times10^{-15}$ & \checkmark \\
-    Football          & 89      & 0 & $1.78\times10^{-15}$ & \checkmark \\
-    Healthcare        & 1       & 0 & 0                    & \checkmark \\
-    Finance           & 18      & 0 & 0                    & \checkmark \\
-    Manufacturing     & 16{,}384 & 0 & 0                    & \checkmark \\
-    Clinical genomics & 3{,}500  & 0 & 0                    & \checkmark \\
-    \midrule
-    \textbf{Total}    & 20{,}016 & \textbf{0} & $1.78\times10^{-15}$ & \checkmark \\
+    $\hat\eta(\kappa,\rho)=\hat\eta(1/\kappa,\rho)$ & $1.78\times 10^{-15}$ & 86 sports indicators \\
+    Same identity & $0$ & 19{,}903 other units \\
+    $\eta(\tau,\rho)=\eta(-\tau,\rho)$ & $0$ & Half-strip grid \\
+    $\eta = 1/(1-\cos\sigma)$ & $8.88\times 10^{-16}$ & 86 sports indicators \\
+    Same identity & $2.13\times 10^{-14}$ & Half-strip grid \\
+    Truncated series, $|u|<0.85$ & $2.49\times 10^{-14}$ & Half-strip grid \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-\subsubsection{Level 2.5: Bootstrap Joint-Distribution Test}
-\label{sec:val_sym_l25}
+A separate bootstrap comparison of $(\hat\tau,\hat\rho)$ under the two label orders is not reported.
+If the clouds keep the sign of $\hat\tau$, they are mirror images whenever $\tau\neq 0$, so a difference is expected.
+If the test uses $|\hat\tau|$, the clouds agree by construction.
+Neither outcome is evidence about \cref{thm:involution}.
 
-Beyond point-estimate agreement, the involution should hold at the joint-distribution level: the bootstrapped $(\hat\tau, \hat\rho)$ clouds under both label orderings should be indistinguishable.  For each KPI, $B = 300$ team-stratified bootstrap resamples \parencite{efron1979} were drawn under each ordering; the \texttt{level2p5\_pass} column records a two-sample energy-distance test \parencite{szekeleyRizzo2013} (threshold 0.05).
+The label swap does change the predictive coordinates.
+Write $V = (1+\kappa)/\eta$, $d_{\mathrm{rel}} = \delta/\sqrt{\Var(X_{\mathrm{A}}-X_{\mathrm{B}})}$, and $r_{\mathrm{A}} = \Corr(X_{\mathrm{A}}, X_{\mathrm{A}}-X_{\mathrm{B}})$.
+At fixed $\delta/\sigma_{\mathrm{A}}$, the swap multiplies $d_{\mathrm{rel}}$ by $\sqrt{\kappa}$ and sends $r_{\mathrm{A}}$ to $-r_{\mathrm{B}}$.
+On the 86 sports indicators the factor $\sqrt{\kappa}$ runs from $0.761$ to $1.160$.
+One labelling can therefore sit $24\%$ away from the other.
+The residuals of $d_{\mathrm{rel}}(1/\kappa) = \sqrt{\kappa}\, d_{\mathrm{rel}}(\kappa)$ and of $r_{\mathrm{B}} = -r_{\mathrm{A}}(1/\kappa)$ are at most $1.1\times 10^{-15}$ (\texttt{scripts/outputs/involution\_equivariance\_check.csv}).
+Again, that is a check of the code.
+The $24\%$ gap is the reason the cell split on $\kappa = 1$ still matters for a comparison that uses $X_{\mathrm{A}}$.
 
-All 113 sports KPIs pass (\texttt{level2p5\_pass} $= 1$ throughout).  This rules out pipeline asymmetries arising from, for example, KDE bandwidth selection, standardisation direction, or degrees-of-freedom conventions.  Such asymmetries would be invisible to the point-estimate test but detectable in the bootstrap clouds.
+Finite differences of $\log\hat\eta$ on the 24 sports indicators with $\hat\rho>0$ recover $\hat\eta-1$ and $\hat\eta(\hat\eta-1)$ to $10^{-6}$.
+That is the step size of the difference.
+It is the same closed form as \cref{sec:latent_family}.
 
-\subsubsection{Level 3: Signal-Coordinate Equivariance}
-\label{sec:val_sym_l3}
-
-Levels 1 and 2 show that the involution leaves $\hat\eta$ invariant.  The efficiency invariant does not, however, fix the predictive signal.  We record how two outcome-layer coordinates transform under the same label swap, using only $(\hat\kappa,\hat\rho)$ and the paired effect size already in \texttt{pef\_landscape\_2season\_geometry.csv}.  The test carries no outcome model and no machine learning; the predictive consequence is empirical-owned \parencite{brownPEFempirical}.
-
-Write $V = 1+\kappa-2\sqrt{\kappa}\,\rho = (1+\kappa)/\eta$ and let the standardised relative signal be $d_{\mathrm{rel}} = \delta/\sqrt{\Var(X)}$, which is the column \texttt{cohens\_d\_paired}.  Let $r_{\mathrm{A}} = \Corr(X_{\mathrm{A}},X) = (1-\rho\sqrt{\kappa})/\sqrt{V}$ and $r_{\mathrm{B}} = \Corr(X_{\mathrm{B}},X) = (\rho-\sqrt{\kappa})/\sqrt{V}$.  The identity $V(1/\kappa) = V(\kappa)/\kappa$ yields three predictions:
-\begin{itemize}
-  \item $V(1/\kappa) = V(\kappa)/\kappa$;
-  \item $d_{\mathrm{rel}}(1/\kappa) = \sqrt{\kappa}\,d_{\mathrm{rel}}(\kappa)$ at fixed $\delta/\sigma_{\mathrm{A}}$;
-  \item $r_{\mathrm{B}}(\kappa) = -\,r_{\mathrm{A}}(1/\kappa)$.
-\end{itemize}
-
-Evaluated on all 113 sports KPIs, the three residuals are at machine precision: $8.9\times10^{-16}$, $5.6\times10^{-17}$, and $2.2\times10^{-16}$ respectively.  The $\hat\eta$-invariance residual from the same columns is $3.6\times10^{-15}$, and the anchor $d_{\mathrm{rel}} = \delta/\sqrt{\Var(X)}$ reproduces \texttt{cohens\_d\_paired} to $2.6\times10^{-14}$.  Across the grid the equivariance factor $\sqrt{\kappa}$ spans $[0.741, 1.192]$, so a fixed efficiency corresponds to predictive signals that differ by up to $19\%$ on the two sheets.
-
-The reading is that $\eta$ organises the geometry, whilst the signal coordinate is equivariant rather than invariant.  Invariance of $d_{\mathrm{rel}}$ is recovered only under the transport $\sigma_{\mathrm{A}} \mapsto \sqrt{\kappa}\,\sigma_{\mathrm{A}}$, which is the true $X_{\mathrm{A}} \leftrightarrow X_{\mathrm{B}}$ relabelling of a single dataset tested at Level 2.  The predictive consequence of this split is a master surface in $(d_{\mathrm{rel}}, r_{\mathrm{A}})$ with closed-form envelopes, reported in \textcite{brownPEFempirical}.  Generated by \texttt{scripts/verify\_involution\_equivariance.m} from \texttt{validation\_inputs/pef\_landscape\_2season\_geometry.csv}; per-KPI values in \texttt{scripts/outputs/involution\_equivariance\_check.csv}.
-
-\subsection{Cumulant Identity Check}
-\label{sec:val_cumulant}
-
-\Cref{prop:cumulants} predicts $A'(\theta) = \eta - 1$ and $A''(\theta) = \eta(\eta-1)$ at the natural parameter $\theta = \log(\rho\,\sech\tau)$.  A direct finite-difference check verifies these identities from the estimated $\hat\eta$ values.
-
-For each of the 113 sports KPI studies with $\hat\rho > 0$ (i.e.\ in the geometric-family regime), we compute $\hat\theta = \log(\hat\rho\,\sech\hat\tau)$, then evaluate $\hat\eta - 1$ and $\hat\eta(\hat\eta - 1)$ and compare them to the numerical derivatives $\partial\log\hat\eta/\partial\hat\theta$ and $\partial^{2}\log\hat\eta/\partial\hat\theta^{2}$ computed by finite differences over a grid of $\pm 10^{-4}$ in $\theta$.  Across all 27 KPIs with $\hat\rho > 0$ (rugby Q1/Q2 and football Q1/Q2), the maximum absolute deviation is at machine precision: the identities hold algebraically, as expected, since they are consequences of the closed-form expression $\log\eta = -\log(1 - e^{\theta})$.
-
-For KPIs with $\hat\rho < 0$ (86 of the 113), the partition-function reading does not apply (\cref{sec:regime}); the signed-$\psi$ extension is used instead, and the cumulant identity is not expected to hold in the geometric direction.  No failures in the intended domain ($\rho > 0$) are observed.
-
-\subsection{Sphere-Distance Equivalence}
-\label{sec:val_sphere}
-
-\Cref{thm:sphere} predicts $\hat\eta = 1/(1-\cos\hat\sigma)$ for all $(\hat\kappa,\hat\rho)$.  The column \texttt{eta\_sigma\_residual} $= \hat\eta_{\mathrm{sphere}} - \hat\eta$ is recorded for all 113 sports KPIs in \texttt{pef\_landscape\_2season\_geometry.csv}.  Results:
-\begin{itemize}
-  \item Maximum $|\hat\eta_{\mathrm{sphere}} - \hat\eta| = 8.88\times10^{-16}$ (two KPIs; all others 0 or $\le 10^{-16}$).
-  \item All 113 residuals satisfy $|\hat\eta_{\mathrm{sphere}} - \hat\eta| < 10^{-14}$, i.e.\ machine-precision equality.
-  \item The $\cos\hat\sigma$ values span $[-0.646,\, 0.814]$, covering both hemispheres of the sphere.
-\end{itemize}
-The sphere realisation is confirmed algebraically at the same precision as the symmetry test.  \Cref{fig:sphere_empirical} places the same 113 KPI studies on the unit sphere of \cref{fig:sphere_theory}.
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=0.92\textwidth]{figures/Figure_6_sphere_empirical.png}
-  \caption{Empirical witness of the sphere realisation.
-    113 sports KPI studies coloured by empirical quadrant, with iso-$\eta$ latitudes, the $\rho=0$ equator, and the Fisher meridian $\kappa=1$.
-    Inset: $\eta=1/(1-\cos\sigma)$ with the same points.
-    Theory plate: \cref{fig:sphere_theory}.
-    Generated by \texttt{scripts/generate\_figure\_sphere.m} from \texttt{validation\_inputs/pef\_landscape\_2season\_geometry.csv}.}
-  \label{fig:sphere_empirical}
-\end{figure}
-
-\subsection{\texorpdfstring{$\psi$}{psi}-Stabilisation Across Domains}
-\label{sec:val_psi}
-
-\Cref{prop:psi} predicts $\Var(\hat\psi) \approx 1/n$ uniformly, whilst $\Var(\hat\eta) \approx \eta^{2}(\eta-1)/n$ varies with $\eta$.  We assess this via the between-domain spread of bootstrap confidence-interval widths.
-
-Bootstrap 95\% CI widths for $\hat\psi$ and $\hat\eta$ are recorded in \texttt{psi\_per\_domain.csv} for the five domains with sufficient within-domain replication.  Across these domains the coefficient of variation (CV, between-domain standard deviation divided by mean) is:
-\begin{itemize}
-  \item All domains: $\mathrm{CV}_\psi = 1.76$, $\mathrm{CV}_\eta = 0.52$.  The higher $\mathrm{CV}_\psi$ reflects that $\psi$ resolves the regime boundary (football is strongly negative, finance is strongly positive) more sharply than $\eta$, which compresses the scale for $\eta < 1$.
-  \item Positive-$\rho$ domains only (finance, clinical genomics, manufacturing): $\mathrm{CV}_\psi = 0.41$, $\mathrm{CV}_\eta = 0.33$, ratio $= 1.23$.  Within the geometric-family regime, the two scales have comparable between-domain resolution.
-\end{itemize}
-
-The key prediction of variance stabilisation is that CI widths should scale as $1/\sqrt{n}$ uniformly.  The manufacturing domain ($n = 16{,}384$) and clinical genomics ($n = 3{,}500$) show the narrowest intervals in both $\psi$ ($\pm 0.026$ and $\pm 0.026$) and $\eta$ scales, whilst the rugby domain ($n = 283$) shows the widest $\psi$ interval ($\pm 0.41$).  The ordering of interval widths matches the ordering of $1/\sqrt{n}$ across all domains, consistent with the $1/n$ asymptotic variance of $\hat\psi$.
-
-\subsection{Regime-Change LRT at \texorpdfstring{$\rho = 0$}{rho = 0}}
-\label{sec:val_regime}
-
-\Cref{sec:psi_regime} predicts a qualitative change in the $\eta$-to-ML relationship at $\rho = 0$.  We test this using the \texttt{psi\_ml\_residuals.csv} file, which records the observed ML improvement (five-fold CV accuracy gain: relative minus absolute features) for each sports KPI alongside the KPI's $\hat\rho$, $\hat\tau$, and $\hat\psi$.
-
-Across the 113 sports KPIs, 27 have $\hat\rho > 0$ and 86 have $\hat\rho < 0$.  The mean ML improvement in the positive-$\rho$ group is $+0.71\%$, and in the negative-$\rho$ group is $+1.84\%$.  A likelihood-ratio test \parencite{davies1987} comparing a continuous linear model of ML improvement on $\hat\rho$ against a model with a slope discontinuity at $\hat\rho = 0$ detects the regime change with $p < 0.05$ (full LRT results pending final pipeline run; the direction is as predicted: the $\rho < 0$ regime, which the partition function identifies as the alternating-sign branch, shows larger mean ML improvement, consistent with the information-content interpretation of \cref{sec:regime}).
-
-\subsection{Half-Strip Geometry Model}
+\subsection{Latent Family and Plug-in}
 \label{sec:val_geometry_model}
 
-The empirical CSVs above witness the geometry on real paired data.  They do not, however, generate the latent geometric family of \cref{thm:exp_family}, nor do they isolate the Fisher--Rao claim $\Var(\hat\psi)\approx 1/n$ from the bivariate-normal plug-in used in the sports pipeline.  The companion numerical model \texttt{scripts/run\_pef\_geometry\_numerical\_model.m} fills that gap on the fundamental domain $\{\tau\ge 0,\,\rho\in(-1,1)\}$ with $|\rho\,\sech\tau|<1$.  Helpers live in the companion-owned library \texttt{scripts/lib/pef\_geometry\_helpers.m} (distinct from the read-only mirror of the empirical \texttt{pef\_theory\_helpers.m}).  Locked configuration, seeds, and pass/fail criteria are recorded in the script's \texttt{PRODUCTION\_CONFIG} block; outputs are written to \texttt{scripts/outputs/}.
+Block~C of the simulation draws the latent family \cref{eq:geo_family} and forms its maximum-likelihood estimator.
+On 36 cells of the positive-$u$ half-strip, with $n = 200$ and 400 trials, the median of $n\,\Var(\hat\psi)$ is $1.011$.
+The median of $\Var(\hat\eta)$ divided by $\eta(\eta-1)/n$ is $0.997$.
+Both ratios have a between-cell coefficient of variation below $0.08$ (\texttt{geometry\_psi\_sampling.csv}).
+This is \cref{eq:psi_clt,eq:var_eta_latent}.
+It is not a statement about paired observations.
 
-Four blocks are reported.
+Block~D draws bivariate-normal pairs at the same $(\tau,\rho)$ and forms the plug-in $(\hat\tau,\hat\rho)$.
+There are 66 cells, with $n = 500$ and 400 trials.
+The median of $\Var(\hat u)$ divided by \cref{eq:var_u_plugin} is $1.009$, and every cell falls between $0.86$ and $1.22$ (\texttt{geometry\_bvn\_plugin.csv}).
+\Cref{fig:plugin} shows the comparison.
+On the same draws, $n\,\Var(\hat\psi)$ runs from $0.29$ to $47$.
+The median is $14.9$ on the cells with $|u|<0.15$, and $3.9$ on the cells with $u>0.5$.
+The plug-in $\hat\psi$ is least stable near independence.
+\Cref{eq:psi_clt} does not describe it.
 
-\paragraph{Block A (algebraic).}
-On a dense admissible grid (234 cells), the involution $\eta(\tau,\rho)=\eta(-\tau,\rho)$, the sphere identity $\eta=1/(1-\cos\sigma)$, and the truncated geometric series $\eta=\sum_{k=0}^{K}u^{k}$ with $u=\rho\,\sech\tau$ and $K=200$ hold to machine precision on $|u|<0.85$ (maximum residuals $0$, $2.13\times10^{-14}$, and $2.49\times10^{-14}$ respectively; \texttt{geometry\_grid\_algebraic.csv}).
+Cross-unit coefficients of variation are not used.
+An interval for a mean across indicators reflects how many indicators there are, and how far apart they sit.
+It is not the sampling variance of one indicator.
+A within-indicator bootstrap of the match series would be the corresponding check on the sports data.
+Those series are not in \texttt{validation\_inputs/}.
 
-\paragraph{Block B (cumulant Monte Carlo).}
-For each positive-$\rho$ cell, $n=50{,}000$ draws from the geometric family~\cref{eq:geo_family} recover $\mathbb{E}[N]=\eta-1$ and $\Var(N)=\eta(\eta-1)$ with maximum relative errors $3.1\%$ and $4.4\%$ (\texttt{geometry\_cumulant\_mc.csv}), confirming \cref{prop:cumulants} under sampling rather than finite differences alone.
-
-\paragraph{Block C (Fisher--Rao MLE).}
-Maximum-likelihood estimators formed from $n=200$ geometric-family draws over $400$ Monte Carlo trials yield median $n\,\Var(\hat\psi)=1.011$ across $36$ half-strip cells, with between-cell coefficient of variation $\mathrm{CV}=0.073$ (\texttt{geometry\_psi\_sampling.csv}).  The corresponding $\Var(\hat\eta)/\bigl(\eta^{2}(\eta-1)/n\bigr)$ ratios have $\mathrm{CV}=0.42$: the $\psi$ scale is near-uniform as predicted by \cref{eq:psi_clt}, whilst the $\eta$ scale is not.
-
-\paragraph{Block D (bivariate-normal plug-in diagnostic).}
-Sampling paired normals at the same $(\tau,\rho)$ and forming plug-in $(\hat\kappa,\hat\rho)\mapsto(\hat\eta,\hat\psi)$ does \emph{not} inherit the geometric-family $1/n$ law.  That law is for the latent exponential family, not for the Pearson estimators used on KPIs.  The diagnostic is retained only to show relative uniformity: across $66$ cells, the coefficient of variation of $n\,\widehat{\Var}(\hat\psi)$ under the plug-in is $1.30$, versus $3.16$ for $n\,\widehat{\Var}(\hat\eta)$ (\texttt{geometry\_bvn\_plugin.csv}).  Empirical $\psi$ intervals in \cref{sec:val_psi} remain the appropriate real-data witness; Block~C is the controlled witness of the information-geometric claim.
-
-\Cref{fig:halfstrip_geometry} summarises the four blocks; \cref{fig:psi_stabilisation} isolates the variance-stabilisation contrast on the positive-$\rho$ branch.
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\textwidth]{figures/Figure_5_halfstrip_geometry.png}
-  \caption{Half-strip geometry numerical model.
-    (A)~Fundamental domain $\tau\ge 0$ with iso-$\eta$ contours and the regime line $\rho=0$.
-    (B)~Geometric-family cumulant recovery ($\mathbb{E}[N]=\eta-1$, $\Var(N)=\eta(\eta-1)$).
-    (C)~Fisher--Rao MLE: $n\,\Var(\hat\psi)$ tracks $1$ across cells (median $1.011$, $\mathrm{CV}=0.073$), whilst scaled $\Var(\hat\eta)$ is non-uniform.
-    (D)~Bivariate-normal plug-in diagnostic: $\psi$ remains more homogeneous than $\eta$ ($\mathrm{CV}=1.30$ vs $3.16$), but does not inherit the geometric-family $1/n$ law.
-    Generated by \texttt{scripts/generate\_figure\_geometry\_model.m} from \texttt{scripts/outputs/geometry\_*.csv}.}
-  \label{fig:halfstrip_geometry}
-\end{figure}
+The sign of $\Delta\mathrm{ML}$ is not re-estimated here.
+The empirical paper reports team-blocked intervals for Quadrant~3.
+A pooled mean on every indicator with $\hat\rho<0$ mixes cells, and the indicators from the same matches are dependent.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.92\textwidth]{figures/Figure_5b_psi_stabilisation.png}
-  \caption{Variance stabilisation on the positive-$\rho$ branch of the half-strip.
-    Left: histogram of $n\,\Var(\hat\psi)$ from geometric-family MLEs clusters at the asymptotic target $1$.
-    Right: $\Var(\hat\eta)/\bigl(\eta^{2}(\eta-1)/n\bigr)$ declines with $\eta$, confirming that the $\eta$ scale is not variance-stabilising.
-    Companion to \cref{fig:halfstrip_geometry}C.}
-  \label{fig:psi_stabilisation}
+  \includegraphics[width=\textwidth]{figures/Figure_3_plugin_variance.png}
+  \caption{Plug-in sampling under bivariate normality.
+    (A)~Monte Carlo $\Var(\hat u)$ against \cref{eq:var_u_plugin}.
+    The line is equality.
+    Blue points have $\rho>0$ and red points have $\rho<0$.
+    (B)~$n\,\Var(\hat\psi)$ against $u$.
+    The vertical scale is logarithmic.
+    The plug-in coordinate is least stable near $u = 0$.}
+  \label{fig:plugin}
 \end{figure}
-
-\subsection{Falsifiability Summary}
-\label{sec:val_falsifiability}
-
-\Cref{tab:falsifiability} summarises what each test would have falsified if it had failed, and the actual outcome.
-
-\begin{table}[t]
-  \centering
-  \caption{Falsifiability summary for the numerical tests.
-           Empirical CSV tests use provenance in \texttt{validation\_inputs/\_manifest.csv};
-           half-strip model tests use \texttt{scripts/outputs/geometry\_numerical\_summary.txt}.}
-  \label{tab:falsifiability}
-  \small
-  \begin{tabular}{@{}lllp{4cm}@{}}
-    \toprule
-    \textbf{Test} & \textbf{Section} & \textbf{Would falsify} & \textbf{Result} \\
-    \midrule
-    Symmetry (L2) & \cref{sec:val_sym_l2}
-      & $\kappa \leftrightarrow 1/\kappa$ involution (\cref{thm:involution})
-      & Pass: max resid $1.78\times10^{-15}$, 113/113 \\[4pt]
-    Symmetry (L2.5) & \cref{sec:val_sym_l25}
-      & Involution in bootstrapped joint distribution
-      & Pass: 113/113 energy-distance tests \\[4pt]
-    Signal equivariance (L3) & \cref{sec:val_sym_l3}
-      & Equivariance $d_{\mathrm{rel}}(1/\kappa)=\sqrt{\kappa}\,d_{\mathrm{rel}}(\kappa)$; $r_{\mathrm{B}}(\kappa)=-r_{\mathrm{A}}(1/\kappa)$
-      & Pass: max resid $2.2\times10^{-16}$, 113/113 \\[4pt]
-    Cumulant identity & \cref{sec:val_cumulant}
-      & Geometric exponential family identification (\cref{prop:cumulants})
-      & Pass: algebraic identity, max dev $\approx 10^{-15}$ \\[4pt]
-    Sphere equivalence & \cref{sec:val_sphere}
-      & Sphere realisation (\cref{thm:sphere})
-      & Pass: max resid $8.88\times10^{-16}$, 113/113 \\[4pt]
-    $\psi$ stabilisation & \cref{sec:val_psi}
-      & Variance-stabilising property (\cref{prop:psi})
-      & Pass: CI widths scale as $1/\sqrt{n}$ across domains \\[4pt]
-    Regime-change LRT & \cref{sec:val_regime}
-      & Regime change at $\rho = 0$ (\cref{sec:regime,sec:psi_regime})
-      & Consistent: $\Delta$ML higher for $\rho < 0$; full LRT pending \\[4pt]
-    Half-strip model (A--C) & \cref{sec:val_geometry_model}
-      & Involution, sphere, cumulants, $\Var(\hat\psi)\approx 1/n$
-      & Pass: median $n\,\Var(\hat\psi)=1.011$, $\mathrm{CV}=0.073$ \\
-    \bottomrule
-  \end{tabular}
-\end{table}

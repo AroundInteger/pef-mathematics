@@ -1,0 +1,86 @@
+\section{Sampling Theory}
+\label{sec:sampling}
+
+\subsection{Latent-Family Variances}
+
+Let $\hat\theta$ be the maximum-likelihood estimator of $\theta = \log u$ from $n$ draws of the latent family \cref{eq:geo_family}.
+This estimator exists only for $u\in(0,1)$.
+Standard exponential-family theory gives $\sqrt{n}(\hat\theta-\theta)\xrightarrow{d}\mathcal{N}(0,1/\mathcal{I}(\theta))$ with Fisher information $\mathcal{I}(\theta) = \eta(\eta-1)$.
+Fisher information is non-negative on this family.
+It is not defined for $\rho\le 0$, and it does not change sign.
+
+Define $\psi = 2\arctanh\sqrt{u}$ for $u\in(0,1)$.
+Then $\mathrm{d}\psi/\mathrm{d}\theta = \sqrt{\mathcal{I}(\theta)}$, so the delta method yields
+\begin{equation}
+  \Var(\hat\psi) \approx \frac{1}{n}
+  \label{eq:psi_clt}
+\end{equation}
+for this latent maximum-likelihood estimator.
+The same delta method uses $\mathrm{d}\eta/\mathrm{d}\theta = \eta(\eta-1)$, and therefore
+\begin{equation}
+  \Var(\hat\eta)
+  \approx \frac{[\eta(\eta-1)]^{2}}{n\,\eta(\eta-1)}
+  = \frac{\eta(\eta-1)}{n}.
+  \label{eq:var_eta_latent}
+\end{equation}
+The variance is small when $\eta$ is near $1$ and grows as $\eta\to\infty$.
+The earlier factor $\eta^{2}(\eta-1)/n$ is too large by $\eta$.
+
+The coordinate $\psi$ is not Fisher's $z$.
+At $\tau = 0$ one has $u = \rho$, so $\psi = 2\arctanh\sqrt{\rho}$ for $\rho\in(0,1)$, whereas $z = \arctanh\rho$.
+The two transforms differ.
+
+For display when $\rho<0$, the signed extension $\operatorname{sign}(\rho)\cdot 2\arctanh\sqrt{|u|}$ is continuous at $\rho = 0$.
+Its derivative in $u$ diverges as $u\to 0$.
+The extension is not the arc length of \cref{eq:geo_family}, because that family does not exist on $\rho\le 0$.
+There is then no maximum-likelihood estimator in the latent family and no $1/n$ law.
+
+\subsection{Plug-in Variance under Bivariate Normality}
+
+The estimator used on paired observations is not the latent-family maximum-likelihood estimator.
+It is the plug-in $(\hat\kappa,\hat\rho)$ computed from $n$ pairs.
+The next proposition is for that estimator.
+\Cref{sec:numerical} compares it with a bivariate-normal simulation.
+
+\begin{proposition}[Plug-in variance]
+\label{prop:plugin}
+Let $(X_{\mathrm{A}},X_{\mathrm{B}})$ be bivariate normal, and let $\hat\rho$ and $\hat\tau = \tfrac{1}{2}\log(s_{\mathrm{B}}^{2}/s_{\mathrm{A}}^{2})$ be computed from $n$ pairs.
+Set $u = \rho\,\sech\tau$.
+Asymptotically, $\Var(\hat\rho)\approx(1-\rho^{2})^{2}/n$, $\Var(\hat\tau)\approx(1-\rho^{2})/n$, and $\Cov(\hat\rho,\hat\tau) = o(1/n)$.
+Therefore
+\begin{equation}
+  \Var(\hat u)
+  \approx \frac{(\sech^{2}\tau - u^{2})(1-u^{2})}{n}.
+  \label{eq:var_u_plugin}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+The argument is the delta method recorded in \cref{sec:appendix_plugin}.
+The leading covariance of $\hat\rho$ and $\hat\tau-\tau$ vanishes because the swap $\mathrm{A}\leftrightarrow\mathrm{B}$ fixes $\hat\rho$ and reverses the sign of $\hat\tau-\tau$.
+The variance of a log sample variance is $2/n$, and $\Cov(\log s_{\mathrm{A}}^{2},\log s_{\mathrm{B}}^{2})\approx 2\rho^{2}/n$, which gives $\Var(\hat\tau)$.
+The partial derivatives are $\partial u/\partial\rho = \sech\tau$ and $\partial u/\partial\tau = -u\tanh\tau$.
+Their combination simplifies by $\sech^{2}\tau\,(1-\rho^{2}) = \sech^{2}\tau - u^{2}$.
+\end{proof}
+
+\begin{corollary}
+\label{cor:plugin_eta_psi}
+On $u\in(0,1)$, the same delta method gives
+\begin{align}
+  \Var(\hat\eta)
+  &\approx \frac{\eta^{4}\,(\sech^{2}\tau-u^{2})(1-u^{2})}{n},
+  \label{eq:var_eta_plugin}\\
+  \Var(\hat\psi)
+  &\approx \frac{(\sech^{2}\tau-u^{2})(1+u)}{n\, u\,(1-u)}.
+  \label{eq:var_psi_plugin}
+\end{align}
+\end{corollary}
+
+\Cref{eq:var_u_plugin} depends on $\tau$, not on $u$ alone.
+No transformation of $u$ can stabilise the plug-in variance exactly.
+At $\tau = 0$ the formula reduces to $\Var(\hat\rho)\approx(1-\rho^{2})^{2}/n$, whose stabilising transform is Fisher's $z$.
+\Cref{eq:var_psi_plugin} diverges as $u\to 0$.
+The plug-in $\hat\psi$ is therefore least stable near independence.
+That is where many of the sports indicators in \textcite{brownPEFempirical} sit.
+The uniform law $\Var(\hat\psi)\approx 1/n$ is \cref{eq:psi_clt}.
+It is not a property of $\hat\psi$ computed from $(\hat\kappa,\hat\rho)$.

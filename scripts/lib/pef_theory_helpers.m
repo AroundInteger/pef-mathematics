@@ -2,7 +2,7 @@ function H = pef_theory_helpers()
 %PEF_THEORY_HELPERS  Function handles for idealised probit simulation.
 %
 %   H = pef_theory_helpers() returns handles to theory-aligned helpers:
-%     eta_pef, var_diff, mi_closed, bayes_acc_x, classify_quadrant,
+%     eta_pef, var_diff, mi_closed, bayes_acc_x, bayes_acc_A, classify_quadrant,
 %     sample_bvn_ab, sample_y_a2, cv_logistic_sim, is_admissible
 %
 %   Used by run_pef_idealised_probit_sim.m and run_pef_finalize_diagnostics.m.
@@ -13,6 +13,7 @@ function H = pef_theory_helpers()
         'var_diff',               @var_diff, ...
         'mi_closed',              @mi_closed, ...
         'bayes_acc_x',            @bayes_acc_x, ...
+        'bayes_acc_A',            @bayes_acc_A, ...
         'classify_quadrant',      @classify_quadrant, ...
         'delta_sigma_from_means', @delta_sigma_from_means, ...
         'grad_I',                 @grad_I, ...
@@ -71,7 +72,35 @@ end
 
 % -------------------------------------------------------------------------
 function acc = bayes_acc_x(delta, varX)
-    acc = 1 - normcdf(-delta ./ (2 * sqrt(varX)));
+    % Equal-prior Bayes accuracy of the relative feature X under (A2).
+    % Uses |delta| so the label orientation does not push the bound below 1/2.
+    acc = 1 - normcdf(-abs(delta) ./ (2 * sqrt(varX)));
+end
+
+% -------------------------------------------------------------------------
+function acc = bayes_acc_A(delta, kappa, rho, sigmaA)
+    % Equal-prior Bayes accuracy of the absolute feature X_A under (A1)--(A2).
+    % Matches SI Validation 4: acc_A(d_rel, r) with d_rel = |delta|/sqrt(Var(X)).
+    if nargin < 4 || isempty(sigmaA)
+        sigmaA = 1;
+    end
+    if ~is_admissible(kappa, rho) || ~(sigmaA > 0) || ~isfinite(delta)
+        acc = NaN;
+        return
+    end
+    vX = var_diff(kappa, rho, sigmaA);
+    if ~(vX > 0)
+        acc = NaN;
+        return
+    end
+    d_rel = abs(delta) / sqrt(vX);
+    r = (1 - rho * sqrt(kappa)) / sqrt(1 + kappa - 2 * sqrt(kappa) * rho);
+    r = max(min(r, 1 - 1e-12), -1 + 1e-12);
+    denom = sqrt(max(2 - r^2, 1e-12));
+    phi = @(w) exp(-0.5 * w.^2) / sqrt(2 * pi);
+    Phi = @(z) 0.5 * erfc(-z / sqrt(2));
+    acc = integral(@(w) phi(w) .* Phi(abs(d_rel + r .* w) ./ denom), ...
+        -8, 8, 'AbsTol', 1e-8);
 end
 
 % -------------------------------------------------------------------------
@@ -151,15 +180,35 @@ function boot = bootstrap_pef_table(paired, kpiName, nBoot)
         return
     end
 
+    use_team_boot = ismember('home_team', paired.Properties.VariableNames);
+    if use_team_boot
+        ht = string(paired.home_team(ok));
+        teams = unique(ht, 'stable');
+        n_teams = numel(teams);
+    end
+
     eta_s = nan(nBoot, 1);
     I_s   = nan(nBoot, 1);
     k_s   = nan(nBoot, 1);
     r_s   = nan(nBoot, 1);
 
     for b = 1:nBoot
-        idx = randi(n, n, 1);
-        Ab = A(idx);
-        Bb = B(idx);
+        if use_team_boot
+            draw = teams(randi(n_teams, n_teams, 1));
+            idx = [];
+            for t = 1:n_teams
+                idx = [idx; find(ht == draw(t))]; %#ok<AGROW>
+            end
+            if numel(idx) < 8
+                continue
+            end
+            Ab = A(idx);
+            Bb = B(idx);
+        else
+            idx = randi(n, n, 1);
+            Ab = A(idx);
+            Bb = B(idx);
+        end
         vA = var(Ab, 0);
         vB = var(Bb, 0);
         if vA <= 0 || vB <= 0
