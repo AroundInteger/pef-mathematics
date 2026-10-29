@@ -1,0 +1,44 @@
+\section{Non-Gaussian margins}
+\label{sec:stress}
+
+\Cref{tab:stress} separates two kinds of statement.
+Alignment~(\cref{thm:alignment}) and reliability~(\cref{thm:reliability}) are second-moment identities.
+They hold for every law with finite second moments; Monte Carlo agreement only checks that sample moments converge.
+The informative column is the Gaussian $(z,r^2)$ map for log-loss, Brier score, AUC and mutual information.
+
+\begin{table}[t]
+  \centering
+  \caption{Stress battery.
+           Second-moment identities hold by construction.
+           The $(z,r^2)$ column is a Monte Carlo check of the Gaussian map at the same second moments.}
+  \label{tab:stress}
+  \begin{tabular}{@{}lcc@{}}
+    \toprule
+    Law & Gaussian $(z,r^2)$ map & Second-moment identities \\
+    \midrule
+    Gaussian            & matches & by construction \\
+    Repeated team       & matches & by construction$^\ast$ \\
+    Student $t_3$       & fails   & by construction \\
+    Student $t_5$       & fails   & by construction \\
+    Gamma margins       & fails   & by construction \\
+    Bivariate Poisson   & fails   & by construction \\
+    Ordinal cut         & fails   & by construction \\
+    Five per cent contamination & fails & by construction \\
+    \bottomrule
+  \end{tabular}\\[0.5em]
+  {\footnotesize $^\ast$On the misaligned repeated-team design the \emph{sample} reliability is $0.733$ against population theory $0.753$ ($z=-3.2$).
+   That discrepancy is estimation under dependent matches, not a failure of~\cref{thm:reliability}.}
+\end{table}
+
+The $(z,r^2)$ reduction matches for the Gaussian law and for the repeated-team law, which is marginally Gaussian.
+It fails for $t_3$, $t_5$, gamma margins, bivariate Poisson and the ordinal cut.
+Contamination is mixed across metrics and does not restore the Gaussian map.
+
+Three predictive questions under non-Gaussian margins are left open: whether logistic $\beta_A+\beta_B=0$ still tracks best-linear-predictor alignment; whether $D$ loses nothing to the pair in out-of-sample log-loss when $\beta\propto c$; and whether the $1/(2n)$ cost becomes the Takeuchi correction under misspecification.
+They are not claimed as results of this draft.
+
+The repeated-team simulation recovers a latent $\eta_S/\eta_N$ by Gaussian maximum likelihood with a Woodbury likelihood, using Wald intervals at nominal level $95\%$.
+Coverage is $0.983$ at a $16$-team design ($240$ matches, $60$ replicates) and $0.967$ at a $24$-team design ($1{,}104$ matches, $30$ replicates).
+The population reliability identity assumes independent signal and noise and i.i.d.\ draws.
+Team effects induce dependence across matches that share a club, so a sample reliability computed as if matches were independent can deviate from the population value even when~\cref{thm:reliability} holds.
+Match-level applications are reported in the companion empirical paper~\parencite{brownPEFempirical}.

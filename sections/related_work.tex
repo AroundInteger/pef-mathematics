@@ -1,0 +1,18 @@
+\section{Related work}
+\label{sec:related}
+
+Fisher's paired efficiency~\parencite{fisher1935} is the $\kappa=1$ case of~\cref{def:pef}.
+The reparameterisation~\cref{eq:pef_u} identifies $u$ with Lin's concordance correlation coefficient without location shift~\parencite{lin1989}, and with the pairwise intraclass correlation.
+
+Difference-score reliability is classical in psychometrics~\parencite{lord1956,lord1963,cronbachFurby1970,rogosaWillett1983}.
+Further discussion appears in~\parencite{zimmermanWilliams1982,zimmermanWilliams1998}.
+\Cref{thm:reliability} reparameterises that literature through $\eta_S/\eta_N$.
+The product $R^2_D=\Rel(D)\cdot q$ is attenuation by measurement error~\parencite{fuller1987}.
+
+Under joint normality, binary metrics reduce to $(z,r^2)$ via the liability-threshold model~\parencite{falconer1965}.
+Conversions to the observed scale and to AUC are given by~\parencite{wray2010,lee2012}.
+Alignment as $\beta\propto c$ is restricted linear regression~\parencite{seberLee2003}.
+What is new here is the separation of that restriction from $\eta$ and from $\eta_S/\eta_N$.
+
+The leading $1/(2n)$ cost of one redundant parameter is Akaike's information criterion and Stone's cross-validation equivalence~\parencite{akaike1973,stone1977}.
+The second-order crossover coefficient $\gamma$ in~\cref{rem:crossover} is fitted, not classical.

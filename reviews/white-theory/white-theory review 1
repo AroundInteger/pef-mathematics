@@ -1,0 +1,204 @@
+As before, I can't save files here, so copy everything inside the block into `PEF_theory_whitepaper_draft1_review.md`.
+
+````markdown
+# Review: "Sufficiency of the Paired Difference, and What Pairing Efficiency Decides" (Theory white-paper, first draft)
+
+**Manuscript:** R. Brown (theory companion)
+**Review date:** 27 October 2026
+**Version reviewed:** PDF first draft (Sections 1–5, Tables 1–3)
+**Read alongside:**
+- `PEF_whitepaper_draft1_review.md` (empirical white-paper)
+- `PEF_presubmission_review.md` (original empirical paper)
+- `PEF_geometry_presubmission_review.md` (geometry companion)
+
+---
+
+## Overall assessment
+
+A big step forward from the geometry paper, and a good fit with the new empirical paper. The central message is correct and clearly stated:
+
+- **η does not decide whether D is sufficient.** Alignment of the predictive coefficient with (1, −1) does.
+- **What η's components decide** is efficiency and, through the split ηS/ηN, the reliability of D.
+- **Fitting the pair when D suffices** costs about 1/(2n) in expected test log-loss.
+
+The main results were checked and hold up: Theorem 3.1, equations (2) and (3), Theorem 3.2, P1–P5, the crossover formula and every number in Table 2.
+
+**Still a sketch:**
+- theorems stated without proofs;
+- simulation designs unspecified;
+- two references;
+- no related-work section, discussion or conclusion.
+
+The reliability law has a long psychometric history and the 1/(2n) cost is classical; both need anchoring in that literature. The work needed is mostly additive. With it, this could be a solid short methods paper.
+
+---
+
+## Part A: How the two papers fit together
+
+### A1. The division of labour works
+- **Theory:** when D suffices (alignment), what η decides (efficiency, reliability), what redundancy costs (1/(2n), crossover).
+- **Empirical:** measures alignment in real leagues, compares gaps with 1/(2n), shows η doesn't sort the D-versus-(A, B) gap, as the theory predicts.
+
+This is a clean, mutually reinforcing structure.
+
+### A2. Bridge the two definitions of alignment
+- **Theory paper:** the best linear predictor of the *latent* margin M from (A, B) is ∝ (1, −1).
+- **Empirical paper:** βA + βB = 0 in a *logistic* regression of observed Y on (A, B).
+- **Under joint normality:** P(Y = 1 | K) = Φ(E[M | K]/sd(M | K)), and E[M | K] is linear in K with coefficient β. So probit coefficients are ∝ β, and logistic coefficients approximately so.
+- **Action:** state this as a short lemma in the theory paper (logistic case approximate), and test the bridge under non-Gaussian margins (D3).
+
+### A3. The theory predicts η *should* sort the A-versus-D gap, and the data hint that it does
+- In the exchangeable aligned case, equation (3) gives R²_D/R²_A = 2η, a positive association between η and D's advantage over A.
+- The empirical paper reports correlations of η̂ with the A-versus-D gap of **0.29** (rugby) and **0.22** (football): the predicted direction.
+- Yet the empirical text says "neither association supports η as a sorter", without distinguishing the two gaps.
+- **Correct joint message:**
+  - η does **not** sort D versus (A, B); alignment decides that.
+  - η **should** sort A versus D under near-exchangeability (theory), and the data are consistent with this, though weakly.
+- **Action:** pre-specify the A-versus-D test in the empirical paper. Equation (2) gives the general, non-exchangeable version (the same role as the r_A sorter in the empirical review, B2).
+
+### A4. Reliability is currently unused empirically
+- Theorem 3.2 is arguably the most distinctive result, yet the empirical paper doesn't use it.
+- **Natural route in sport:** signal = persistent team-level component; noise = match-to-match variation. A random-effects decomposition of home and away series by team estimates ΣS and ΣN, hence ηS, ηN and Rel(D).
+- The repeated-team simulation suggests the machinery may already exist (D4).
+- A short empirical section estimating Rel(D) per KPI would tie the papers together closely.
+
+### A5. Mismatched titles and author names
+- **Theory → empirical:** cites "The Paired Efficiency Factor: Cross-Domain Validation and Machine-Learning Interpretation" (the old title).
+- **Empirical → theory:** cites "Alignment, Reliability, and the Finite-Sample Cost of a Redundant Coefficient in Paired Features", which matches neither the current title nor the emphasis.
+- **Author names:** "Rowan Brown" (theory) vs "M. R. Brown" (empirical author list), with "Rowan Brown" in the empirical CRediT. Use one form throughout.
+- **Undefined terms in the empirical paper:** "relative-to-single-entity ratio under exchangeability" (equation 3 here) and "stress boundary" (Section 5 here) each need a one-line gloss.
+
+### A6. Use the AIC connection in both papers
+- First-order crossover n* ≈ 1/(2Δ∞) ⇔ noncentrality of the LR statistic ≈ 1 ⇔ **E[Λ] ≈ 2** (Akaike's threshold).
+- This links Theorem 4.2 directly to the empirical paper's Figure 1A, where 2 should be the primary landmark.
+- The theory paper already uses training-set n for 1/(2n), which supports recomputing the empirical comparison with fold-specific training sizes.
+
+---
+
+## Part B: Mathematical checks
+
+### B1. Verified correct
+| Result | Check |
+|---|---|
+| Definition 2.1, P1–P5 | Correct, incl. η(κ,1) = (1+κ)/(1−√κ)², η(κ,−1) = (1+κ)/(1+√κ)², minimum ½ at κ = 1, ρ = −1. P4 now has the correct direction (fixing the geometry paper's sign error). |
+| Theorem 3.1 | Correct: cᵀΣKβ = cᵀΣS b; Cauchy–Schwarz in the ΣK inner product. |
+| Equation (2) | Correct. |
+| Equation (3) | Correct: with κS = κN = 1 and b = bA·c, ratio = 4σ²/(2σ²(1−ρ)) = 2/(1−ρ) = 2η. |
+| Theorem 3.2 | Correct: Var(SD) = tr ΣS/ηS, Var(ND) = tr ΣN/ηN, with S ⟂ N. |
+| R²_D = Rel(D)·q when b = c | Correct. |
+| (z, r²) reduction | Correct under joint normality; z is outcome-only, so comparison reduces to R². |
+| Theorem 4.2 second-order formula | Correctly solves Δ∞n² − n/2 − c = 0; all four Table 2 values reproduced (126.3, 330.2, 330.2, 1032.2). |
+
+### B2. "Sufficient" is too strong outside the Gaussian case
+- Theorem 3.1 establishes **linear** sufficiency (R²_D = R²_full when β ∝ c).
+- Under joint normality this equals full sufficiency for Y; under non-Gaussian margins it does not, because D can match the pair in R² while discarding information a nonlinear rule could use.
+- **Action:** use "linearly sufficient" in general; reserve "sufficient" for the Gaussian statement (title and abstract included). This matters because Section 5 concerns non-Gaussian margins.
+
+### B3. Theorems 4.1 and 4.2 are a classical result and an approximation
+- **Theorem 4.1** is the standard one-parameter AIC penalty. It holds for any correctly specified regular model; normality is needed only to make the probit correctly specified. Call it a proposition and cite Akaike (1973) and Stone (1977). The drafted SI S3 derivation can be adapted.
+- **Theorem 4.2 (second-order)** relies on a coefficient c fitted on three designs, and implicitly assumes the second-order term for misaligned designs equals that for aligned ones. Rename it (e.g. "Crossover approximation") and state that assumption.
+
+### B4. The abstract misstates what η decides
+- The abstract says η "decides … the signal-to-noise reliability of D through the ratio ηS/ηN". The **total** η does not decide reliability; its **signal and noise components** do. Two KPIs with equal η can differ greatly in reliability.
+- **Suggested wording:** "Reliability is decided not by η but by the ratio of its signal and noise components, ηS/ηN."
+
+### B5. Notation clashes
+- **Λ:** tr ΣN/tr ΣS here, but the LR statistic in the empirical paper. Rename one, e.g. ν for the trace ratio.
+- **c:** the contrast (1, −1) in Section 3 and the second-order coefficient in Section 4. Rename the latter (c₂ or γ).
+- **r²:** a coefficient of determination here; r_A and r were correlations earlier. Keep the papers consistent.
+
+---
+
+## Part C: Novelty and literature
+
+### C1. The reliability law has deep psychometric roots
+- The reliability of difference scores is a classic topic: Lord (1956, 1963); Cronbach & Furby (1970); Rogosa & Willett (1983); Zimmerman & Williams (1982, 1998).
+- Theorem 3.2 is an equivalent but cleaner parameterisation via ηS/ηN. That is a genuine contribution, since it explains in one ratio why difference scores can be more or less reliable than their parts, but it must be presented as such, with those citations.
+- R²_D = Rel(D)·q is classical attenuation by measurement error; cite e.g. Fuller, *Measurement Error Models* (1987).
+
+### C2. Other connections to cite
+- **(z, r²) reduction:** the liability-threshold model (Falconer 1965). Liability-to-observed-scale conversions and AUC: Lee et al. (2012); Wray et al. (2010). Also the binormal ROC model.
+- **η = 1/(1 − u)** with u = 2σ_AB/(σ²_A + σ²_B), the pairwise ICC (Lin's concordance coefficient with no location shift). Add as **P6**, citing Lin (1989). This links to geometry review B1.
+- **Alignment as a restricted regression:** cite a standard regression text so referees don't think it is claimed as new.
+
+### C3. Where the novelty lies
+A synthesis that separates three quantities practitioners routinely conflate:
+1. efficiency (η);
+2. alignment (whether D suffices);
+3. reliability (ηS/ηN).
+
+Plus a quantified cost of ignoring alignment (1/(2n), crossover) and a map of which conclusions survive non-Gaussian data. This framing is honest and does not depend on any single result being new.
+
+---
+
+## Part D: Simulations and reporting
+
+### D1. The designs need specifying
+Unspecified: A1–A3, B, C, Table 1's High/Mid/Zero, the stress laws, the repeated-team design. For each, report:
+- ΣS, ΣN, b and the distribution of ε;
+- the n grid and number of Monte Carlo replicates;
+- how "empirical n*" was determined (interpolated zero-crossing? precision?);
+- Monte Carlo standard errors.
+
+A design table in an appendix would solve this.
+
+### D2. Table 1 conveys little in its current form
+- "Target R²_D" and "R²_D" are identical, and η is constant, so the table restates its premise.
+- **Replace with** the design parameters (ΣS, ΣN, b) giving η = 2 with R²_D = 0.80, 0.33 and 0.
+- Add one line of algebra for the zero case (cᵀΣS b = 0 with η = 2).
+
+### D3. The stress battery tests identities, not predictive meaning
+- Alignment and reliability hold for **any** law with finite second moments; "surviving" only shows that sample moments converge.
+- **Informative questions for non-Gaussian data:**
+  1. Does logistic βA + βB = 0 still correspond to best-linear-predictor alignment (the A2 bridge, which the empirical paper relies on)?
+  2. Does D still lose nothing to the pair in out-of-sample log-loss when β ∝ c, or does nonlinearity let the pair, or a nonlinear model, win?
+  3. Does the 1/(2n) cost survive misspecification, where it becomes tr(J⁻¹K)/(2n)?
+- **Action:** reframe Table 3 around these predictive questions. Mark alignment and reliability as "hold by construction for finite second moments".
+
+### D4. The repeated-team results need explaining
+- **Reliability "failure"** (0.733 vs 0.753, z = −3.2): a population identity cannot fail, so this is estimation. Likely causes: estimators assume independent matches while team effects induce dependence, or the design's signal and noise definitions break the independence the theorem assumes. Diagnose it and say which.
+- **η_S/η_N estimator:** coverage 0.983 and 0.967 are reported without saying how ηS/ηN is estimated when S and N are latent, or the nominal level. If nominal is 95%, 0.983 is conservative. This estimator is potentially the bridge to empirical use (A4) and deserves its own subsection.
+
+### D5. Table 2 detail
+- For B with n* = 1000, the empirical value (980.1) is closer to first-order (1000) than second-order (1032.2). Add one honest sentence, plus Monte Carlo SEs for the empirical n* values; the difference may be within noise.
+- Explain the label "C, κN".
+
+### D6. Unexplained sentence
+"Fisher-z coverage for η̂ is omitted": remove, or explain what was omitted and why.
+
+---
+
+## Part E: Presentation
+
+- **Proofs:** none are given. Most are a few lines; add them to the main text or an appendix.
+- **Structure:** add related work (C1, C2), a discussion (scope, latent-margin interpretation, limitations) and a conclusion.
+- **Interpreting the latent model in sport:** explain what S, N, M and ε mean for a team KPI. Discuss reverse causation: match state affects KPIs (teams that lead change how they play), which the one-way S → M structure does not capture.
+- **References:**
+  - fix the Fisher encoding glitch ("ğ24" → "§24");
+  - "2nd edition" conflicts with 1935: the first edition is 1935, the second 1937;
+  - expand well beyond two references (C1, C2).
+- **Figures:** add at least one, e.g. R²_D/R²_full against misalignment angle, or reliability against ηS/ηN for several ν.
+
+---
+
+## Suggested plan
+
+**Theory paper:**
+1. Add proofs; recast Theorems 4.1 and 4.2 as a proposition and an approximation with classical citations (B3).
+2. Add the probit/logistic alignment lemma (A2).
+3. Add the literature: difference-score reliability, attenuation, liability-threshold model, ICC/CCC, Akaike and Stone (C1, C2).
+4. Specify all simulation designs with Monte Carlo SEs; rebuild Table 1 (D1, D2).
+5. Reframe the stress battery around predictive questions; diagnose the repeated-team result; document the ηS/ηN estimator (D3, D4).
+6. Fix wording ("linearly sufficient"; what decides reliability), notation clashes, references and the Fisher citation (B2, B4, B5, E).
+
+**Empirical paper (arising from this review):**
+1. Pre-specify the A-versus-D test of η (or equation 2); revise the "η sorts nothing" wording (A3).
+2. Consider a short reliability section via team random effects (A4).
+3. Make 2 the primary LR landmark (A6).
+4. Fix cross-citation titles and author name (A5).
+
+---
+
+## Publishability
+
+Real potential. The results are correct, the message is useful, and the claims are appropriately scoped, unlike the geometry paper, whose identities were mostly reparameterisations and whose headline claim failed for real estimators. Once proofs, designs and literature are in place, a short methods note in *The American Statistician*, *Stat*, or the methods side of *Journal of Quantitative Analysis in Sports* is realistic. The reliability decomposition, framed honestly against the psychometrics literature, is the most distinctive piece.

@@ -1,0 +1,65 @@
+\section{Finite-sample cost}
+\label{sec:finite_sample}
+
+Suppose the population coefficient aligns with $(1,-1)$, so $D$ is linearly sufficient at the population level.
+A correctly specified probit in $(A,B)$ still fits one more coefficient than a probit in $D$.
+
+\begin{proposition}[Parameter-saving gain]
+\label{prop:gain}
+For any correctly specified regular model that differs by one free parameter,
+\[
+  \mathbb{E}\bigl[\mathrm{LL}_{\mathrm{full}}-\mathrm{LL}_D\bigr]
+  = \frac{1}{2n}+O(n^{-2}),
+\]
+where $\mathrm{LL}$ denotes expected test log-loss and $n$ is the training sample size~\parencite{akaike1973,stone1977}.
+Under joint normality with $\beta\propto(1,-1)$, a probit with intercept is correctly specified for both feature sets, so the expansion applies.
+\end{proposition}
+
+The leading term is the usual one-parameter Akaike penalty.
+On three aligned Gaussian designs A1--A3, a weighted fit of $n\cdot\mathrm{gain}=a+\gamma/n$ gave leading coefficients $0.491$, $0.503$ and $0.489$ (standard errors $0.007$).
+The second-order coefficients were $17.3$, $16.6$ and $15.6$.
+The pooled fitted value is $\gamma\approx 16.6$.
+That coefficient is an empirical fit on those three designs.
+It is not claimed to be universal.
+
+When $D$ is slightly misaligned, the population gap $\Delta_\infty=\mathrm{LL}_{D,\infty}-\mathrm{LL}_{\mathrm{full},\infty}$ is positive and computable from the Gaussian $(z,r^2)$ map.
+The finite-sample advantage of $D$ is then approximately $1/(2n)-\Delta_\infty$.
+The first-order crossover $n^*\approx 1/(2\Delta_\infty)$ is the sample size at which the expected likelihood-ratio statistic for the redundant coefficient equals Akaike's threshold of two.
+
+\begin{remark}[Crossover approximation]
+\label{rem:crossover}
+If $\Delta_\infty>0$, the first-order crossover sample size is $n^*\approx 1/(2\Delta_\infty)$.
+With the second-order remainder and the fitted coefficient $\gamma$ from the aligned designs,
+\[
+  n^*
+  = \frac{\tfrac12+\sqrt{\tfrac14+4\gamma\Delta_\infty}}{2\Delta_\infty}.
+\]
+The formula reuses the aligned $\gamma$ for misaligned cells.
+That transfer is an assumption, not a derived identity.
+\end{remark}
+
+\Cref{tab:crossover} compares the two predictions with the empirical crossover on four cells.
+Cell~B misaligns through the outcome coefficient ratio $b_B/b_A$.
+Cell~C misaligns through noise asymmetry $\kappa_N\neq 1$ at $b=c$.
+The second-order formula uses the pooled $\gamma$ from A1--A3, so the B and C rows are out-of-sample for that coefficient.
+For B with nominal $n^*=1000$, the empirical crossover $980.1$ (interval $950$--$1023$) is closer to the first-order value $1000$ than to the second-order value $1032.2$; the gap is within Monte Carlo noise.
+The expansion uses the Gaussian $(z,r^2)$ map.
+It was not re-estimated on the stress laws of~\cref{sec:stress}.
+
+\begin{table}[t]
+  \centering
+  \caption{Crossover sample sizes.
+           Second-order predictions use the pooled fitted $\gamma\approx 16.6$ from the aligned designs A1--A3.
+           Empirical intervals are from the E3 summary.}
+  \label{tab:crossover}
+  \begin{tabular}{@{}lccccc@{}}
+    \toprule
+    Cell & $\Delta_\infty$ & First-order & Second-order & Empirical & Interval \\
+    \midrule
+    B, $b$-ratio, $n^*=100$  & $0.005$    & $100$  & $126.3$  & $124.8$ & $120.8$--$128$ \\
+    B, $b$-ratio, $n^*=300$  & $0.001667$ & $300$  & $330.2$  & $327.6$ & $309.9$--$340.9$ \\
+    B, $b$-ratio, $n^*=1000$ & $0.0005$   & $1000$ & $1032.2$ & $980.1$ & $950$--$1023$ \\
+    C, $\kappa_N$, $n^*=300$ & $0.001667$ & $300$ & $330.2$ & $342$ & $327.4$--$353.8$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}

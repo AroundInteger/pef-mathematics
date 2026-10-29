@@ -1,0 +1,42 @@
+\section{Definition}
+\label{sec:definition}
+
+Let $(A,B)$ have variances $\sigma_A^2$ and $\sigma_B^2$, correlation $\rho$, and variance ratio $\kappa=\sigma_B^2/\sigma_A^2$.
+Write $D=A-B$.
+
+\begin{definition}[Paired Efficiency Factor]
+\label{def:pef}
+\[
+  \eta
+  = \frac{\sigma_A^2+\sigma_B^2}{\Var(D)}
+  = \frac{1+\kappa}{1+\kappa-2\sqrt{\kappa}\,\rho}.
+\]
+\end{definition}
+
+The quantity is a ratio of second moments.
+It does not require a Gaussian margin.
+Equivalently,
+\begin{equation}
+  \eta = \frac{1}{1-u},
+  \qquad
+  u = \frac{2\sigma_{AB}}{\sigma_A^2+\sigma_B^2},
+  \label{eq:pef_u}
+\end{equation}
+so $u$ is the pairwise concordance correlation of Lin with the location-shift term set to zero~\parencite{lin1989}, and also the intraclass correlation for the pair.
+The following properties are algebraic consequences of~\cref{def:pef}.
+
+\begin{enumerate}[label=P\arabic*.]
+  \item $\eta>1$ if and only if $\rho>0$, for every $\kappa>0$.
+        The boundary $\eta=1$ is the line $\rho=0$.
+  \item $\eta(\kappa,\rho)=\eta(1/\kappa,\rho)$.
+  \item $\eta\in[\tfrac12,\infty)$.
+        The minimum $\tfrac12$ is attained at $\rho=-1$ and $\kappa=1$.
+        In general $\eta(\kappa,1)=(1+\kappa)/(1-\sqrt{\kappa})^2$ and $\eta(\kappa,-1)=(1+\kappa)/(1+\sqrt{\kappa})^2$.
+  \item For fixed $\rho>0$, $\eta$ is maximised at $\kappa=1$, where $\eta=1/(1-\rho)$.
+        For fixed $\rho<0$, $\eta$ is minimised at $\kappa=1$.
+  \item $\eta\to 1$ as $\kappa\to 0$ or $\kappa\to\infty$.
+  \item $\eta=1/(1-u)$ with $u$ as in~\cref{eq:pef_u}.
+\end{enumerate}
+
+These properties decide the efficiency of the paired difference as an estimator of a mean difference.
+They do not decide whether $D$ is a linearly sufficient predictor of a binary outcome.

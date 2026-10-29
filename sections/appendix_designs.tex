@@ -1,0 +1,40 @@
+\section{Simulation designs}
+\label{app:designs}
+
+All numerical illustrations reuse the stored outputs of the \texttt{pef\_numerics} programme.
+No new Monte Carlo was run for this draft.
+Parameters below are taken from the experiment scripts.
+
+\subsection*{Finite-sample cells (E3)}
+
+The dimensionless base point is
+\[
+  z=0,\quad \rho_S=0.2,\quad \rho_N=0.6,\quad w=0.5,\quad q=0.8.
+\]
+Aligned designs: A1 is the base point; A2 uses $(z,\rho_S,\rho_N,w,q)=(0.5,-0.3,0.3,0.3,0.9)$; A3 uses $(0,0.5,0.8,0.8,0.6)$.
+Training sizes are $n\in\{50,100,200,500,1000,2000,5000\}$ with $R=3000$ replicates per cell.
+Expected test log-loss is computed exactly from the fitted probit, not from a held-out sample.
+
+Cell~B sets the outcome coefficient ratio $b_B/b_A$ so that $\Delta_\infty=1/(2n^*)$ at nominal $n^*\in\{100,300,1000\}$.
+Cell~C sets $\kappa_N$ for $\Delta_\infty=1/(2\cdot 300)$ at $b=c$.
+Empirical $n^*$ is the interpolated zero-crossing of the Monte Carlo gain curve, with the intervals reported in~\cref{tab:crossover}.
+
+\subsection*{Counterexample designs (Table~\ref{tab:eta2})}
+
+The three $(\Sigma_S,\Sigma_N,b)$ triples are stored exactly in \texttt{E5\_eta2\_counterexample.csv}.
+They are algebraic, not simulated.
+Every case has $\eta(\Sigma_K)=2$.
+
+\subsection*{Stress battery (E5)}
+
+Two design points share the E3 base second moments: an aligned point, and a misaligned point with $b_B/b_A\approx 1.177$ (the coefficient asymmetry whose probit crossover is $n^*=300$).
+Each law uses $40$ replicates of $n=2500$ draws.
+Laws: Gaussian; multivariate $t$ with $3$ and $5$ degrees of freedom; Gaussian copula with gamma margins; bivariate Poisson; an ordinal cut of a latent Gaussian; five per cent contamination; and a repeated-team law that is marginally Gaussian with club-level dependence.
+
+\subsection*{Repeated-team estimator}
+
+Truth: $\tau^2=1$, $\lambda=0.5$, residual variances $(1,1.44)$, residual correlation $0.4$, giving $\eta_S/\eta_N\approx 0.337$.
+Estimation is Gaussian maximum likelihood for $(\mu_A,\mu_B,\tau^2,\lambda,\Sigma_\varepsilon)$ with a Woodbury likelihood checked against a dense covariance.
+Wald intervals use the observed information at nominal level $95\%$.
+Rugby-sized design: $16$ teams, $240$ matches, $60$ replicates.
+Football-sized design: $24$ teams, $1{,}104$ matches, $30$ replicates.

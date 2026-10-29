@@ -2,18 +2,14 @@
 % !BIB program = biber
 % Overleaf: set Compiler = pdfLaTeX, Main document = main.tex
 %
-% Companion paper to pef-empirical/.
-% Solo-authored mathematical infrastructure for the empirical PEF framework:
-% canonical form, geometry, partition-function structure, Fisher--Rao coordinates,
-% and numerical validation (§7 CSVs from validation_inputs/).
-% Empirical paper submits first; companion preprints around the same time.
+% Statistics paper on draft/white-theory (draft 2).
+% Geometry manuscript preserved at tag gandalf-grey (files left on disk, not input).
 
 \documentclass[11pt,a4paper]{article}
 
 \usepackage[british]{babel}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
-\usepackage{bbm}
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{geometry}
@@ -33,21 +29,18 @@
   urlcolor=blue!50!black
 }
 
-% Vancouver-style: numbered citations in order of first appearance.
 \usepackage[style=numeric,backend=biber,sorting=none,giveninits=true,maxbibnames=99]{biblatex}
 \addbibresource{references.bib}
 
-% --- Notation (UK English in prose; LaTeX maths per OVERLEAF_BEST_PRACTICES) ---
 \newcommand{\Var}{\operatorname{Var}}
 \newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\Rel}{\operatorname{Rel}}
 \DeclareMathOperator{\Corr}{Corr}
-\newcommand{\ind}{\mathbbm{1}}
+\newcommand{\ind}{\mathbf{1}}
 \newcommand{\sech}{\operatorname{sech}}
 \newcommand{\arctanh}{\operatorname{arctanh}}
 \newcommand{\Real}{\operatorname{Re}}
 
-% Theorem environments (kept light; numbering scheme chosen so the companion
-% paper carries its own theorem stream independent of the empirical paper).
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}[theorem]{Proposition}
@@ -60,9 +53,8 @@
 \theoremstyle{remark}
 \newtheorem{remark}[theorem]{Remark}
 
-\title{The Geometry of Paired Efficiency:\\
-       Canonical Form, Information-Geometric Structure,\\
-       and Cross-Domain Pooling for Fisher's Generalised Formula}
+\title{Linear Sufficiency of the Paired Difference,\\
+       and What Pairing Efficiency Decides}
 \author{Rowan Brown}
 \date{}
 
@@ -71,16 +63,16 @@
 
 \input{sections/abstract}
 \input{sections/introduction}
-\input{sections/canonical_form}
-\input{sections/mobius_chebyshev}
-\input{sections/sphere_realisation}
-\input{sections/partition_function}
-\input{sections/fisher_rao}
-\input{sections/numerical_validation}
+\input{sections/related_work}
+\input{sections/definition}
+\input{sections/sufficiency}
+\input{sections/finite_sample}
+\input{sections/stress}
 \input{sections/discussion}
+\input{sections/conclusion}
 
 \appendix
-\input{sections/appendix}
+\input{sections/appendix_designs}
 
 \printbibliography[title={References}]
 
